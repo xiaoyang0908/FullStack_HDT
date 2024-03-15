@@ -44,17 +44,15 @@ export default function NavBar(){
             <MenuList>
             {mainListItems.map((v,i)=>(
                 <MenuItem selected={i === selectedIndex}
-                onClick={(event) => handleMenuItemClick(event, i)} >
-                    <Link href={v.key} 
-                         sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'none' },underline:"none",color:"inherit"  }}
-                         >
+                onClick={(event) => handleMenuItemClick(event, i)} key={v.key} 
+                component={Link} 
+                href={v.key}>
                         <ListItemButton>
                         <ListItemIcon>
                             {v.icon}
                         </ListItemIcon>
                         <ListItemText primary={v.title}/>
                         </ListItemButton>
-                    </Link>
                 </MenuItem>
             ))}
             </MenuList>

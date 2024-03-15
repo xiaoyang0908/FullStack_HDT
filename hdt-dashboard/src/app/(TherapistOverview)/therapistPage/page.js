@@ -3,8 +3,7 @@ import { Box, Container, Grid, Paper } from "@mui/material";
 
 export default function TherapistOverview(){
     return(
-        // <Container sx={{marginTop:"20px"}}>
-            <Grid container spacing={3}>
+            <Grid container spacing={4} marginTop={1}>
                 <Grid item xs={12} sm={12} md={12} lg={12} >
                     <Paper
                         sx={{
@@ -26,21 +25,21 @@ export default function TherapistOverview(){
                                 p: 2,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                height: 150,
+                                height: 180,
                                 backgroundColor:'white',
                             }}
                             >
                                 <h3>welcome xxxxx</h3>
                         </Paper>
                     </Box>
-                    <Box sx={{marginTop:2}}>
+                    <Box marginTop={4}>
                     <h3>Patients Today</h3>
                         <Paper
                             sx={{
                                 p: 2,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                height: 250,
+                                height: 330,
                                 backgroundColor:'white',
                             }}
                             >
@@ -55,7 +54,7 @@ export default function TherapistOverview(){
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            height: 444,
+                            height: 570,
                             backgroundColor:'white',
                         }}
                         >
@@ -67,7 +66,6 @@ export default function TherapistOverview(){
                 </Grid>
                 
             </Grid>
-        // </Container>   
         
     )
 }
