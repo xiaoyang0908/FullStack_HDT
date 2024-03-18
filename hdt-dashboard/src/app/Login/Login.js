@@ -21,7 +21,7 @@ export default function Login(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        router.push("/patientPage")
+        router.push("/therapistPage")
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
     };
 

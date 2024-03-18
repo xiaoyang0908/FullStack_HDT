@@ -1,9 +1,8 @@
 'use client'
 import { useState } from 'react'
 import {TrdPartyMainMenu} from './menuList'
-import Drawer from '@mui/material/Drawer';
-import Divider from '@mui/material/Divider';
-import { MenuItem, ListItemIcon, ListItemText, MenuList,ListItemButton,Link, Avatar, Toolbar, Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import {  ListItemIcon,Link, Avatar, Toolbar, Box} from '@mui/material';
 
 
 export default function TrdNavBar(){
@@ -11,8 +10,8 @@ export default function TrdNavBar(){
     const drawerWidth = 240;
    
     return (
-        <Box sx={{height:"100vh",width:drawerWidth}}>
-            <Toolbar sx={{ height:150,
+        <Box sx={{height:"100vh",width:drawerWidth, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Toolbar sx={{ height:"30vh",
                 display:"flex",
                 flexDirection:"column",
                 alignItems: 'center',
@@ -24,19 +23,19 @@ export default function TrdNavBar(){
                 <h4>click to edit your avatar</h4>
             </Toolbar>
             {/* <Divider  sx={{height: 20}} /> */}
-            <MenuList sx={{marginTop:2, justifyContent:"center"}}>
-            {TrdPartyMainMenu.map((v,i)=>(
-                <MenuItem key={v.key} sx={{width:"240px", height:"50px"}} component={Link} 
-                href={v.key}>
-                        <ListItemButton variant="contained" >
-                            <ListItemIcon>
-                                {v.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={v.title}/>
-                        </ListItemButton>
-                </MenuItem>
-            ))}
-            </MenuList>
+            <Box  
+                sx={{ display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',height:"65vh",border:"none}"}}>
+                {TrdPartyMainMenu.map((v,i)=>(
+                    <Button key={v.key} component={Link} href={v.key} variant="contained" sx={{height:70, width:200, fontSize:23, justifyContent:"center"}}>
+                        <ListItemIcon sx={{width:50, height:50, alignItems:"center"}}>
+                            {v.icon}
+                        </ListItemIcon>
+                        {v.title}
+                    </Button>
+                ))}
+            </Box>
             
         </Box>
        
