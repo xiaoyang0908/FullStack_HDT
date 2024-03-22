@@ -1,4 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Set up
+React version 18.0.0  peer the version
+
+npm config set legacy-peer-deps true
+npm i
+
+
 
 ## Getting Started
 

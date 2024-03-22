@@ -25,6 +25,7 @@ public class HdtApplication implements CommandLineRunner {
         if (userRepository.findAll().isEmpty()){
             userRepository.save(new User("1","kkk","kkk@gamil.com","123"));
             userRepository.save(new User("2","qqq","qqq@gamil.com","456"));
+
         }
         for (User user: userRepository.findAll()){
             System.out.println(user);
