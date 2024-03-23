@@ -4,7 +4,7 @@ import styles from "./layout.module.css";
 import CssBaseline from '@mui/material/CssBaseline';
 export default function TherapistLayout({ children }) {
     return(
-        <Box sx={{ display: 'flex', height:"100%"}}>
+        <Box sx={{ display: 'flex', height:"100vh"}}>
         <CssBaseline />
         <NavBar />
         <Box
