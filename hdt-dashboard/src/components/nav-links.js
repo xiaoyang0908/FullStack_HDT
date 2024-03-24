@@ -1,8 +1,6 @@
 'use client'
 import { useState , useEffect} from 'react'
 import {mainListItems} from './menuList'
-import IconButton from '@mui/material/IconButton';
-import MenuOutlined from '@mui/icons-material/MenuOutlined';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';

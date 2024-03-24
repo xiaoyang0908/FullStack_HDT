@@ -1,13 +1,48 @@
+'use client'
 import SortIcon from '@mui/icons-material/SortOutlined';
 import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp  from '@mui/icons-material/ThumbUpAltOutlined';
 import { patientsList } from '@/components/patientsList';
-import {TextField, Box,Avatar, Button, Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from "@mui/material";
+import {TextField, Box,Avatar, Button, Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Container, TableFooter, TablePagination, Pagination, Stack } from "@mui/material";
+import { useEffect, useState } from 'react';
 
 export default function TherapistOverview(){
+    const[sortedData, setSortedData] = useState(patientsList);
+    const[sort, setSort] = useState(true);
+    // sort list
+    // 
+    // x.localeCompare(y,'fr',{ignorePunctuation:true})
+    function Comparator(a,b){
+        return a.name.localeCompare(b.name);
+    }
+    function SortList(dataList){
+        let sortDataList = dataList.slice().sort(Comparator);
+        return sortDataList;
+    }
+
+    const handleSortClick = () =>{
+        if(sort){
+            setSortedData(SortList(sortedData));
+        }else{
+            setSortedData(patientsList);
+        }
+        setSort(!sort);
+    }
+
+    // set pagination
+    const rowsPerPage = 5;
+
+    let count = Math.ceil(patientsList.length / rowsPerPage);;
+    const [page,setPage] = useState(1);
+   
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+      };
+
+
     return(
-        <Container>
+        <Container maxWidth="none">
             <TextField
                 sx={{width:"80vw", backgroundColor:"white", borderRadius:2}}
                 label="Search input"
@@ -16,7 +51,7 @@ export default function TherapistOverview(){
                 }}
             />
             <Box sx={{display:"flex", width:"80vw", justifyContent:"space-between", marginTop:3}}>
-                <Button variant="outlined" endIcon={<SortIcon/>}>
+                <Button variant="outlined" endIcon={<SortIcon/>} onClick={handleSortClick}>
                     Name A-z
                 </Button>
                 <Button variant='contained' startIcon={<AddIcon/>}>
@@ -27,16 +62,16 @@ export default function TherapistOverview(){
             <TableContainer  sx={{width:"80vw",marginTop:2}}>
                 <Table >
                     <TableBody>
-                        {patientsList.map((row)=>(
+                        {(sortedData.slice((page-1) * rowsPerPage, (page-1) * rowsPerPage + rowsPerPage)).map((row)=>(
                             <TableRow key={row.name}>
-                                <TableCell component="th" scope='row'>
-                                    <Box sx={{display:"flex", alignItems:"center", justifyContent:"space-between", height:70,bgcolor:"white", borderRadius:2}}>
-                                        <Box sx={{display:"flex",alignItems:"center",marginLeft:2, height:50, width:300,}}>
+                                <TableCell component="th" scope='row' >
+                                    <Box sx={{display:"flex", alignItems:"center", justifyContent:"space-between", height:100,bgcolor:"white", borderRadius:2}}>
+                                        <Box sx={{display:"flex",alignItems:"center",marginLeft:2, height:100, width:300,}}>
                                             <Avatar alt="Remy Sharp"
                                                 src=""
-                                                sx={{ width: 50, height: 50, border:"1px solid black", marginRight:1 }} />
+                                                sx={{ width: 70, height: 70, border:"1px solid black", marginRight:1 }} />
                                             <Box>
-                                            <p><h4>{row.name}</h4></p>
+                                            <p>{row.name}</p>
                                             <p>Current tasks: {row.totalTask} ({row.currentTask}/{row.totalTask})</p>
                                             </Box>
                                            
@@ -47,7 +82,7 @@ export default function TherapistOverview(){
                                             <p>This week: {row.weekHour}h</p>
                                         </Box>
                                         <Box sx={{marginRight:2}}>
-                                            <Button variant='contained' startIcon={<DetailIcon/>} sx={{marginRightß:3}}>
+                                            <Button variant='contained' startIcon={<DetailIcon/>} sx={{marginRight:3}}>
                                                 Details
                                             </Button>
                                             <Button variant='contained' startIcon={<ThumbUp/>}>
@@ -62,6 +97,14 @@ export default function TherapistOverview(){
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box sx={{display:"flex", width:"80vw", justifyContent:"center", marginTop:3}}> 
+                <Pagination 
+                defaultPage={1}
+                page={page}
+                count={count}
+                onChange={handleChangePage} 
+                size='large'/> 
+            </Box>
         </Container>
     )
 }
