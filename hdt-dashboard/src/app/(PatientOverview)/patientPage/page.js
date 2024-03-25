@@ -1,70 +1,136 @@
-
-import { Box, Container, Grid, Paper } from "@mui/material";
+import { tasksList } from "@/components/taskList";
+import { Box, Grid, Paper, Avatar} from "@mui/material";
 
 export default function PatientOverview(){
+    
     return(
-            <Grid container spacing={4} marginTop={1}>
-                <Grid item xs={12} sm={12} md={12} lg={12} >
+            <Grid container spacing={2} padding={4}>
+                <Grid item xs={7} sm={7} md={7} lg={7} >
+                    <Box sx={{display:"flex", justifyContent:"space-between"}}>
+                        <Box sx={{width:"38%"}}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: "18vh",
+                                    backgroundColor:'lightblue',
+                                    justifyContent:"center"
+                                }}
+                                >
+                                    
+                                    <h3>Welcome!</h3>
+                                    <h3>You're doing great</h3>
+                                    <p>Check your exercise data here</p>   
+                            </Paper>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    height: "18vh",
+                                    backgroundColor:'white',
+                                    alignItems:"center"
+                                }}
+                                >
+                                    <Avatar alt="Remy Sharp"
+                                            src=""
+                                            sx={{ width: 80, height: 80, border:"1px solid black", marginRight:1 }} />
+                                    <Box>
+                                    <p>Jack Smith</p>
+                                    <p>Age    34</p>
+                                    <p>Exercise    17days</p>
+                                    </Box>   
+                            </Paper>
+                        </Box>
+                        <Box sx={{width:"60%"}}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    height: "18vh",
+                                    backgroundColor:'white',
+                                }}
+                                >
+                                    <h3>level</h3>
+                            </Paper>
+                            <Paper
+                                sx={{
+                                    marginTop:"2vh",
+                                    p: 2,
+                                    display: 'flex',
+                                    height: "16vh",
+                                    backgroundColor:'white',
+                                    alignItems:"center"
+                                }}
+                                >
+                                    <Box sx={{width:"50%"}}>
+                                        <p>Contact person</p>
+                                        <Box sx={{display:"flex", marginTop:2, alignItems:"center"}}>
+                                            <Avatar alt="Remy Sharp"
+                                                    src=""
+                                                    sx={{ width: 50, height: 50, border:"1px solid black", marginRight:1 }} />
+                                            <p>Emma</p>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{width:"1px", height:100, bgcolor:"lightgrey"}} />
+                                    <Box sx={{width:"50%", marginLeft:2}}>
+                                        <p>Therapist</p>
+                                        <Box sx={{display:"flex", marginTop:2, alignItems:"center"}}>
+                                            <Avatar alt="Remy Sharp"
+                                                    src=""
+                                                    sx={{ width: 50, height: 50, border:"1px solid black", marginRight:1 }} />
+                                            <p>Dr. Emily Johnson</p>
+                                        </Box>
+                                    </Box>
+                            </Paper>
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        marginTop:"4vh",
+                                        height: "60vh",
+                                        backgroundColor:'white',
+                                        overflow:"hidden",
+                                    }}
+                                    >
+                                    <Box sx={{display:"flex", marginTop:1, alignItems:"center"}}>
+                                        <h3>Tasks</h3> 
+                                        <p>You have {tasksList.length} tasks now</p>
+                                    </Box>
+                                    <Box sx={{display:"flex", marginTop:1, flexWrap:"wrap"}}>
+                                        {tasksList.map((v,i)=>(
+                                            <Paper key={i} sx={{width:"31%",height:"24vh",p:2, margin:1}}>
+                                                <p>{v.type}</p>
+                                                <Box>
+                                                    <Box sx={{width:50, height:50}}></Box>
+                                                </Box>
+                                            </Paper>
+                                        ))}
+                                    </Box>
+                                   
+                                   
+                            </Paper>
+                        </Box>
+                    </Grid>
+                <Grid item xs={5} sm={5} md={5} lg={5}>
                     <Paper
                         sx={{
                             p: 2,
                             display: 'flex',
                             flexDirection: 'column',
-                            height: 200,
+                            height: "100vh",
                             backgroundColor:'white',
                         }}
                         >
-                            <h3>welcome xxxxx</h3>
+                            <h3>Avatar</h3>
                     </Paper>
                 </Grid>
-                <Grid item xs={4} sm={4} md={4} lg={4} >
-                    <Box>
-                        <h3>Your Patients</h3>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 180,
-                                backgroundColor:'white',
-                            }}
-                            >
-                                <h3>welcome xxxxx</h3>
-                        </Paper>
-                    </Box>
-                    <Box marginTop={4}>
-                    <h3>Patients Today</h3>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 330,
-                                backgroundColor:'white',
-                            }}
-                            >
-                                <h3>welcome xxxxx</h3>
-                        </Paper>
-                    </Box>
-                </Grid>
-                <Grid item xs={8} sm={8} md={8} lg={8}>
-                    <h3>Schedule</h3>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 570,
-                            backgroundColor:'white',
-                        }}
-                        >
-                            <h3>welcome xxxxx</h3>
-                    </Paper>
-                </Grid>
-                <Grid item xs={8}>
-                    
-                </Grid>
-                
+
             </Grid>
         
     )
