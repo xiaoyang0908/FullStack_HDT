@@ -2,8 +2,25 @@
 import { tasksList } from "@/components/taskList";
 import { Box, Grid, Paper, Avatar, Button} from "@mui/material";
 import { useState } from "react";
+import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import { Avatar as VisageAvatar} from "@readyplayerme/visage";
 
+/**
+ * @typedef {Object} AvatarCreatorConfig
+ * @property {boolean} [clearCache]
+ * @property {BodyType} [bodyType]
+ * @property {boolean} [quickStart]
+ * @property {Language} [language]
+ * @property {string} [token]
+ * @property {string} [avatarId]
+ * 
+ * @param {AvatarExportedEvent} avatarEvent
+ */
 export default function PatientOverview(){
+    /*
+    @typedef
+    
+    */
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
@@ -18,6 +35,20 @@ export default function PatientOverview(){
         setOpen(!open);
     }
     
+    const config = {
+        clearCache: true,
+        bodyType: 'fullbody',
+        quickStart: false,
+        language: 'en',
+    };
+
+
+    const style = {width: '100%', height: '100vh', border: 'none'};
+    const [avatarUrl, setAvatarUrl] = useState('');
+    const handleOnAvatarExported = (avatarEvent) => {
+        console.log(`Avatar URL is: ${avatarEvent.data.url}`);
+      };
+
     return(
             <Grid container spacing={2} padding={4}>
                 <Grid item xs={7} sm={7} md={7} lg={7} >
@@ -142,7 +173,9 @@ export default function PatientOverview(){
                             backgroundColor:'white',
                         }}
                         >
-                            <h3>Avatar</h3>
+                            <h3>Range of motion(ROM)</h3>
+                            <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
+                            {avatarUrl && <VisageAvatar modelSrc={avatarUrl}/>}
                     </Paper>
                 </Grid>
 
