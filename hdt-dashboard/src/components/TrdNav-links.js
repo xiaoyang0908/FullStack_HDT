@@ -25,8 +25,7 @@ export default function TrdNavBar(){
             {/* <Divider  sx={{height: 20}} /> */}
             <Box  
                 sx={{ display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',height:"65vh",border:"none}"}}>
+                flexDirection: 'column',height:"65vh",border:"none}"}}>
                 {TrdPartyMainMenu.map((v,i)=>(
                     <Button key={v.key} component={Link} href={v.key} variant="contained" sx={{height:70, width:200, fontSize:23, justifyContent:"center"}}>
                         <ListItemIcon sx={{width:50, height:50, alignItems:"center"}}>

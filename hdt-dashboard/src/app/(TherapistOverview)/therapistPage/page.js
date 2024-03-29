@@ -3,6 +3,7 @@ import SortIcon from '@mui/icons-material/SortOutlined';
 import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp  from '@mui/icons-material/ThumbUpAltOutlined';
+import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import { patientsList } from '@/components/patientsList';
 import {TextField, Box,Avatar, Button, Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Container, TableFooter, TablePagination, Pagination, Stack } from "@mui/material";
 import { useEffect, useState } from 'react';
@@ -54,9 +55,16 @@ export default function TherapistOverview(){
                 <Button variant="outlined" endIcon={<SortIcon/>} onClick={handleSortClick}>
                     Name A-z
                 </Button>
-                <Button variant='contained' startIcon={<AddIcon/>}>
-                    Add patient
-                </Button>
+                <Box>
+                    <Button variant='contained' startIcon={<AddIcon/>} sx={{marginRight:1}}>
+                        Add Client
+                    </Button>
+
+                    <Button variant='outlined' startIcon={<ArchivedIcon/>}>
+                        Archived Clients
+                    </Button>
+                </Box>
+               
             </Box>
                         
             <TableContainer  sx={{width:"80vw",marginTop:2}}>

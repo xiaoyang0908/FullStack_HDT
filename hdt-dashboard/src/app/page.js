@@ -11,12 +11,8 @@ export default function Home() {
       display:"flex",
       justifyContent: 'center',
       alignItems: 'center',
-      minHeight: '100vh',}}>
-      {/* <img src="" ></img> */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <img src="your-image-url" alt="Your Image" /> {/* 替换为你的图片 */}
+      minHeight: '100vh', bgcolor:"#F2F3F8"}}>
         <Login />
-      </Box>
     </Box>
   );
 }
