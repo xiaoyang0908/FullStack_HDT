@@ -9,31 +9,12 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends MongoRepository<Patient, String> {
     /*
+    * operate database
     * myBatis
     * get info by id
     * @param id
     * find() findOne()
     * */
-    Patient getPatient(String id);
 
-    List<Patient> getPatientList(String name);
-
-    /*
-    * insert data --- save()
-    * @param patient
-    * */
-    void insertPatient(Patient patient);
-
-    /*
-    * delete data
-    * @param id
-    * */
-    void deletePatient(String id);
-
-    /*
-    * update data
-    * @param id
-    * */
-    void updataPatient(String id);
 
 }

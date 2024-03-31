@@ -2,156 +2,30 @@ package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
 import com.example.hdt.repositories.PatientRepository;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+
 
 @Service
-public class PatientImpl implements PatientRepository {
-    @Override
-    public Patient getPatient(String id) {
-        return null;
+public class PatientImpl{
+    @Autowired
+    private  PatientRepository patientRepo;
+
+    public Patient getPatient(String id){
+        return patientRepo.findById(id).get();
     }
 
-    @Override
-    public List<Patient> getPatientList(String name) {
-        return null;
+    public List<Patient> getPatientList(){
+        return patientRepo.findAll();
     }
 
-    @Override
-    public void insertPatient(Patient patient) {
 
-    }
 
-    @Override
-    public void deletePatient(String id) {
 
-    }
 
-    @Override
-    public void updataPatient(String id) {
 
-    }
-
-    @Override
-    public <S extends Patient> S insert(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> List<S> insert(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
-    }
-
-    @Override
-    public <S extends Patient> List<S> findAll(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> long count(Example<S> example) {
-        return 0;
-    }
-
-    @Override
-    public <S extends Patient> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
-    public <S extends Patient, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends Patient> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<Patient> findById(String s) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(String s) {
-        return false;
-    }
-
-    @Override
-    public List<Patient> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<Patient> findAllById(Iterable<String> strings) {
-        return null;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(String s) {
-
-    }
-
-    @Override
-    public void delete(Patient entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends String> strings) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends Patient> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
-    public List<Patient> findAll(Sort sort) {
-        return null;
-    }
-
-    @Override
-    public Page<Patient> findAll(Pageable pageable) {
-        return null;
-    }
 }

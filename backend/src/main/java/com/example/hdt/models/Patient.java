@@ -5,10 +5,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
 
-@Document
+@Document("patientProfile")
 public class Patient {
     @Id
-    private String id;
+    private String patientID;
     @Field
     private String name;
     @Field
@@ -16,21 +16,17 @@ public class Patient {
     @Field
     private String password;
     @Field
+    private String biometrics;
+    @Field
     private String loginMode;
     @Field
     private String photo;
     @Field
     private ArrayList<String> caregivers;
+    @Field
+    private ArrayList<String> therapists;
 
     public Patient(){}
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -80,27 +76,54 @@ public class Patient {
         this.password = password;
     }
 
+    public String getPatientID() {
+        return patientID;
+    }
 
-    public Patient(String id, String name, String email, String password, String loginMode, String photo, ArrayList<String> caregivers) {
-        this.id = id;
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+
+    public String getBiometrics() {
+        return biometrics;
+    }
+
+    public void setBiometrics(String biometrics) {
+        this.biometrics = biometrics;
+    }
+
+    public ArrayList<String> getTherapists() {
+        return therapists;
+    }
+
+    public void setTherapists(ArrayList<String> therapists) {
+        this.therapists = therapists;
+    }
+
+    public Patient(String patientID, String name, String email, String password, String biometrics, String loginMode, String photo, ArrayList<String> caregivers, ArrayList<String> therapists) {
+        this.patientID = patientID;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.biometrics = biometrics;
         this.loginMode = loginMode;
         this.photo = photo;
         this.caregivers = caregivers;
+        this.therapists = therapists;
     }
 
     @Override
     public String toString() {
         return "Patient{" +
-                "id='" + id + '\'' +
+                "patientID='" + patientID + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", biometrics='" + biometrics + '\'' +
                 ", loginMode='" + loginMode + '\'' +
                 ", photo='" + photo + '\'' +
                 ", caregivers=" + caregivers +
+                ", therapists=" + therapists +
                 '}';
     }
 }

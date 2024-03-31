@@ -11,15 +11,6 @@ import java.util.List;
 
 @RestController
 public class PatientController {
-    private final PatientRepository patientRepository;
 
-    @Autowired
-    public PatientController(PatientRepository patientRepository){
-        this.patientRepository = patientRepository;
-    }
 
-    @RequestMapping("/patient")
-    public List<Patient> getPatient(){
-        return patientRepository.findAll();
-    }
 }
