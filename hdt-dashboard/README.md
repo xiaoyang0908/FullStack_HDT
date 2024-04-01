@@ -2,6 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Set up
 React version 18.0.0  peer the version
 
+```bash
 npm config set legacy-peer-deps true
 npm i
 

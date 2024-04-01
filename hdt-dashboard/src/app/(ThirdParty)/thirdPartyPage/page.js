@@ -5,6 +5,17 @@ import { tasksList } from "@/components/taskList";
 
 
 export default function TrdPage(){
+    const [fold, setFold] = useState("more");
+    const [morebutton, setMore] = useState("hidden");
+    const handleClickMore = () =>{
+        if(fold==="more"){
+            setMore("auto");
+            setFold("fold")
+        }else{
+            setMore("hidden");
+            setFold("more");
+        } 
+    }
     return(
         <Grid container spacing={2} padding={4}>
         <Grid item xs={7} sm={7} md={7} lg={7} >
@@ -89,7 +100,7 @@ export default function TrdPage(){
                                 marginTop:"4vh",
                                 height: "50vh",
                                 backgroundColor:'white',
-                                overflow:"hidden",
+                                overflow:morebutton,
                             }}
                             >
                             <Box sx={{justifyContent:"space-between", display:"flex"}}>
@@ -97,11 +108,11 @@ export default function TrdPage(){
                                     <h3>Tasks</h3> 
                                     <p>You have {tasksList.length} tasks now</p>
                                 </Box>
-                                <Button variant="contained" sx={{width:"80px", height:"40px"}}> More </Button>
+                                <Button variant="contained" sx={{width:"80px", height:"40px"}} onClick={handleClickMore}> {fold} </Button>
                             </Box>
                             <Box sx={{display:"flex", marginTop:1, flexWrap:"wrap"}}>
                                 {tasksList.map((v,i)=>(
-                                    <Paper key={i} sx={{width:"31.5%",height:"40vh",p:2, margin:1}}>
+                                    <Paper key={i} sx={{width:"31%",height:"40vh",p:2, margin:1}}>
                                         <p>{v.type}</p>
                                         <Box>
                                             <Box sx={{width:50, height:50}}></Box>
