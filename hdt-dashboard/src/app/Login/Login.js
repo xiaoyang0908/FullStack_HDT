@@ -8,7 +8,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 export default function Login(){
     const [open, setOpen] = useState(false);
-    const [loginSymbol, setLoginSymbol] = useState("error")
+    const [loginSymbol, setLoginSymbol] = useState("error");
 
     const handleOpen = () => {
       setOpen(true);
@@ -37,32 +37,32 @@ export default function Login(){
         }));
     };
 
-    // get username and password
+    // get username and password ==Object -->res={}
+    
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
         reqLogin(userData.username,userData.password).then((res)=>{
-            console.log(`${res.data}`)
-            if(res.status===1){
+            console.log(res)
+            if(res.status==="online"){
+                setLoginSymbol("success");
                 setMsg("Login Successfully");
-                setLoginSymbol("error");
-                if(res.data.role === "Patient"){
+                if(res.role === "Patient"){
                     router.replace("/patientPage");
-                }else if(res.data.role === "Therapist"){
+                }else if(res.role === "Therapist"){
                     router.replace("/therapistPage");
-                }else if(res.data.role === "Caregiver"){
+                }else if(res.role === "Caregiver"){
                     router.replace("/thirdPartyPAge");
                 }
-            }else{
-                setMsg("Incorrect email or password")
-                setLoginSymbol("suceess")
             }
         })
+        setLoginSymbol("error");
+        setMsg("Incorrect email or password");
         router.replace("/")
        
     };
 
-    const LoginImg = require("../../../public/Loginimg/login.svg")
+    // const LoginImg = require("../../../public/Loginimg/login.svg")
 
     return (
         <Box sx={{display:"flex"}}>
@@ -77,9 +77,9 @@ export default function Login(){
                 </Box>
                 <Snackbar
                     open={open}
-                    autoHideDuration={6000} // 控制自动隐藏的时间（毫秒）
+                    autoHideDuration={1000} // control hidden
                     onClose={handleClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Snackbar 出现的位置
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Snackbar position
                 >
                     <Alert onClose={handleClose} severity={loginSymbol}>
                         {msg}
@@ -89,19 +89,19 @@ export default function Login(){
                     <form onSubmit={handleSubmit} style={{width:"80%"}}>
                         <InputLabel htmlFor="component-simple">Account</InputLabel>
                         <TextField
+                            id='component-simple'
                             name="username"
-                            label="Username"
                             value={userData.username}
                             onChange={handleChange}
                             variant="outlined"
                             fullWidth
                             margin="normal"
                         />
-                        <InputLabel htmlFor="component-simple">Password</InputLabel>
+                        <InputLabel htmlFor="component-simple1">Password</InputLabel>
                         <TextField
+                            id='component-simple1'
                             name="password"
                             type="password"
-                            label="Password"
                             value={userData.password}
                             onChange={handleChange}
                             variant="outlined"

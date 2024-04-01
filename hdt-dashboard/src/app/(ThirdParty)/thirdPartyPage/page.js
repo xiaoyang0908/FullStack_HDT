@@ -5,17 +5,20 @@ import { tasksList } from "@/components/taskList";
 
 
 export default function TrdPage(){
-    const [fold, setFold] = useState("more");
-    const [morebutton, setMore] = useState("hidden");
+    const [open, setOpen] = useState("false");
+    const [showList, setShowList] = useState("hidden");
+    const [buttonName, setButton] = useState("more");
     const handleClickMore = () =>{
-        if(fold==="more"){
-            setMore("auto");
-            setFold("fold")
+        if(open){
+            setShowList("auto");
+            setButton("fold");
         }else{
-            setMore("hidden");
-            setFold("more");
-        } 
+            setShowList("hidden");
+            setButton("more");
+        }
+        setOpen(!open);
     }
+    
     return(
         <Grid container spacing={2} padding={4}>
         <Grid item xs={7} sm={7} md={7} lg={7} >
@@ -100,7 +103,7 @@ export default function TrdPage(){
                                 marginTop:"4vh",
                                 height: "50vh",
                                 backgroundColor:'white',
-                                overflow:morebutton,
+                                overflow:showList,
                             }}
                             >
                             <Box sx={{justifyContent:"space-between", display:"flex"}}>
@@ -108,7 +111,7 @@ export default function TrdPage(){
                                     <h3>Tasks</h3> 
                                     <p>You have {tasksList.length} tasks now</p>
                                 </Box>
-                                <Button variant="contained" sx={{width:"80px", height:"40px"}} onClick={handleClickMore}> {fold} </Button>
+                                <Button variant="contained" sx={{width:"80px", height:"40px"}} onClick={handleClickMore}> {buttonName} </Button>
                             </Box>
                             <Box sx={{display:"flex", marginTop:1, flexWrap:"wrap"}}>
                                 {tasksList.map((v,i)=>(

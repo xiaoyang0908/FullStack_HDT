@@ -1,8 +1,7 @@
 import axios from "axios";
-import { resolve } from "styled-jsx/css";
 
 //create axios instance
-const instance = axios.create({
+const service = axios.create({
     baseURL: "", //default url
     timeout: 50000, //request out of time
     withCredentials: false,
@@ -19,7 +18,7 @@ export function get(url,params){
         }).then((response)=>{
             resolve(response.data);
         }).catch(error=>{
-            message.error("request error");
+            console.error('An error occurred:', error);
         })
     })
 }
@@ -33,7 +32,7 @@ export function post(url,data){
         }).then((response)=>{
             resolve(response.data)
         }).catch(error=>{
-            message.error("请求出错了"+error.message)
+            console.error('An error occurred:', error);
         })
     })
 }

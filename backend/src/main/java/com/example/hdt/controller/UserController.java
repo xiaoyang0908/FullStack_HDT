@@ -9,27 +9,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @CrossOrigin
-@RequestMapping("/login")
+//@RequestMapping("/login")
 public class UserController {
     @Autowired
     private UserImpl userImpl;
 
-//    @PostMapping("/user")
-    public ResponseEntity<User> authenticateUser(@RequestParam("username")String email, @RequestParam("password")String password){
+    @PostMapping("/login")
+//    requesParam could not get the corresponding param name, so use requestBody to get the jsonObject
+    public ResponseEntity<User> authenticateUser(@RequestBody Map<String, Object> requestBody) throws Exception{
 //        get all users
+        String username = (String) requestBody.get("username");
+        String password = (String) requestBody.get("password");
+        System.out.println(username+password);
         List<User> userList = userImpl.getUserList();
         for (User user1:userList) {
-            if (user1.getEmail()==email && user1.getPassword()== password){
+            if (user1.getEmail().equals(username) && user1.getPassword().equals(password)){
                 user1.setStatus("online");
                 userImpl.updateUser(user1);
-                return new ResponseEntity<User>(user1, HttpStatusCode.valueOf(1));
+                return ResponseEntity.ok(user1);
             }
         }
-        return new ResponseEntity<User>(HttpStatusCode.valueOf(0));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @GetMapping("/{id}")

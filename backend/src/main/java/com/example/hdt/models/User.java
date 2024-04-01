@@ -1,10 +1,19 @@
 package com.example.hdt.models;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+@Document("signUpUsers")
 public class User {
+    @Field
     private String email;
+    @Field
     private String password;
+    @Field
     private String name;
+    @Field
     private String status;
+    @Field
     private String role;
 
     public User(String email, String password, String name, String status, String role) {
