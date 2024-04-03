@@ -39,14 +39,16 @@ export default function Login(){
 
     // get username and password ==Object -->res={}
     
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
-        reqLogin(userData.username,userData.password).then((res)=>{
-            console.log(res)
+        try {
+            const res = await reqLogin(userData.username,userData.password);
+            console.log(res);
             if(res.status==="online"){
                 setLoginSymbol("success");
                 setMsg("Login Successfully");
+                handleOpen();
                 if(res.role === "Patient"){
                     router.replace("/patientPage");
                 }else if(res.role === "Therapist"){
@@ -54,12 +56,14 @@ export default function Login(){
                 }else if(res.role === "Caregiver"){
                     router.replace("/thirdPartyPAge");
                 }
+            } else {
+                throw new Error("Login failed");
             }
-        })
-        setLoginSymbol("error");
-        setMsg("Incorrect email or password");
-        router.replace("/")
-       
+        } catch (error) {
+            setLoginSymbol("error");
+            setMsg("Incorrect email or password");
+            handleOpen(); // Open the Snackbar with the new message
+        }
     };
 
     // const LoginImg = require("../../../public/Loginimg/login.svg")
@@ -77,7 +81,7 @@ export default function Login(){
                 </Box>
                 <Snackbar
                     open={open}
-                    autoHideDuration={1000} // control hidden
+                    autoHideDuration={3000} // Increase to 3 seconds
                     onClose={handleClose}
                     anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Snackbar position
                 >
@@ -108,16 +112,9 @@ export default function Login(){
                             fullWidth
                             margin="normal"
                         />
-                        <Box  sx={{
-                                display: "flex",
-                                justifyContent: "flex-end", // 按钮右对齐
-                                marginTop: 2,          // 使按钮位于底部
-                            }}>
-                             <Button type="submit" variant="contained" color="primary" onClick={handleOpen}>
-                                Continue
-                            </Button>
-                        </Box>
-                        
+                        <Button type="submit" variant="contained" color="primary">
+                            Continue
+                        </Button>
                     </form>
                 </Box>
             </Box>
