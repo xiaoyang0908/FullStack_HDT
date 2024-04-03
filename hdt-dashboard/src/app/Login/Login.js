@@ -56,8 +56,6 @@ export default function Login(){
                 }
             }
         })
-        setLoginSymbol("error");
-        setMsg("Incorrect email or password");
         router.replace("/")
        
     };
@@ -66,11 +64,11 @@ export default function Login(){
 
     return (
         <Box sx={{display:"flex"}}>
-            <Box sx={{width:"30vw", height:"45vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
+            <Box sx={{width:"35vw", height:"60vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
                 <img src="/Loginimg/login.svg" alt="Login Picture" sx={{width:"30vw", height:"25vh"}} loading="lazy"/>
             </Box>
 
-            <Box sx={{width:"25vw", height:"45vh",bgcolor:"white", display:"flex", flexDirection:"column", justifyContent:"center", alignitem:"center", }}>
+            <Box sx={{width:"25vw", height:"60vh",bgcolor:"white", display:"flex", flexDirection:"column", justifyContent:"center", alignitem:"center", }}>
                 <Box margin={4}>
                     <p>Welcome to the Dashboard</p>
                     <p>Please log in</p>
