@@ -9,7 +9,7 @@ const service = axios.create({
 
 //get/post
 export function get(url,params){
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         service({
             method: "GET",
             url:url,
@@ -19,12 +19,13 @@ export function get(url,params){
             resolve(response.data);
         }).catch(error=>{
             console.error('An error occurred:', error);
+            reject(error); // Propagate the error
         })
     })
 }
 
 export function post(url,data){
-    return new Promise((resolve)=>{
+    return new Promise((resolve, reject)=>{
         service({
             method:"POST",
             url:url,
@@ -33,6 +34,7 @@ export function post(url,data){
             resolve(response.data)
         }).catch(error=>{
             console.error('An error occurred:', error);
+            reject(error); // Propagate the error
         })
     })
 }
