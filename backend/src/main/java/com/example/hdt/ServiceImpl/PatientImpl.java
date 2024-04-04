@@ -22,10 +22,4 @@ public class PatientImpl{
     public List<Patient> getPatientList(){
         return patientRepo.findAll();
     }
-
-
-
-
-
-
 }
