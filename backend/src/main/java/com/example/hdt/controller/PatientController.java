@@ -16,24 +16,15 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api")
 public class PatientController {
-    private final PatientImpl patientService;
-
     @Autowired
-    public PatientController(PatientImpl patientService){
-        this.patientService = patientService;
-    }
+    private PatientImpl patientService;
 
     @GetMapping("/patients")
-    public ResponseEntity<List<Patient>> getAllPatients(){
-        try {
+    public ResponseEntity<List<Patient>> getAllPatients() throws Exception{
             List<Patient> patients = patientService.getPatientList();
             if (patients.isEmpty()) {
-                return ResponseEntity.noContent().build(); 
+                return ResponseEntity.status(400).body(null);
             }
             return ResponseEntity.ok(patients);
-        } catch (Exception e) {
-            System.out.println("Error fetching patients: " + e.getMessage());
-            return ResponseEntity.internalServerError().body(null);
-        }
     }
 }

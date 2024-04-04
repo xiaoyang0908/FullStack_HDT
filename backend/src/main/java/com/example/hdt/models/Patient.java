@@ -8,122 +8,104 @@ import java.util.ArrayList;
 @Document("patientProfile")
 public class Patient {
     @Id
-    private String patientID;
+    private String PatientID;
     @Field
-    private String name;
+    private String Name;
     @Field
-    private String email;
+    private String Email;
     @Field
-    private String password;
+    private String Password;
     @Field
-    private String biometrics;
+    private String Biometrics;
     @Field
-    private String loginMode;
+    private String LoginMode;
     @Field
-    private String photo;
+    private String ActivityStatus;
     @Field
-    private ArrayList<String> caregivers;
+    private String Photo;
     @Field
-    private ArrayList<String> therapists;
-
-    public Patient(){}
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLoginMode() {
-        return loginMode;
-    }
-
-    public void setLoginMode(String loginMode) {
-        this.loginMode = loginMode;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public ArrayList<String> getCaregivers() {
-        return caregivers;
-    }
-
-    public void setCaregivers(ArrayList<String> caregivers) {
-        this.caregivers = caregivers;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private ArrayList<String> Caregivers;
+    @Field
+    private ArrayList<String> Therapists;
 
     public String getPatientID() {
-        return patientID;
+        return PatientID;
     }
 
     public void setPatientID(String patientID) {
-        this.patientID = patientID;
+        PatientID = patientID;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
     }
 
     public String getBiometrics() {
-        return biometrics;
+        return Biometrics;
     }
 
     public void setBiometrics(String biometrics) {
-        this.biometrics = biometrics;
+        Biometrics = biometrics;
+    }
+
+    public String getLoginMode() {
+        return LoginMode;
+    }
+
+    public void setLoginMode(String loginMode) {
+        LoginMode = loginMode;
+    }
+
+    public String getActivityStatus() {
+        return ActivityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        ActivityStatus = activityStatus;
+    }
+
+    public String getPhoto() {
+        return Photo;
+    }
+
+    public void setPhoto(String photo) {
+        Photo = photo;
+    }
+
+    public ArrayList<String> getCaregivers() {
+        return Caregivers;
+    }
+
+    public void setCaregivers(ArrayList<String> caregivers) {
+        Caregivers = caregivers;
     }
 
     public ArrayList<String> getTherapists() {
-        return therapists;
+        return Therapists;
     }
 
     public void setTherapists(ArrayList<String> therapists) {
-        this.therapists = therapists;
-    }
-
-    public Patient(String patientID, String name, String email, String password, String biometrics, String loginMode, String photo, ArrayList<String> caregivers, ArrayList<String> therapists) {
-        this.patientID = patientID;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.biometrics = biometrics;
-        this.loginMode = loginMode;
-        this.photo = photo;
-        this.caregivers = caregivers;
-        this.therapists = therapists;
-    }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "patientID='" + patientID + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", biometrics='" + biometrics + '\'' +
-                ", loginMode='" + loginMode + '\'' +
-                ", photo='" + photo + '\'' +
-                ", caregivers=" + caregivers +
-                ", therapists=" + therapists +
-                '}';
+        Therapists = therapists;
     }
 }
+
