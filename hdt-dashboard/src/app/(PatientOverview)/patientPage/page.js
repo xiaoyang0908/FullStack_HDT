@@ -21,6 +21,7 @@ export default function PatientOverview(){
     @typedef
     
     */
+    
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
@@ -174,8 +175,8 @@ export default function PatientOverview(){
                         }}
                         >
                             <h3>Range of motion(ROM)</h3>
-                            <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
-                            {avatarUrl && <VisageAvatar modelSrc={avatarUrl}/>}
+                            {/* <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
+                            {avatarUrl && <VisageAvatar modelSrc={avatarUrl}/>} */}
                     </Paper>
                 </Grid>
 

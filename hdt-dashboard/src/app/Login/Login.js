@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, InputLabel, Alert} from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { reqLogin } from '@/api/api';
 import Snackbar from '@mui/material/Snackbar';
-
+import { useCookies } from "react-cookie";
+import { currentUser } from '@/util/userStorage';
 
 
 export default function Login(){
@@ -37,8 +38,13 @@ export default function Login(){
         }));
     };
 
+    // const USER_Token = "token";
+
+
+    const [cookies,setCookie] = useCookies(["user_token"]);
+    const [curUser, setCurUser] = useState({});
+
     // get username and password ==Object -->res={}
-    
     const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
@@ -49,6 +55,14 @@ export default function Login(){
                 setLoginSymbol("success");
                 setMsg("Login Successfully");
                 handleOpen();
+                //  save user info into memory
+                const user = res;
+                setCurUser(user);
+                setCookie("user_token",user,{
+                    path: "/",
+                    maxAge: 3600, // cookeie  expired after one hour
+                    sameSite: true,
+                  })
                 if(res.role === "Patient"){
                     router.replace("/patientPage");
                 }else if(res.role === "Therapist"){
@@ -56,19 +70,33 @@ export default function Login(){
                 }else if(res.role === "Caregiver"){
                     router.replace("/thirdPartyPAge");
                 }
-            }else {
+            } else {
                 throw new Error("Login failed");
             }
+
         } catch (error) {
             setLoginSymbol("error");
             setMsg("Incorrect email or password");
             handleOpen(); // Open the Snackbar with the new message
         }
-        setLoginSymbol("error");
-        setMsg("Incorrect email or password");
-        router.replace("/")
-       
     };
+
+    // setCurUser(currentUser.user);
+     // signed in already
+    useEffect(()=>{
+        console.log(`user is ${curUser.email} , cookie is ${JSON.stringify(cookies)}`);
+        const cookieUser = cookies.user_token;
+        if(cookieUser){
+            console.log(cookieUser.role);
+            if(cookieUser.role === "Patient"){
+                router.replace("/patientPage");
+            }else if(cookieUser.role === "Therapist"){
+                router.replace("/therapistPage");
+            }else if(cookieUser.role === "Caregiver"){
+                router.replace("/thirdPartyPAge");
+            }
+        }
+    },[cookies,curUser]);
 
     // const LoginImg = require("../../../public/Loginimg/login.svg")
 
