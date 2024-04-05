@@ -7,14 +7,17 @@ import Divider from '@mui/material/Divider';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button, ListItemIcon, ListItemText, MenuList, ListItemButton,Link, Avatar, Box , MenuItem, AppBar, IconButton} from '@mui/material';
-
+import { useCookies } from "react-cookie";
+import { Center } from '@react-three/drei';
 
 export default function NavBar(){
     
-    const drawerWidth = 200;
+    const drawerWidth = '15%';
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [fontColor, setFont] = useState("black");
     const [bgcolor, setBgColor] = useState("white")
+    const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
+    const therapistInfo = cookies.user_token;
 
 
     const handleMenuItemClick = (event,index) => {
@@ -42,27 +45,42 @@ export default function NavBar(){
             }}>
                 <Avatar alt="Remy Sharp"
                     src=""
-                    sx={{ width: 100, height: 100, border: "1px solid black" }} />
-                <h4>Hi!</h4>
-                <h4>Dr.Emily Johnson</h4>
-                <p>ID:</p>
+                    sx={{ width: 100, height: 100, border: "1px solid black"}} />
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                    <h4>Welcome!</h4>
+                    <h4 variant="h6">{therapistInfo ? therapistInfo.name : "Loading..."}</h4>
+                </Box>
             </Toolbar>
             <Divider />
-            <Box sx={{ width: "200px", }}>
-                <Box sx={{ height: "50px", alignItems: "center", display: "flex", marginLeft: 1 }}>
-                    <p>Dashboard</p>
-                </Box>
+            <Box sx={{ width: "100%", }}>
                 <MenuList sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
                     {mainListItems.map((v, i) => (
-                        <MenuItem selected={i === selectedIndex} sx={{
-                            '.&Mui-selected': {
-                                bgcolor: "none"
-                            }
-                        }}
-                            onClick={(event) => handleMenuItemClick(event, i)} key={v.key}
+                        <MenuItem
+                            selected={i === selectedIndex}
+                            onClick={(event) => handleMenuItemClick(event, i)}
+                            key={v.key}
                             component={Link}
-                            href={v.key}>
-                            <Button variant='contained' sx={{ width: "160px", height: "50px", bgcolor: bgcolor, color: fontColor }}>
+                            href={v.key}
+                            sx={{
+                                width: '90%',
+                                pt: 2,
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                },
+                                '&.Mui-selected': {
+                                    backgroundColor: 'transparent',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                    }
+                                }
+                            }}
+                        >
+                            <Button variant='contained' sx={{
+                                width: "100%",
+                                height: "50px",
+                                bgcolor: bgcolor,
+                                color: fontColor,
+                            }}>
                                 <ListItemIcon>
                                     {v.icon}
                                 </ListItemIcon>

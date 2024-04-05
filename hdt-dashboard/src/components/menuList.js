@@ -11,7 +11,7 @@ export const mainListItems = [
   // Fragments let you group a list of children without adding extra nodes to the DOM.
   {
     title: 'Patients',
-    key: '/patients',
+    key: '/therapistPage',
     icon: <PatientIcon />,
   },
   {

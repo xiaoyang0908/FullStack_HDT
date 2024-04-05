@@ -8,6 +8,7 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import DetailsIcon from '@mui/icons-material/Details';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import { reqPatientsList } from '../../../api/api';
+import { useEffect, useState } from 'react';
 import {
   TextField, 
   Box,
@@ -19,18 +20,28 @@ import {
   Grid,
   IconButton,
   Container,
-  Pagination
+  Pagination,
+  Divider
 } from "@mui/material";
-import { useEffect, useState } from 'react';
+
+
 export default function TherapistOverview() {
     const [patientsList, setPatientsList] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [page, setPage] = useState(1);
-    const rowsPerPage = 5;
-    
+    const [isAscending, setIsAscending] = useState(true);
+    const gridAndSearchBarWidth = '100%';
+    const [searchQuery, setSearchQuery] = useState('');
+    const dividerPadding = 2;
+    const [rowsPerPage, setRowsPerPage] = useState(6);
 
-    useEffect(() => {
+
+    useEffect(() => {   // Prevents scrolling on page
+        document.body.style.overflow = 'hidden';
+    }, []);
+
+    useEffect(() => {   // Fetch patients
         const fetchPatients = async () => {
             setLoading(true);
             try {
@@ -47,29 +58,65 @@ export default function TherapistOverview() {
         fetchPatients();
     }, []);
 
+    useEffect(() => {   // Sort patients by name
+        setPatientsList(patientsList => [...patientsList].sort((a, b) => {
+            const nameA = a.name ? a.name.toUpperCase() : '';
+            const nameB = b.name ? b.name.toUpperCase() : '';
+            if (nameA < nameB) {
+                return isAscending ? -1 : 1;
+            }
+            if (nameA > nameB) {
+                return isAscending ? 1 : -1;
+            }
+            return 0;
+        }));
+    }, [isAscending]);
+
+    useEffect(() => {
+        const calculateRows = () => {
+          const rowHeight = 150; // Adjust this value based on your row height
+          const rows = Math.floor(window.innerHeight / rowHeight);
+          setRowsPerPage(rows);
+        };
+      
+        window.addEventListener('resize', calculateRows);
+        calculateRows(); // Calculate initial number of rows
+      
+        return () => {
+          window.removeEventListener('resize', calculateRows);
+        };
+      }, []);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
-    let count = Math.ceil(patientsList.length / rowsPerPage);
+    const handleSort = () => {
+        setIsAscending(!isAscending);
+    }
+
+    const filteredPatientsList = searchQuery    // Filter patients by name
+        ? patientsList.filter(patient =>
+            patient.name && patient.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        : patientsList;
+
+    let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
         <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
 
             {/* Search Grid */}
-            <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
                         placeholder="Type a name to search"
                         InputProps={{
                             type: 'search',
-                            endAdornment: (
-                                <IconButton>
-                                    <SortIcon />
-                                </IconButton>
-                            ),
                         }}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </Grid>
             </Grid>
@@ -80,8 +127,9 @@ export default function TherapistOverview() {
                     variant="outlined"
                     startIcon={<SortIcon />}
                     sx={{ mr: 1 }}
+                    onClick={handleSort}
                 >
-                    Name A - Z
+                    {isAscending ? 'Name: A - Z' : 'Name: Z - A'}
                 </Button>
 
                 {/* Right section for client buttons */}
@@ -96,28 +144,51 @@ export default function TherapistOverview() {
             </Box>
 
             {/* User grid */}
-            <Grid container spacing={2} sx={{ overflow: 'auto', mb: 'auto' }}>
-                {patientsList
+            <Grid container spacing={2} sx={{ overflow: 'auto', mb: 'auto', width: gridAndSearchBarWidth }}>
+                {filteredPatientsList
                     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                     .map((patient) => (
                         <Grid item key={patient.patientID} xs={12}>
                             <Card sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, padding: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, padding: 2, maxWidth: '30%' }}>
                                     <Avatar sx={{ marginRight: 2 }}>{/* Patient's Avatar */}</Avatar>
-                                    <Box>
-                                        <Typography variant="h6">{patient.name}</Typography>
-                                        <Typography variant="body2">Current tasks: {patient.currentTasks}</Typography>
+                                    <Box sx={{ flexDirection: 'column' }}>
+                                        <Typography variant="h6">{patient.name || 'No data available'}</Typography>
+                                        <Typography variant="body2">Current tasks: {patient.currentTasks || 'No data available'}</Typography>
                                     </Box>
                                 </Box>
-                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-around', pr: 2 }}>
-                                    <IconButton>
-                                        <DetailIcon />
-                                    </IconButton>
-                                    <IconButton>
-                                        <PlaylistAddCheckIcon />
-                                    </IconButton>
-                                    <IconButton>
+
+                                <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
+
+                                <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
+                                    <Typography variant="body2">Total exercise: {patient.exerciseTime || 'No data available'}</Typography>
+                                    <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available'}</Typography>
+                                </Box>
+
+                                <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, maxWidth: '40%' }}>
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<DetailsIcon />}
+                                        size="large"
+                                        sx={{ textTransform: 'none' }}
+                                    >
+                                        Details
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        startIcon={<ManageTasksIcon />}
+                                        size="large"
+                                        sx={{ textTransform: 'none' }}
+                                    >
+                                        Manage tasks
+                                    </Button>
+                                    <IconButton aria-label="thumbs up" size="large">
                                         <ThumbUp />
+                                    </IconButton>
+                                    <IconButton aria-label="archive" size="large" sx={{ mr: 2 }}>
+                                        <ArchivedIcon />
                                     </IconButton>
                                 </Box>
                             </Card>
