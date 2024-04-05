@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, InputLabel, Alert} from '@mui/material';
-import { reqLogin } from '@/app/api/api';
+import { useRouter } from 'next/navigation';
+import { reqLogin } from '@/api/api';
 import Snackbar from '@mui/material/Snackbar';
-import { CookieSetting } from '@/app/util/cookieSetting';
+import { useCookies } from "react-cookie";
+import { currentUser } from '@/util/userStorage';
 
 
 export default function Login(){
     const [open, setOpen] = useState(false);
     const [loginSymbol, setLoginSymbol] = useState("error");
-    const { setToken} = CookieSetting();
 
     const handleOpen = () => {
       setOpen(true);
@@ -22,7 +23,7 @@ export default function Login(){
     };
   
 
-
+    const router = useRouter();
     const [userData, setUserData] = useState({
         username: '',
         password: '',
@@ -37,7 +38,11 @@ export default function Login(){
         }));
     };
 
+    // const USER_Token = "token";
 
+
+    const [cookies,setCookie] = useCookies(["user_token"]);
+    const [curUser, setCurUser] = useState({});
 
     // get username and password ==Object -->res={}
     const handleSubmit = async (event) => {
@@ -52,18 +57,19 @@ export default function Login(){
                 handleOpen();
                 //  save user info into memory
                 const user = res;
-                setToken(user,{
+                setCurUser(user);
+                setCookie("user_token",user,{
                     path: "/",
                     maxAge: 3600, // cookeie  expired after one hour
                     sameSite: true,
                   })
-                // if(res.role === "Patient"){
-                //     router.replace("/patientPage");
-                // }else if(res.role === "Therapist"){
-                //     router.replace("/therapistPage");
-                // }else if(res.role === "Caregiver"){
-                //     router.replace("/thirdPartyPAge");
-                // }
+                if(res.role === "Patient"){
+                    router.replace("/patientPage");
+                }else if(res.role === "Therapist"){
+                    router.replace("/therapistPage");
+                }else if(res.role === "Caregiver"){
+                    router.replace("/thirdPartyPAge");
+                }
             } else {
                 throw new Error("Login failed");
             }
@@ -72,11 +78,26 @@ export default function Login(){
             setLoginSymbol("error");
             setMsg("Incorrect email or password");
             handleOpen(); // Open the Snackbar with the new message
-            // router.replace("/")
         }
     };
 
-   
+    // setCurUser(currentUser.user);
+     // signed in already
+    useEffect(()=>{
+        console.log(`user is ${curUser.email} , cookie is ${JSON.stringify(cookies)}`);
+        const cookieUser = cookies.user_token;
+        if(cookieUser){
+            console.log(cookieUser.role);
+            if(cookieUser.role === "Patient"){
+                router.replace("/patientPage");
+            }else if(cookieUser.role === "Therapist"){
+                router.replace("/therapistPage");
+            }else if(cookieUser.role === "Caregiver"){
+                router.replace("/thirdPartyPAge");
+            }
+        }
+    },[cookies,curUser]);
+
     // const LoginImg = require("../../../public/Loginimg/login.svg")
 
     return (

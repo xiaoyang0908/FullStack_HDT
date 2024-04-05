@@ -14,12 +14,12 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api")
+//@RequestMapping("/login")
 public class UserController {
     @Autowired
     private UserImpl userImpl;
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
 //    requesParam could not get the corresponding param name, so use requestBody to get the jsonObject
     public ResponseEntity<User> authenticateUser(@RequestBody Map<String, Object> requestBody) throws Exception{
 //        get all users
