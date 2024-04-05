@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
+import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import { reqPatientsList } from '../../api/api';
 import { useEffect, useState } from 'react';
 import {
@@ -167,7 +168,7 @@ export default function TherapistOverview() {
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, maxWidth: '40%' }}>
                                     <Button
                                         variant="outlined"
-                                        startIcon={<DetailsIcon />}
+                                        startIcon={<DetailIcon />}
                                         size="large"
                                         sx={{ textTransform: 'none' }}
                                     >
