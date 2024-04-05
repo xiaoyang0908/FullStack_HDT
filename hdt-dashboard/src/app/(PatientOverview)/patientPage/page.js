@@ -4,7 +4,8 @@ import { Box, Grid, Paper, Avatar, Button,Typography} from "@mui/material";
 import { useState } from "react";
 import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar} from "@readyplayerme/visage";
-import { useCookies } from "react-cookie";
+import { CookieSetting } from "@/app/util/cookieSetting";
+import LogOut from "@/app/components/appBar";
 
 /**
  * @typedef {Object} AvatarCreatorConfig
@@ -22,9 +23,8 @@ export default function PatientOverview(){
     @typedef
     
     */
-    
-    const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
-    const userInfo = cookies.user_token;
+    const {getToken} = CookieSetting();
+    const userInfo = getToken();
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
@@ -53,6 +53,8 @@ export default function PatientOverview(){
       };
 
     return (
+        <Box>
+        <LogOut/>
         <Grid container spacing={2} padding={4}>
             {/* Left Column: Patient Info, Journey, Thumbs-Up Count */}
             <Grid item xs={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '100vh' }}>
@@ -97,6 +99,7 @@ export default function PatientOverview(){
                 <Button variant="contained" sx={{ mt: 2 }}>Check Animation</Button>
             </Grid>
         </Grid>
+        </Box>
     );
 }
 
