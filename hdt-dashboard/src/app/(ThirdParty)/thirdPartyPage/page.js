@@ -1,7 +1,7 @@
 'use client'
 import { Box, Grid, Avatar, Paper, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { tasksList } from "@/components/taskList";
+import { tasksList } from "@/app/components/taskList";
 
 
 export default function TrdPage(){
