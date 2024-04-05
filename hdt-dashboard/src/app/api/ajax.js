@@ -7,7 +7,6 @@ const service = axios.create({
     withCredentials: false,
 })
 
-const {getToken} = CookieSetting();
 
 //get/post
 export function get(url,params){

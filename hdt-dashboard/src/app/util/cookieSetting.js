@@ -1,6 +1,7 @@
 import { useCookies } from "react-cookie";
 
-export const CookieSetting = () =>{
+export const CookieSetting =() =>{
+
     const [cookies,setCookie, removeCookie] = useCookies(["user_token"]);
 
     // get token name

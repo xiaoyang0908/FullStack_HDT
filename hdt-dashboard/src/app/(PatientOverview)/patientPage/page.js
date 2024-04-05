@@ -1,6 +1,6 @@
 'use client'
-import { tasksList } from "@/components/taskList";
-import { Box, Grid, Paper, Avatar, Button} from "@mui/material";
+// import { tasksList } from "@/components/taskList";
+import { Box, Grid, Paper, Avatar, Button,Typography} from "@mui/material";
 import { useState } from "react";
 import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar} from "@readyplayerme/visage";

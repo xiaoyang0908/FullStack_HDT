@@ -4,8 +4,7 @@ import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
-import { reqPatientsList } from '../../../api/api';
-import {TextField, Box,Avatar, Button, Table,TableBody, TableCell, TableContainer, TableHead, TableRow, Container, TableFooter, TablePagination, Pagination, Stack } from "@mui/material";
+import { reqPatientsList } from '../../api/api';
 import { useEffect, useState } from 'react';
 import {
   TextField, 
