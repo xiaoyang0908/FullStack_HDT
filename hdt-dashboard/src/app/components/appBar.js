@@ -9,7 +9,7 @@ export default function LogOut({ shadow, bgColour }){
     const {removeToken} = CookieSetting();
 
     const handleLogOut = () =>{
-        // removeToken();
+        removeToken();
     }
     return(
         <AppBar position="static" elevation={shadow ? 4 : 0} sx={{ bgcolor: bgColour, boxShadow: shadow ? 'default' : 'none' }}>

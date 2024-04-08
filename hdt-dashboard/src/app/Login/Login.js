@@ -57,13 +57,6 @@ export default function Login(){
                     maxAge: 3600, // cookeie  expired after one hour
                     sameSite: true,
                   })
-                // if(res.role === "Patient"){
-                //     router.replace("/patientPage");
-                // }else if(res.role === "Therapist"){
-                //     router.replace("/therapistPage");
-                // }else if(res.role === "Caregiver"){
-                //     router.replace("/thirdPartyPAge");
-                // }
             } else {
                 throw new Error("Login failed");
             }

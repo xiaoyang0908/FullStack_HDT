@@ -1,7 +1,7 @@
 'use client'
 // import { tasksList } from "@/components/taskList";
 import { Box, Grid, Paper, Avatar, Button,Typography} from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar} from "@readyplayerme/visage";
 import { CookieSetting } from "@/app/util/cookieSetting";
@@ -23,8 +23,21 @@ export default function PatientOverview(){
     @typedef
     
     */
+    const [userInfo, setUserInfo] = useState("");
     const {getToken} = CookieSetting();
-    const userInfo = getToken();
+    const handleToken = async() =>{
+        const token = await getToken();
+        return token;
+    }
+    useEffect(()=>{
+        handleToken().then(token => {
+            setUserInfo(token.name);
+            console.log(token); // token
+        });
+    },[userInfo])
+   
+  
+    
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
@@ -63,7 +76,7 @@ export default function PatientOverview(){
 
                 {/* Patient Info */}
                 <Paper elevation={3} sx={{ p: 2 }}>
-                    <Typography variant="h6">{userInfo ? userInfo.name : "Loading..."}</Typography>
+                    <Typography variant="h6">{userInfo ? userInfo : "Loading..."}</Typography>
                 </Paper>
 
                 {/* Journey Button */}
