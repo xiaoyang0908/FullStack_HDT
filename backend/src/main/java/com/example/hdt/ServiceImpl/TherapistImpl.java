@@ -1,12 +1,11 @@
 package com.example.hdt.ServiceImpl;
 
-import com.example.hdt.repositories.TherapistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class TherapistImpl {
 
-    @Autowired
-    private TherapistRepository therapistRepository;
 
 
 }

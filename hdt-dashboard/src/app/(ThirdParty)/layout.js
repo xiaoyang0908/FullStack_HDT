@@ -4,14 +4,12 @@ import TrdNavBar from '@/app/components/TrdNav-links';
 import { Middleware } from '@/app/util/middleware';
 export default function TrdLayout({ children }) {
     return(
-        <Middleware>
-            <Box sx={{ display: 'flex', height:"100%"}}>
-                <Box
-                component="main"
-                sx={{ flexGrow: 1,}}>
-                {children}
-                </Box>
+        <Box sx={{ display: 'flex', height:"100%"}}>
+            <Box
+            component="main"
+            sx={{ flexGrow: 1,}}>
+            {children}
             </Box>
-        </Middleware>
-    )
+        </Box>
+)
 }

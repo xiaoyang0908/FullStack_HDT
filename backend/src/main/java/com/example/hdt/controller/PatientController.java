@@ -17,11 +17,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class PatientController {
     @Autowired
-    private PatientImpl patientService;
+    private PatientImpl patientImpl;
 
     @GetMapping("/patients")
     public ResponseEntity<List<Patient>> getAllPatients() throws Exception{
-            List<Patient> patients = patientService.getPatientList();
+            List<Patient> patients = patientImpl.getPatientList();
             if (patients.isEmpty()) {
                 return ResponseEntity.status(400).body(null);
             }

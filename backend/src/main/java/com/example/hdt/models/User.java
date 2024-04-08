@@ -1,10 +1,14 @@
 package com.example.hdt.models;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("signUpUsers")
 public class User {
+
+    @Id
+    private String _id;
     @Field
     private String email;
     @Field
@@ -23,7 +27,13 @@ public class User {
         this.status = status;
         this.role = role;
     }
+    public String get_id() {
+        return _id;
+    }
 
+    public void set_id(String _id) {
+        this._id = _id;
+    }
     public String getEmail() {
         return email;
     }

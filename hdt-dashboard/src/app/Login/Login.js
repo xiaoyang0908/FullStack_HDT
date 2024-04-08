@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, InputLabel, Alert} from '@mui/material';
-import { reqLogin } from '@/app/api/api';
+import { reqLoginInAndOUt } from '@/app/api/api';
 import Snackbar from '@mui/material/Snackbar';
 import { CookieSetting } from '@/app/util/cookieSetting';
 
@@ -44,7 +44,7 @@ export default function Login(){
         event.preventDefault();
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
         try {
-            const res = await reqLogin(userData.username,userData.password);
+            const res = await reqLoginInAndOUt(userData.username,userData.password);
             console.log(res);
             if(res.status==="online"){
                 setLoginSymbol("success");

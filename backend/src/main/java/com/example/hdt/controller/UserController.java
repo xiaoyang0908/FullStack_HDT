@@ -26,20 +26,21 @@ public class UserController {
         String username = (String) requestBody.get("username");
         String password = (String) requestBody.get("password");
         System.out.println(username+password);
-        List<User> userList = userImpl.getUserList();
-        for (User user1:userList) {
-            if (user1.getEmail().equals(username) && user1.getPassword().equals(password)){
-                user1.setStatus("online");
-                userImpl.updateUser(user1);
-                return ResponseEntity.ok(user1);
+        User cueUser = userImpl.findUserByEmail(username);
+        if (cueUser.getPassword().equals(password)){
+            System.out.println(cueUser.getStatus());
+            if (cueUser.getStatus().equals("offline")) {
+                cueUser.setStatus("online");
+            }else{
+                cueUser.setStatus("offline");
             }
+           userImpl.updateStatus(cueUser);
+            return ResponseEntity.ok(cueUser);
+
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(String id){
-        return userImpl.getUser(id);
-    }
+
 
 }

@@ -1,17 +1,17 @@
 import{get, post} from "./ajax";
 
-export const reqLogin = (username, password)=>{
+export const reqLoginInAndOUt = (username, password)=>{
     try{
-        return post("http://127.0.0.1:8090/api/auth",{username:username,password:password})
+        return post("http://127.0.0.1:8090/api/auth",{username:username,password:password});
     }catch(err){
-        throw err
+        throw errl
     }
 }
 
-export const reqPatientsList = async () => {
+
+export const reqPatientsList = ()=>{
     try {
-        const response = await get("http://127.0.0.1:8090/api/patients");
-        return response;
+        return get("http://127.0.0.1:8090/api/patients");
     } catch (err) {
         console.error('Failed to fetch patients:', err);
         throw err;
