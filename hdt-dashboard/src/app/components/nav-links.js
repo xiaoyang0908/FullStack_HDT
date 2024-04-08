@@ -18,7 +18,11 @@ export default function NavBar(){
     const [bgcolor, setBgColor] = useState("white")
     const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
     const therapistInfo = cookies.user_token;
+    const [isClient, setIsClient] = useState(false);
 
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const handleMenuItemClick = (event,index) => {
         setSelectedIndex(index);
@@ -46,9 +50,9 @@ export default function NavBar(){
                 <Avatar alt="Remy Sharp"
                     src=""
                     sx={{ width: 100, height: 100, border: "1px solid black"}} />
-                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                     <h4>Welcome!</h4>
-                    <h4 variant="h6">{therapistInfo ? therapistInfo.name : "Loading..."}</h4>
+                    {isClient ? (therapistInfo ? <h4 variant="h6">{therapistInfo.name}</h4> : null) : <h4 variant="h6">Loading...</h4>}
                 </Box>
             </Toolbar>
             <Divider />
