@@ -35,10 +35,6 @@ export default function TherapistOverview() {
     const [rowsPerPage, setRowsPerPage] = useState(6);
 
 
-    useEffect(() => {   // Prevents scrolling on page
-        document.body.style.overflow = 'hidden';
-    }, []);
-
     useEffect(() => {   // Fetch patients
         const fetchPatients = async () => {
             setLoading(true);
@@ -102,7 +98,7 @@ export default function TherapistOverview() {
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
-        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingTop: '60px' }}>
 
             {/* Search Grid */}
             <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>

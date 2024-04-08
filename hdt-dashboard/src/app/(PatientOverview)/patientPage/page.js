@@ -53,8 +53,10 @@ export default function PatientOverview(){
       };
 
     return (
-        <Box>
-        <LogOut/>
+        <Box sx={{ overflow: 'hidden', height: '100vh'}}>
+        <LogOut 
+            shadow={true}
+            bgColour={"white"}/>
         <Grid container spacing={2} padding={4}>
             {/* Left Column: Patient Info, Journey, Thumbs-Up Count */}
             <Grid item xs={4} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', height: '100vh' }}>

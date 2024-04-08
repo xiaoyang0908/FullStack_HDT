@@ -4,7 +4,7 @@ import { Container,Toolbar,Button, Box } from "@mui/material";
 import { CookieSetting } from "../util/cookieSetting";
 import SignOutIcon from "@mui/icons-material/LogoutOutlined";
 
-export default function LogOut(){
+export default function LogOut({ shadow, bgColour }){
 
     const {removeToken} = CookieSetting();
 
@@ -12,7 +12,7 @@ export default function LogOut(){
         // removeToken();
     }
     return(
-        <AppBar position="static" sx={{ boxShadow: 'none', bgcolor: 'transparent' }}>
+        <AppBar position="static" elevation={shadow ? 4 : 0} sx={{ bgcolor: bgColour, boxShadow: shadow ? 'default' : 'none' }}>
             <Toolbar  sx={{bgcolor:"white", height:30,display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 <Box sx={{display:"flex"}}>
                     <Box sx={{width:22, height:22, bgcolor:"rgba(117,144,210, 0.5)" }}>
@@ -21,7 +21,6 @@ export default function LogOut(){
                     <Box sx={{marginLeft:1}}>
                         <img src="/Rehab.svg" alt="Logo" sx={{width:96, height:20}} loading="lazy"/>
                     </Box>
-                   
                 </Box>
                 <Button onClick={handleLogOut} startIcon={<SignOutIcon/>}>
                     Sign Out
