@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
+import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import { reqPatientsList } from '../../api/api';
 import { useEffect, useState } from 'react';
@@ -33,8 +34,13 @@ export default function TherapistOverview() {
     const [searchQuery, setSearchQuery] = useState('');
     const dividerPadding = 2;
     const [rowsPerPage, setRowsPerPage] = useState(6);
+    const router = useRouter();
 
-
+    const detailsButtonPath = '/patients/page';
+    const manageTaskButtonPath = '';
+    const addClientButtonPath = '';
+    const archivedClientsButtonPath = '';
+    
     useEffect(() => {   // Fetch patients
         const fetchPatients = async () => {
             setLoading(true);
@@ -52,6 +58,14 @@ export default function TherapistOverview() {
         fetchPatients();
     }, []);
 
+    useEffect(() => {   // Prevent scrolling 
+        document.body.style.overflow = 'hidden';
+    
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
     useEffect(() => {   // Sort patients by name
         setPatientsList(patientsList => [...patientsList].sort((a, b) => {
             const nameA = a.name ? a.name.toUpperCase() : '';
@@ -66,11 +80,15 @@ export default function TherapistOverview() {
         }));
     }, [isAscending]);
 
-    useEffect(() => {
+    useEffect(() => {   // Update number of rows based on window height to prevent scrolling
         const calculateRows = () => {
-          const rowHeight = 150; // Adjust this value based on your row height
-          const rows = Math.floor(window.innerHeight / rowHeight);
-          setRowsPerPage(rows);
+          const rowHeight = 170;
+          const otherElementsHeight = 20; 
+
+          const availableHeight = window.innerHeight - otherElementsHeight;
+          const rows = Math.floor(availableHeight / rowHeight);
+
+          setRowsPerPage(rows > 0 ? rows : 1);
         };
       
         window.addEventListener('resize', calculateRows);
@@ -81,13 +99,17 @@ export default function TherapistOverview() {
         };
       }, []);
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePatientListPage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleSort = () => {
         setIsAscending(!isAscending);
-    }
+    };
+
+    const handleButtonClick = (path) => {   // Redirect to different page
+        router.push(path);
+        };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
         ? patientsList.filter(patient =>
@@ -128,10 +150,19 @@ export default function TherapistOverview() {
 
                 {/* Right section for client buttons */}
                 <Box>
-                    <Button variant="contained" startIcon={<AddIcon />} sx={{ mr: 1 }}>
+                    <Button 
+                    variant="contained" 
+                    startIcon={<AddIcon />} 
+                    sx={{ mr: 1 }}
+                    onClick={() => handleButtonClick(addClientButtonPath)}
+                    >
                         Add client
                     </Button>
-                    <Button variant="outlined" startIcon={<ArchivedIcon />}>
+                    <Button 
+                    variant="outlined" 
+                    startIcon={<ArchivedIcon />}
+                    onClick={() => handleButtonClick(archivedClientsButtonPath)}
+                    >
                         Archived Clients
                     </Button>
                 </Box>
@@ -167,6 +198,7 @@ export default function TherapistOverview() {
                                         startIcon={<DetailIcon />}
                                         size="large"
                                         sx={{ textTransform: 'none' }}
+                                        onClick={() => handleButtonClick(detailsButtonPath)}
                                     >
                                         Details
                                     </Button>
@@ -175,6 +207,7 @@ export default function TherapistOverview() {
                                         startIcon={<ManageTasksIcon />}
                                         size="large"
                                         sx={{ textTransform: 'none' }}
+                                        onClick={() => handleButtonClick(manageTaskButtonPath)}
                                     >
                                         Manage tasks
                                     </Button>
@@ -195,7 +228,7 @@ export default function TherapistOverview() {
                 <Pagination
                     page={page}
                     count={count}
-                    onChange={handleChangePage}
+                    onChange={handleChangePatientListPage}
                     size="large"
                 />
             </Box>
