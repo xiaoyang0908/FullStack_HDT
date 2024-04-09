@@ -36,7 +36,7 @@ export default function TherapistOverview() {
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const router = useRouter();
 
-    const detailsButtonPath = '/patients/page';     // Cant get it to work to navigate correctly
+    const detailsButtonPath = '/patientsDetails';
     const manageTaskButtonPath = '';
     const addClientButtonPath = '';
     const archivedClientsButtonPath = '';
