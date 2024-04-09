@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react";
 
-export default function Patients(){
+export default function TherapistPatientsDetails(){
 
     useEffect(() => {   // Prevents scrolling on page
         document.body.style.overflow = 'hidden';
