@@ -51,7 +51,7 @@ export default function NavBar(){
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
-                    marginTop: '2%'
+                    marginTop: '6vh'
                 }
             }}>
                 <Toolbar sx={{
