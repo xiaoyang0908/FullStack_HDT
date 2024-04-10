@@ -35,14 +35,18 @@ export default function NavBar(){
 
     return (
         <>
+            <LogOut shadow={true}
+                    bgColour={drawerBGColor}/>
             <Drawer variant="permanent" anchor='left' sx={{
                 width: drawerWidth,
                 bgcolor: drawerBGColor,
-                flexShrink: 0,
+                flexShrink: 0, 
+                zIndex:"1200 !important",
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
                     bgcolor:"#F5F7FC",
+                    zIndex:"1200 !important",
                     // marginTop: '2%'
                 }
             }}>
