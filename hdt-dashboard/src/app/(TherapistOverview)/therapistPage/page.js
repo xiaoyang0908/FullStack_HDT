@@ -7,6 +7,7 @@ import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 import { reqPatientsList } from '../../api/api';
+import { usePatient } from '../../contexts/PatientContext';
 import { useEffect, useState } from 'react';
 import {
   TextField, 
@@ -35,6 +36,7 @@ export default function TherapistOverview() {
     const dividerPadding = 2;
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const router = useRouter();
+    const { updateCurrentPatient } = usePatient();
 
     const detailsButtonPath = '/patientsDetails';
     const manageTaskButtonPath = '';
@@ -107,9 +109,13 @@ export default function TherapistOverview() {
         setIsAscending(!isAscending);
     };
 
-    const handleButtonClick = (path) => {   // Redirect to different page
+    const handleButtonClick = (path, patientData = null) => {   // Redirect to different page
+        if (patientData) {
+            updateCurrentPatient(patientData);
+            //console.log('Patient data:', patientData);  // Remember to delete after testing
+        }
         router.push(path);
-        };
+    };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
         ? patientsList.filter(patient =>
@@ -198,7 +204,7 @@ export default function TherapistOverview() {
                                         startIcon={<DetailIcon />}
                                         size="large"
                                         sx={{ textTransform: 'none' }}
-                                        onClick={() => handleButtonClick(detailsButtonPath)}
+                                        onClick={() => handleButtonClick(detailsButtonPath, patient)}
                                     >
                                         Details
                                     </Button>
@@ -207,7 +213,7 @@ export default function TherapistOverview() {
                                         startIcon={<ManageTasksIcon />}
                                         size="large"
                                         sx={{ textTransform: 'none' }}
-                                        onClick={() => handleButtonClick(manageTaskButtonPath)}
+                                        onClick={() => handleButtonClick(detailsButtonPath, patient)}
                                     >
                                         Manage tasks
                                     </Button>
