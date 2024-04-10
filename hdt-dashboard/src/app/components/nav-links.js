@@ -27,10 +27,14 @@ export default function NavBar(){
         setIsClient(true);
     }, []);
 
+    const [buttonStyles, setButtonStyles] = useState(
+        mainListItems.map(() => ({ fontColor: "black", bgcolor: "white" }))
+      );
+
     const handleMenuItemClick = (event,index) => {
-        setSelectedIndex(index);
-        setFont("white")
-        setBgColor("#3B3F73")
+        const newButtonStyles = [...buttonStyles];
+        newButtonStyles[index] = { fontColor: "white", bgcolor: "#3B3F73" };
+        setButtonStyles(newButtonStyles);
       };
 
     return (
@@ -96,8 +100,8 @@ export default function NavBar(){
                                 <Button variant='contained' sx={{
                                     width: "100%",
                                     height: "50px",
-                                    bgcolor: bgcolor,
-                                    color: fontColor,
+                                    bgcolor: buttonStyles[i].bgcolor,
+                                    color: buttonStyles[i].fontColor,
                                 }}>
                                     <ListItemIcon>
                                         {v.icon}
