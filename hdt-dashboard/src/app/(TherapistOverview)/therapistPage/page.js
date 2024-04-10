@@ -39,12 +39,12 @@ export default function TherapistOverview() {
     const dividerPadding = 2;
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const router = useRouter();
-    const { updateCurrentPatient } = usePatient();
+    // const { updateCurrentPatient } = usePatient();
 
     const detailsButtonPath = '/patientsDetails';
-    const manageTaskButtonPath = '';
-    const addClientButtonPath = '';
-    const archivedClientsButtonPath = '';
+    const manageTaskButtonPath = '/manafeDetails';
+    const addClientButtonPath = '/addClient';
+    const archivedClientsButtonPath = '/archievedClients';
     
     useEffect(() => {   // Fetch patients
         const fetchPatients = async () => {
@@ -112,11 +112,13 @@ export default function TherapistOverview() {
         setIsAscending(!isAscending);
     };
 
-    const handleButtonClick = (path, patientData = null) => {   // Redirect to different page
+    const handleButtonClick = (path, patientData) => {   // Redirect to different page
         if (patientData) {
-            updateCurrentPatient(patientData);
+            // updateCurrentPatient(patientData);
+            router.push(`${path}?patient=${JSON.stringify(patientData)}`);
+        }else{
+            router.push(path)
         }
-        router.push(path);
     };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
@@ -225,7 +227,7 @@ export default function TherapistOverview() {
                                         startIcon={<ManageTasksIcon />}
                                         // size="large"
                                         sx={{ textTransform: 'none' }}
-                                        onClick={() => handleButtonClick(detailsButtonPath, patient)}
+                                        onClick={() => handleButtonClick(manageTaskButtonPath, {})}
                                     >
                                         Manage tasks
                                     </Button>

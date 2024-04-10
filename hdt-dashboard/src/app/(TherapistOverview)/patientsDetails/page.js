@@ -21,6 +21,7 @@ import {
     Male,
     EditIcon
 } from "@mui/icons-material";
+import { useSearchParams } from "next/navigation";
 
 /**
  * @typedef {Object} AvatarCreatorConfig
@@ -35,7 +36,10 @@ import {
  */
 
 export default function TherapistPatientsDetails() {
-    const { currentPatient } = usePatient();    // current.patient is the patient data
+     // current.patient is the patient data
+     const searchParams = useSearchParams();
+     const currentPatient = JSON.parse(searchParams.get("patient"));
+     console.log(currentPatient);
 
     // Avatar creator configuration
     const style = { width: '100%', height: '90vh', border: 'none' };
@@ -65,7 +69,7 @@ export default function TherapistPatientsDetails() {
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                             <Typography variant="h5">
-                                {currentPatient?.name}
+                                {currentPatient.name}
                             </Typography>
                         </Box>
                         <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
@@ -81,7 +85,7 @@ export default function TherapistPatientsDetails() {
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Email</Typography>
-                            <Typography variant="body2" color="text.secondary">{currentPatient?.email}</Typography>
+                            <Typography variant="body2" color="text.secondary">{currentPatient.email}</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact person</Typography>

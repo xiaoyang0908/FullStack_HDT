@@ -14,6 +14,8 @@ public class Patient {
     @Field
     private String Email;
     @Field
+    private String Phone;
+    @Field
     private String Password;
     @Field
     private String Biometrics;
@@ -58,6 +60,14 @@ public class Patient {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
     }
 
     public String getBiometrics() {
