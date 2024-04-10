@@ -48,7 +48,7 @@ export function Middleware({children}){
                 handleUserExpire()
                 clearInterval(expirationCheckInterval); 
             }
-        }, 36);
+        }, 60*60*1000);
 
         return () => clearInterval(expirationCheckInterval); 
     }, [cookieUser]);

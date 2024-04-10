@@ -54,7 +54,7 @@ export default function Login(){
                 const user = res;
                 setToken(user,{
                     path: "/",
-                    maxAge: 36, // cookeie  expired after one hour
+                    maxAge: 3600, // cookeie  expired after one hour
                     sameSite: true,
                   })
             } else {
