@@ -1,151 +1,161 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { usePatient } from "../../contexts/PatientContext";
+import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import {
+    Box,
+    Grid,
+    Paper,
+    Avatar,
+    Button,
+    Typography,
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    Container
+} from "@mui/material";
+import {
+    PaddingTwoTone,
+    Male,
+    EditIcon
+} from "@mui/icons-material";
 
-export default function TherapistPatientsDetails(){
+/**
+ * @typedef {Object} AvatarCreatorConfig
+ * @property {boolean} [clearCache]
+ * @property {BodyType} [bodyType]
+ * @property {boolean} [quickStart]
+ * @property {Language} [language]
+ * @property {string} [token]
+ * @property {string} [avatarId]
+ * 
+ * @param {AvatarExportedEvent} avatarEvent
+ */
+
+export default function TherapistPatientsDetails() {
+    const { currentPatient } = usePatient();    // current.patient is the patient data
+
+    // Avatar creator configuration
+    const style = { width: '100%', height: '90vh', border: 'none' };
+    const [avatarUrl, setAvatarUrl] = useState('');
+    const handleOnAvatarExported = (avatarEvent) => {
+        console.log(`Avatar URL is: ${avatarEvent.data.url}`);
+    };
+
+    const config = {
+        clearCache: true,
+        bodyType: 'fullbody',
+        quickStart: false,
+        language: 'en',
+    };
 
     useEffect(() => {   // Prevents scrolling on page
         document.body.style.overflow = 'hidden';
     }, []);
 
+    const personalInfoSection = (
+        <Grid>
+            <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh' }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
+                            <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}} />
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
+                            <Typography variant="h5">
+                                {currentPatient?.name}
+                            </Typography>
+                        </Box>
+                        <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
+                    </Grid>
+                    <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
+                        <Grid item xs={12}>
+                            <Typography variant="body1">Birth date</Typography>
+                            <Typography variant="body2" color="text.secondary">12 / 06 / 2000</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Client's Tel.</Typography>
+                            <Typography variant="body2" color="text.secondary">+45 12 34 56 78</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Email</Typography>
+                            <Typography variant="body2" color="text.secondary">{currentPatient?.email}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Contact person</Typography>
+                            <Typography variant="body2" color="text.secondary">Anna Jensen</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Contact Person Tel.</Typography>
+                            <Typography variant="body2" color="text.secondary">+45 87 65 43 21</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Type of Movement impairment</Typography>
+                            <Typography variant="body2" color="text.secondary">Limited Shoulder Mobility</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Dominant arm</Typography>
+                            <Typography variant="body2" color="text.secondary">Left</Typography>
+                        </Grid>
+                        <Grid item xs={12} sx={{ mt: 1 }}>
+                            <Typography variant="body1">Therapy goals</Typography>
+                            <Typography variant="body2" color="text.secondary">Increase range of motion, Reduce pain, Strenghten shoulder</Typography>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Paper>
+        </Grid>
+    );
+
+    // Exercise Completion section
+    const exerciseCompletionChartSection = (
+        <Paper sx={{ p: 2, minHeight: '44.2vh'}}>
+            <Typography variant="h6">Exercise Completion Rate</Typography>
+        </Paper>
+    );
+
+    // Tasks Section
+    const tasksSection = (
+        <Paper sx={{ p: 2, minHeight: '44.2vh' }}>
+            <Typography variant="h6">Tasks</Typography>
+            <List>
+            </List>
+        </Paper>
+    );
+
+    const userAvatar = (
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start' }}>
+            <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
+            {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
+        </Grid>
+    )
+
     return (
-        <div>
-            Patients
-        </div>
+        <Container sx={{ paddingTop: '60px', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>
+            <Grid container spacing={2}>
+
+                {/* Personal Info Section, assuming it's now smaller let's say md={3} */}
+                <Grid item xs={12} md={2.5}>
+                    {personalInfoSection}
+                </Grid>
+
+                {/* Exercise Completion Chart & Tasks Section */}
+                <Grid item xs={12} md={2.5}>
+                    <Grid container direction="column" spacing={2}>
+                        <Grid item xs={12}>
+                            {exerciseCompletionChartSection}
+                        </Grid>
+                        <Grid item xs={12}>
+                            {tasksSection}
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} md={4.8}>
+                    {userAvatar}
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
-
-
-    // Old patient layout to be used for the therapist view of the patient
-/*
-    return(
-        <Grid container spacing={2} padding={4}>
-            <Grid item xs={7} sm={7} md={7} lg={7} >
-                <Box sx={{display:"flex", justifyContent:"center"}}>
-                    <Box sx={{width:"38%",}}>
-                        <Box sx={{display:"flex"}}>
-                            <Paper sx={{p:2, width:"48%", height:"14vh"}}>
-                                
-                            </Paper>
-                            <Paper sx={{p:2, width:"48%", height:"14vh", marginLeft:2}}>
-
-                            </Paper>
-                        </Box>
-                        <Box sx={{height:"26vh", marginTop:"2vh"}}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                }}
-                                >
-                                    <Box sx={{ display: 'flex',
-                                                height: "13vh",
-                                                backgroundColor:'white',
-                                                alignItems:"center"}}>
-                                        <Avatar alt="Remy Sharp"
-                                                src=""
-                                                sx={{ width: 80, height: 80, border:"1px solid black", marginRight:1 }} />
-                                        <Box>
-                                        <p>Jack Smith</p>
-                                        <p>ID:</p>
-                                        </Box>   
-                                    </Box>
-                                    <Box sx={{width:"100%", height:"1px", bgcolor:"lightgray",}}></Box>
-                                    <Box sx={{ display: 'flex',
-                                                height: "13vh",
-                                                backgroundColor:'white',
-                                                alignItems:"center"}}>
-                                            <h3>level!</h3>
-                                    </Box>
-                            </Paper>
-                        </Box>
-                       
-                    </Box>
-                    <Box sx={{width:"60%", marginLeft:3}}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: "23vh",
-                                backgroundColor:'lightblue',
-                            }}
-                            >
-                                <h3>Thumbs</h3>
-                        </Paper>
-                        <Paper
-                            sx={{
-                                paddingLeft:2,
-                                height: "23vh",
-                                backgroundColor:'white',
-                                alignItems:"center"
-                            }}
-                            >
-                            <Box sx={{display:"flex", alignItems:"center", height:"12vh"}}>
-                                <Avatar alt="Remy Sharp"
-                                        src=""
-                                        sx={{ width: 60, height: 60, border:"1px solid black", marginRight:1 }} />
-                                <p>Emma</p>
-                            </Box>
-                            <Box sx={{display:"flex", alignItems:"center",}}>
-                                <Avatar alt="Remy Sharp"
-                                        src=""
-                                        sx={{ width: 60, height: 60, border:"1px solid black", marginRight:1 }} />
-                                <p>Dr. Emily Johnson</p>
-                            </Box>
-                               
-                        </Paper>
-                        </Box>
-                    </Box>
-                    <Box>
-                        <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    marginTop:"4vh",
-                                    height: "50vh",
-                                    backgroundColor:'white',
-                                    overflow:showList,
-                                }}
-                                >
-                                <Box sx={{justifyContent:"space-between", display:"flex"}}>
-                                    <Box sx={{display:"flex", marginTop:1, alignItems:"center"}}>
-                                        <h3>Tasks</h3> 
-                                        <p>You have {tasksList.length} tasks now</p>
-                                    </Box>
-                                    <Button onClick={handleClickMore} variant="contained" sx={{width:"80px", height:"40px"}}> {buttonName} </Button>
-                                </Box>
-                                
-                                <Box sx={{display:"flex", marginTop:1, flexWrap:"wrap"}}>
-
-                                    {tasksList.map((v,i)=>(
-                                        <Paper key={i} sx={{width:"31.5%",height:"40vh",p:2, margin:1}}>
-                                            <p>{v.type}</p>
-                                            <Box>
-                                                <Box sx={{width:50, height:50}}></Box>
-                                            </Box>
-                                        </Paper>
-                                    ))}
-                                </Box>
-                               
-                               
-                        </Paper>
-                    </Box>
-                </Grid>
-            <Grid item xs={5} sm={5} md={5} lg={5}>
-                <Paper
-                    sx={{
-                        p: 2,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        height: "100vh",
-                        backgroundColor:'white',
-                    }}
-                    >
-                        <h3>Range of motion(ROM)</h3>
-                        {// <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
-                        //{avatarUrl && <VisageAvatar modelSrc={avatarUrl}/>} }
-                </Paper>
-            </Grid>
-        </Grid>
-)
-*/

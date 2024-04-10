@@ -115,7 +115,6 @@ export default function TherapistOverview() {
     const handleButtonClick = (path, patientData = null) => {   // Redirect to different page
         if (patientData) {
             updateCurrentPatient(patientData);
-            //console.log('Patient data:', patientData);  // Remember to delete after testing
         }
         router.push(path);
     };
