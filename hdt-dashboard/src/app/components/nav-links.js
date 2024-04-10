@@ -10,6 +10,7 @@ import { Button, ListItemIcon, ListItemText, MenuList, ListItemButton,Link, Avat
 import { useCookies } from "react-cookie";
 import { Center } from '@react-three/drei';
 import LogOut from './appBar';
+import { ThemeContext } from '@emotion/react';
 
 export default function NavBar(){
     
@@ -34,15 +35,6 @@ export default function NavBar(){
 
     return (
         <>
-            <Box sx={{
-                width: '100%',
-                position: 'fixed',
-                zIndex: 1300, /* default zIndex of drawer is 1200 */
-            }}>
-                <LogOut
-                    shadow={false}
-                    bgColour={drawerBGColor} />
-            </Box>
             <Drawer variant="permanent" anchor='left' sx={{
                 width: drawerWidth,
                 bgcolor: drawerBGColor,
@@ -51,7 +43,7 @@ export default function NavBar(){
                     width: drawerWidth,
                     boxSizing: 'border-box',
                     bgcolor:"#F5F7FC",
-                    marginTop: '2%'
+                    // marginTop: '2%'
                 }
             }}>
                 <Toolbar sx={{

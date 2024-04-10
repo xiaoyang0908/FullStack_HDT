@@ -10,12 +10,14 @@ export default function LogOut({ shadow, bgColour}){
     const {getToken,removeToken} = CookieSetting();
 
     const appBarStyles = {
-        position: "static",
+        position: "fixed",
         elevation: shadow ? 4 : 0,
-
+        zIndex: 1300, 
         // sx properties
         bgcolor: bgColour,
         boxShadow: shadow ? 'default' : 'none',
+        
+
     }
 
     const handleLogOut = async() =>{

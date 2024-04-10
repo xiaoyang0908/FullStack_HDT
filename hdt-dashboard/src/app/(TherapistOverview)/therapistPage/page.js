@@ -156,7 +156,7 @@ export default function TherapistOverview() {
                 </Grid>
             </Grid>
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom:2, paddingRight:2}}>
                 {/* Left section for sort button */}
                 <Button
                     variant="outlined"
