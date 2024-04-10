@@ -1,10 +1,13 @@
 'use client'
+import SearchIcon from "@mui/icons-material/SearchRounded";
+import InputAdornment from '@mui/material/InputAdornment';
 import SortIcon from '@mui/icons-material/SortOutlined';
 import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
+
 import { reqPatientsList } from '../../api/api';
 import { useEffect, useState } from 'react';
 import {
@@ -98,16 +101,26 @@ export default function TherapistOverview() {
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
-        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingTop: '60px' }}>
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingTop: '40px' }}>
 
             {/* Search Grid */}
             <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{border:"none"}}>
                     <TextField
                         fullWidth
+                        variant="outlined"
                         placeholder="Type a name to search"
                         InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                  <SearchIcon sx={{color:"#5A6ACF"}}/>
+                                </InputAdornment>
+                              ),
                             type: 'search',
+                            sx:{
+                                bgcolor:"white",
+                                border:"none"
+                            }
                         }}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -165,7 +178,7 @@ export default function TherapistOverview() {
                                     <Button
                                         variant="outlined"
                                         startIcon={<DetailIcon />}
-                                        size="large"
+                                        // size="large"
                                         sx={{ textTransform: 'none' }}
                                     >
                                         Details
@@ -173,7 +186,7 @@ export default function TherapistOverview() {
                                     <Button
                                         variant="outlined"
                                         startIcon={<ManageTasksIcon />}
-                                        size="large"
+                                        // size="large"
                                         sx={{ textTransform: 'none' }}
                                     >
                                         Manage tasks

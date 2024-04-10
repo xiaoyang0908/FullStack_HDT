@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, InputLabel, Alert} from '@mui/material';
-import { reqLoginInAndOUt } from '@/app/api/api';
+import { reqLoginIn } from '@/app/api/api';
 import Snackbar from '@mui/material/Snackbar';
 import { CookieSetting } from '@/app/util/cookieSetting';
 
@@ -44,7 +44,7 @@ export default function Login(){
         event.preventDefault();
         console.log(`Username: ${userData.username}, Password: ${userData.password}`);
         try {
-            const res = await reqLoginInAndOUt(userData.username,userData.password);
+            const res = await reqLoginIn(userData.username,userData.password);
             console.log(res);
             if(res.status==="online"){
                 setLoginSymbol("success");
@@ -54,7 +54,7 @@ export default function Login(){
                 const user = res;
                 setToken(user,{
                     path: "/",
-                    maxAge: 3600, // cookeie  expired after one hour
+                    maxAge: 36, // cookeie  expired after one hour
                     sameSite: true,
                   })
             } else {
@@ -68,6 +68,7 @@ export default function Login(){
             // router.replace("/")
         }
     };
+
 
    
     // const LoginImg = require("../../../public/Loginimg/login.svg")

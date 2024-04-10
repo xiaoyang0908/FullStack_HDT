@@ -1,10 +1,18 @@
 import{get, post} from "./ajax";
 
-export const reqLoginInAndOUt = (username, password)=>{
+export const reqLoginIn = (username, password)=>{
     try{
         return post("http://127.0.0.1:8090/api/auth",{username:username,password:password});
     }catch(err){
-        throw errl
+        throw err;
+    }
+}
+
+export const reqLoginOUt = ()=>{
+    try{
+        return get("http://127.0.0.1:8090/api/logout");
+    }catch(err){
+        throw err;
     }
 }
 

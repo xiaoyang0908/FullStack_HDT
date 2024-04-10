@@ -4,6 +4,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { Alert } from "@mui/material";
 import { useState, useEffect} from "react";
 import { useRouter } from "next/navigation";
+import { reqLoginOUt } from "../api/api";
 export function Middleware({children}){
     const router = useRouter();
     const [open, setOpen] = useState(false);
@@ -11,16 +12,65 @@ export function Middleware({children}){
         setOpen(true);
       };
     
-      const handleClose = (event, reason) => {
+    const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpen(false);
-      };
-    // setCurUser(currentUser.user);
-     // signed in already
+    };
+        // setCurUser(currentUser.user);
+    // signed in already
      const {getToken} = CookieSetting();
      const cookieUser = getToken();
+
+       // if expired
+     const handleUserExpire = async() =>{
+       try {
+            const res = await reqLoginOUt();
+            return res;
+       } catch (error) {
+            new Error("Haven't signed in");
+       }
+       
+     }
+     const handleUserActivity = () => {
+        // refresh cookie
+        const expirationTime = new Date();
+        expirationTime.setTime(expirationTime.getTime() + 60 * 60 * 1000); // 1hour
+        document.cookie = `auth=${cookieUser}; expires=${expirationTime.toUTCString()}; path=/`;
+    };
+
+    //check cookie per hour
+    useEffect(() => {
+        const expirationCheckInterval = setInterval(() => {
+            if (!cookieUser) {
+                setOpen(true); 
+                handleUserExpire()
+                clearInterval(expirationCheckInterval); 
+            }
+        }, 36);
+
+        return () => clearInterval(expirationCheckInterval); 
+    }, [cookieUser]);
+
+    // listener
+    useEffect(() => {
+        const activityListener = () => {
+            handleUserActivity();
+        };
+
+       
+        window.addEventListener('mousemove', activityListener);
+        window.addEventListener('keypress', activityListener);
+
+        return () => {
+            window.removeEventListener('mousemove', activityListener);
+            window.removeEventListener('keypress', activityListener);
+        };
+    }, []);
+
+  
+
     
      useEffect(()=>{   
          console.log(`user is ${JSON.stringify(cookieUser)} `);
@@ -33,13 +83,12 @@ export function Middleware({children}){
              }else if(cookieUser.role === "Caregiver"){
                  router.replace("/thirdPartyPAge");
              }
-         }else{
+        }else{
             router.push("/");
+            
          }
      },[cookieUser,router]);
-    // if(!cookieUser){
-    //         handleOpen();
-    //     }
+
 
     return(
         <div>

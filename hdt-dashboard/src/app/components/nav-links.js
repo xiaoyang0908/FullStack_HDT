@@ -6,11 +6,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Grid';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Button, ListItemIcon, ListItemText, MenuList, ListItemButton,Link, Avatar, Box , MenuItem, AppBar, IconButton} from '@mui/material';
 import { useCookies } from "react-cookie";
 import { Center } from '@react-three/drei';
-import LogOut from "@/app/components/appBar";
+import LogOut from './appBar';
 
 export default function NavBar(){
     
@@ -51,6 +50,7 @@ export default function NavBar(){
                 '& .MuiDrawer-paper': {
                     width: drawerWidth,
                     boxSizing: 'border-box',
+                    bgcolor:"#F5F7FC",
                     marginTop: '2%'
                 }
             }}>

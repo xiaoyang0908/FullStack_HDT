@@ -3,15 +3,14 @@ import { AppBar } from "@material-ui/core";
 import { Container,Toolbar,Button, Box } from "@mui/material";
 import { CookieSetting } from "../util/cookieSetting";
 import SignOutIcon from "@mui/icons-material/LogoutOutlined";
-import { reqLoginInAndOUt } from "../api/api";
+import { reqLoginOUt } from "../api/api";
 
 export default function LogOut({ shadow, bgColour }){
 
     const {getToken,removeToken} = CookieSetting();
 
     const handleLogOut = async() =>{
-        const userInfo = getToken();
-        const res = await reqLoginInAndOUt(userInfo.email, userInfo.password);
+        const res = await reqLoginOUt();
         console.log(res);
         if(res.status=="offline"){
             removeToken();
