@@ -10,7 +10,7 @@ export default function TherapistLayout({ children }) {
           <NavBar />
           <Box
             component="main"
-            sx={{ flexGrow: 1, bgcolor: '#F2F3F8', p: 3,justifyContent:"center"}}
+            sx={{ flexGrow: 1, bgcolor: '#F2F3F8', p: 3}}
           >
             {children}
           </Box>
