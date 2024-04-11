@@ -130,7 +130,7 @@ export default function TherapistOverview() {
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
-        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingTop: '8vh' }}>
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '101vh', paddingTop: '8vh' }}>
 
             {/* Search Grid */}
             <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>
