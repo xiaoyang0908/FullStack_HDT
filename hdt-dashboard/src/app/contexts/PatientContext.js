@@ -1,4 +1,10 @@
 // PatientContext.js
+
+
+
+// could pass the value directly by using router
+// maybe move this provider to therapist layout?
+
 import React, { createContext, useContext, useState } from 'react';
 
 const PatientContext = createContext();
