@@ -1,8 +1,9 @@
 'use client'
-import { useEffect, useState } from "react";
-import { usePatient } from "../../contexts/PatientContext";
-import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { AvatarCreator } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import PieChart from "../../components/pieChart";
 import {
     Box,
     Grid,
@@ -16,36 +17,14 @@ import {
     ListItemText,
     Container
 } from "@mui/material";
-import {
-    PaddingTwoTone,
-    Male,
-    EditIcon
-} from "@mui/icons-material";
-import { useSearchParams } from "next/navigation";
-
-/**
- * @typedef {Object} AvatarCreatorConfig
- * @property {boolean} [clearCache]
- * @property {BodyType} [bodyType]
- * @property {boolean} [quickStart]
- * @property {Language} [language]
- * @property {string} [token]
- * @property {string} [avatarId]
- * 
- * @param {AvatarExportedEvent} avatarEvent
- */
 
 export default function TherapistPatientsDetails() {
-     // current.patient is the patient data
-     const searchParams = useSearchParams();
-     const currentPatient = JSON.parse(searchParams.get("patient"));
-     console.log(currentPatient);
-
-    // Avatar creator configuration
-    const style = { width: '100%', height: '90vh', border: 'none' };
+    const searchParams = useSearchParams();
+    const currentPatient = JSON.parse(searchParams.get("patient") || "{}");
     const [avatarUrl, setAvatarUrl] = useState('');
+
     const handleOnAvatarExported = (avatarEvent) => {
-        console.log(`Avatar URL is: ${avatarEvent.data.url}`);
+        setAvatarUrl(avatarEvent.data.url);
     };
 
     const config = {
@@ -55,111 +34,84 @@ export default function TherapistPatientsDetails() {
         language: 'en',
     };
 
-    useEffect(() => {   // Prevents scrolling on page
+    useEffect(() => {
         document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'auto';
+        };
     }, []);
 
-    const personalInfoSection = (
-        <Grid>
-            <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh' }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                            <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}} />
-                        </Box>
-                        <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
-                            <Typography variant="h5">
-                                {currentPatient.name}
-                            </Typography>
-                        </Box>
-                        <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
+    const PersonalInfo = () => (
+        <Paper sx={{ p: 2, height: "90vh"  }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
+                <Avatar alt={currentPatient.name} src={currentPatient.avatar || "/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100 }} />
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
+                <Typography variant="h5">{currentPatient.name}</Typography>
+            </Box>
+            <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
+            <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
+                {[
+                    { label: "Birth date", value: "12 / 06 / 2000" },
+                    { label: "Client's Tel.", value: "+45 12 34 56 78" },
+                    { label: "Email", value: currentPatient.email },
+                    { label: "Contact person", value: "Anna Jensen" },
+                    { label: "Contact Person Tel.", value: "+45 87 65 43 21" },
+                    { label: "Type of Movement impairment", value: "Limited Shoulder Mobility" },
+                    { label: "Dominant arm", value: "Left" },
+                    { label: "Therapy goals", value: "Increase range of motion, Reduce pain, Strengthen shoulder" }
+                ].map(info => (
+                    <Grid item xs={12} sx={{ mt: 1 }} key={info.label}>
+                        <Typography variant="body1">{info.label}</Typography>
+                        <Typography variant="body2" color="text.secondary">{info.value}</Typography>
                     </Grid>
-                    <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
-                        <Grid item xs={12}>
-                            <Typography variant="body1">Birth date</Typography>
-                            <Typography variant="body2" color="text.secondary">12 / 06 / 2000</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Client's Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">+45 12 34 56 78</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Email</Typography>
-                            <Typography variant="body2" color="text.secondary">{currentPatient.email}</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Contact person</Typography>
-                            <Typography variant="body2" color="text.secondary">Anna Jensen</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Contact Person Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">+45 87 65 43 21</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Type of Movement impairment</Typography>
-                            <Typography variant="body2" color="text.secondary">Limited Shoulder Mobility</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Dominant arm</Typography>
-                            <Typography variant="body2" color="text.secondary">Left</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Therapy goals</Typography>
-                            <Typography variant="body2" color="text.secondary">Increase range of motion, Reduce pain, Strenghten shoulder</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </Grid>
-    );
-
-    // Exercise Completion section
-    const exerciseCompletionChartSection = (
-        <Paper sx={{ p: 2, minHeight: '44.2vh'}}>
-            <Typography variant="h6">Exercise Completion Rate</Typography>
+                ))}
+            </Grid>
         </Paper>
     );
 
-    // Tasks Section
-    const tasksSection = (
-        <Paper sx={{ p: 2, minHeight: '44.2vh' }}>
-            <Typography variant="h6">Tasks</Typography>
+    const ExerciseCompletion = () => (
+        <Paper sx={{ p: 2, height: "44.2vh"}}>
+        <Typography textAlign="center" variant="h6">Exercise Completion Rate</Typography>
+            <PieChart />
+        </Paper>
+    );
+
+    const TasksSection = () => (
+        <Paper sx={{ p: 2, height: "44.2vh" }}>
+        <Typography textAlign="center" variant="h6">Tasks</Typography>
             <List>
             </List>
         </Paper>
     );
 
-    const userAvatar = (
-        <Grid container sx={{ display: 'flex', alignItems: 'flex-start' }}>
-            <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
+    const UserAvatar = () => (
+        <Grid container marginLeft="8%" sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
+            <AvatarCreator subdomain="demo" config={config} style={{ width: '100%', height: '100%', border: 'none' }} onAvatarExported={handleOnAvatarExported} />
             {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
         </Grid>
-    )
+    );
 
     return (
-        <Container sx={{ paddingTop: '60px', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>
+        <Container sx={{ paddingTop: '4%', minWidth: '122%', overflow: 'hidden' }}>
             <Grid container spacing={2}>
-
-                {/* Personal Info Section, assuming it's now smaller let's say md={3} */}
-                <Grid item xs={12} md={2.5}>
-                    {personalInfoSection}
+                <Grid item xs={12} md={3} sx={{ flexGrow: 1 }}>
+                    <PersonalInfo />
                 </Grid>
-
-                {/* Exercise Completion Chart & Tasks Section */}
-                <Grid item xs={12} md={2.5}>
+                <Grid item xs={12} md={2} sx={{ flexGrow: 1 }}>
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
-                            {exerciseCompletionChartSection}
+                            <ExerciseCompletion />
                         </Grid>
                         <Grid item xs={12}>
-                            {tasksSection}
+                            <TasksSection />
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} md={4.8}>
-                    {userAvatar}
+                <Grid item xs={12} md={4.5} sx={{ flexGrow: 1 }}>
+                    <UserAvatar />
                 </Grid>
             </Grid>
         </Container>
-    )
+    );
 }
