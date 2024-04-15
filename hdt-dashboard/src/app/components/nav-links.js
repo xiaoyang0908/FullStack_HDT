@@ -12,7 +12,7 @@ import { Center } from '@react-three/drei';
 import LogOut from './appBar';
 import { ThemeContext } from '@emotion/react';
 
-export default function NavBar(){
+export default function NavBar({ isDrawerEnabled = true }){
     
     const drawerWidth = '15%';
     const drawerBGColor = "#F5F7FC";
@@ -36,21 +36,22 @@ export default function NavBar(){
     return (
         <>
             <LogOut shadow={true}
-                    bgColour={drawerBGColor}/>
-            <Drawer variant="permanent" anchor='left' sx={{
-                width: drawerWidth,
-                bgcolor: drawerBGColor,
-                flexShrink: 0, 
-                zIndex:"1200 !important",
-                '& .MuiDrawer-paper': {
+                bgColour={drawerBGColor}/>
+            {isDrawerEnabled && (
+                <Drawer variant="permanent" anchor='left' sx={{
                     width: drawerWidth,
-                    boxSizing: 'border-box',
-                    bgcolor:"#F5F7FC",
-                    zIndex:"1200 !important",
-                    // marginTop: '2%'
-                }
-            }}>
-                <Toolbar sx={{
+                    bgcolor: drawerBGColor,
+                    flexShrink: 0,
+                    zIndex: "1200 !important",
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        boxSizing: 'border-box',
+                        bgcolor: "#F5F7FC",
+                        zIndex: "1200 !important",
+                        // marginTop: '2%'
+                    }
+                }}>
+                    <Toolbar sx={{
                     height: "30vh",
                     display: "flex",
                     flexDirection: "column",
@@ -105,6 +106,6 @@ export default function NavBar(){
                     </MenuList>
                 </Box>
             </Drawer>
-        </>
+            )}</>
     );
 }

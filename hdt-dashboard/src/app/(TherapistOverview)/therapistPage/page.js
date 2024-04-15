@@ -130,7 +130,7 @@ export default function TherapistOverview() {
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
-        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '101vh', paddingTop: '8vh' }}>
+        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '102%', paddingTop: '7%' }}>
 
             {/* Search Grid */}
             <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>
@@ -189,7 +189,7 @@ export default function TherapistOverview() {
             </Box>
 
             {/* User grid */}
-            <Grid container spacing={2} sx={{ overflow: 'auto', mb: 'auto', width: gridAndSearchBarWidth }}>
+            <Grid container spacing={2} sx={{ overflow: 'hidden', mb: 'auto', width: gridAndSearchBarWidth }}>
                 {filteredPatientsList
                     .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                     .map((patient) => (

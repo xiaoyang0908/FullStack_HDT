@@ -9,13 +9,11 @@ import {
     Grid,
     Paper,
     Avatar,
-    Button,
     Typography,
     Divider,
-    List,
-    ListItem,
-    ListItemText,
-    Container
+    Container,
+    Card,
+    CardContent
 } from "@mui/material";
 
 export default function TherapistPatientsDetails() {
@@ -42,76 +40,101 @@ export default function TherapistPatientsDetails() {
     }, []);
 
     const PersonalInfo = () => (
-        <Paper sx={{ p: 2, height: "90vh"  }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
+        <Paper sx={{ height: "100%", display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
                 <Avatar alt={currentPatient.name} src={currentPatient.avatar || "/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100 }} />
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                 <Typography variant="h5">{currentPatient.name}</Typography>
             </Box>
-            <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
-            <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
-                {[
-                    { label: "Birth date", value: "12 / 06 / 2000" },
-                    { label: "Client's Tel.", value: "+45 12 34 56 78" },
-                    { label: "Email", value: currentPatient.email },
-                    { label: "Contact person", value: "Anna Jensen" },
-                    { label: "Contact Person Tel.", value: "+45 87 65 43 21" },
-                    { label: "Type of Movement impairment", value: "Limited Shoulder Mobility" },
-                    { label: "Dominant arm", value: "Left" },
-                    { label: "Therapy goals", value: "Increase range of motion, Reduce pain, Strengthen shoulder" }
-                ].map(info => (
-                    <Grid item xs={12} sx={{ mt: 1 }} key={info.label}>
-                        <Typography variant="body1">{info.label}</Typography>
-                        <Typography variant="body2" color="text.secondary">{info.value}</Typography>
-                    </Grid>
-                ))}
-            </Grid>
+            <Divider orientation="horizontal" flexItem sx={{ pb: 1, pt: 3 }} />
+            <Box sx={{ overflowY: 'auto', flexGrow: 1, pr: 2 }}>
+                <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
+                    {[
+                        { label: "Birth date", value: "12 / 06 / 2000" },
+                        { label: "Client's Tel.", value: "+45 12 34 56 78" },
+                        { label: "Email", value: currentPatient.email },
+                        { label: "Contact person", value: "Anna Jensen" },
+                        { label: "Contact Person Tel.", value: "+45 87 65 43 21" },
+                        { label: "Type of Movement impairment", value: "Limited Shoulder Mobility" },
+                        { label: "Dominant arm", value: "Left" },
+                        { label: "Therapy goals", value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. psum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis n" }
+                    ].map(info => (
+                        <Grid item xs={12} sx={{ mt: 1 }} key={info.label}>
+                            <Typography variant="body1">{info.label}</Typography>
+                            <Typography variant="body2" color="text.secondary">{info.value}</Typography>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
         </Paper>
     );
-
+    
     const ExerciseCompletion = () => (
-        <Paper sx={{ p: 2, height: "44.2vh"}}>
-        <Typography textAlign="center" variant="h6">Exercise Completion Rate</Typography>
-            <PieChart />
-        </Paper>
+        <Box sx={{ width: '100%', flex: '0 1 auto', mb: 2 }}>
+            <Paper sx={{ p: 2 }}>
+                <Typography textAlign="center" variant="h6">Exercise Completion Rate</Typography>
+                <PieChart />
+            </Paper>
+        </Box>
     );
-
+    
     const TasksSection = () => (
-        <Paper sx={{ p: 2, height: "44.2vh" }}>
-        <Typography textAlign="center" variant="h6">Tasks</Typography>
-            <List>
-            </List>
-        </Paper>
+        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>  
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <Typography textAlign="center" variant="h6" sx={{ paddingBottom: 1 }}>Tasks</Typography>
+                <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
+                    <Grid container spacing={2}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                            <Grid item xs={12} key={item}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant="h7" component="div">
+                                            Placeholder Title {item}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Placeholder content here...
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Paper>
+        </Box>
     );
 
     const UserAvatar = () => (
-        <Grid container marginLeft="8%" sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%'}}>
             <AvatarCreator subdomain="demo" config={config} style={{ width: '100%', height: '100%', border: 'none' }} onAvatarExported={handleOnAvatarExported} />
             {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
         </Grid>
     );
-
+    
     return (
-        <Container sx={{ paddingTop: '4%', minWidth: '122%', overflow: 'hidden' }}>
+        <Container sx={{
+            paddingTop: '6%', 
+            display: 'flex', 
+            overflow: 'hidden', 
+            height: '98%', // Ensures the container takes up nearly the full height
+            minWidth: '100%'
+        }}>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={3} sx={{ flexGrow: 1 }}>
+                <Grid item xs={12} sm={6} md={4} lg={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <PersonalInfo />
                 </Grid>
-                <Grid item xs={12} md={2} sx={{ flexGrow: 1 }}>
-                    <Grid container direction="column" spacing={2}>
-                        <Grid item xs={12}>
-                            <ExerciseCompletion />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TasksSection />
-                        </Grid>
-                    </Grid>
+                <Grid item xs={12} sm={2} md={2} lg={3} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <ExerciseCompletion />
+                        <TasksSection />
+                    </Box>
                 </Grid>
-                <Grid item xs={12} md={4.5} sx={{ flexGrow: 1 }}>
+                <Grid item xs={12} sm={12} md={5} lg={6}>
                     <UserAvatar />
                 </Grid>
             </Grid>
         </Container>
     );
+    
 }

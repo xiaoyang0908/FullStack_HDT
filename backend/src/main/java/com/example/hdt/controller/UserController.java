@@ -29,15 +29,17 @@ public class UserController {
         String password = (String) requestBody.get("password");
         System.out.println(username+password);
         User cueUser = userImpl.findUserByEmail(username);
-        if (cueUser.getPassword().equals(password)){
-            u.setEmail(username);
-            System.out.println(cueUser.getStatus());
-            if (cueUser.getStatus().equals("offline")) {
-                cueUser.setStatus("online");
+        if (cueUser != null) {
+            if (cueUser.getPassword().equals(password)){
+                u.setEmail(username);
+                if (cueUser.getStatus().equals("offline")) {
+                    cueUser.setStatus("online");
+                }
+                userImpl.updateStatus(cueUser);
+                return ResponseEntity.ok(cueUser);
             }
-            userImpl.updateStatus(cueUser);
-            return ResponseEntity.ok(cueUser);
-
+        } else {
+            System.out.println("User not found");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -59,3 +61,11 @@ public class UserController {
     }
 
 }
+
+/*
+ * @GetMapping("/users") // Test API to get all users
+ * public ResponseEntity<List<User>> getAllUsers() {
+ * List<User> users = userImpl.getUserList();
+ * return ResponseEntity.ok(users);
+ * }
+ */

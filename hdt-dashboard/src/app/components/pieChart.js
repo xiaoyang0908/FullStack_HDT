@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Box, Button } from "@mui/material";
-import Chart from 'chart.js/auto';
+import Chart, { layouts } from 'chart.js/auto';
 
 const DATA_SETS = {
     'total': [60, 20, 35],
@@ -31,27 +31,29 @@ const BUTTON_LABELS = {
 
 export default function PieChart() {
     const [filterType, setFilterType] = useState('total');
+    const handleButtonClick = (type) => setFilterType(type);
 
-    const handleButtonClick = (type) => {
-        setFilterType(type);
-    };
-
-    const getFilteredData = () => ({
-        labels: ['Udført', 'Påbegyndt', 'Udeladt'], // Finished, Unfinished, Skipped
+    const data = useMemo(() => ({
+        labels: ['Udført', 'Påbegyndt', 'Udeladt'],
         datasets: [{
             data: DATA_SETS[filterType],
             backgroundColor: COLORS.backgroundColor,
             borderColor: COLORS.borderColor,
             borderWidth: 1,
         }]
-    });
-
-    const data = useMemo(getFilteredData, [filterType]);
+    }), [filterType]);
 
     const options = {
-        cutout: '60%',
+        cutout: '70%',
+        responsive: true,
+        aspectRatio: 1.5,
         plugins: {
-            legend: { position: 'bottom' },
+            legend: { 
+                position: 'bottom',
+                labels: {
+                    padding: 10
+                                }
+            },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
@@ -65,8 +67,13 @@ export default function PieChart() {
         }
     };
 
-    const buttonStyle = { variant: "outlined", sx: { textTransform: 'none' } };
-
+    const buttonStyle = { 
+        variant: "outlined", 
+        sx: { 
+            textTransform: 'none',
+            margin: '2px', // Adjust the values as needed
+        } 
+    };
     Chart.register({
         id: 'centerText',
         afterDraw: (chart) => {
@@ -74,8 +81,12 @@ export default function PieChart() {
             const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
             const completed = chart.data.datasets[0].data[0];
             const percentage = ((completed / total) * 100).toFixed(0) + '%';
+    
+            // Calculate font size dynamically
+            const fontSize = Math.min(chart.width, chart.height) / 7; // Adjust font size
+    
             ctx.save();
-            ctx.font = '2em sans-serif';
+            ctx.font = `${fontSize}px sans-serif`;
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
             ctx.fillText(percentage, chart.width / 2, (chart.chartArea.top + chart.chartArea.bottom) / 2);
@@ -84,16 +95,16 @@ export default function PieChart() {
     });
 
     return (
-        <Box>
-            <Box display="flex" justifyContent="center" alignItems="center" gap="8%" marginBottom="6%" marginTop="4%">
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%' }}>
+            <Box sx={{ mb: 2, flex: '0 0 auto', paddingTop: 2 }}>
                 {Object.keys(BUTTON_LABELS).map(key => (
                     <Button key={key} {...buttonStyle} onClick={() => handleButtonClick(key)}>
                         {BUTTON_LABELS[key]}
                     </Button>
                 ))}
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-                <Doughnut data={data} options={options} key={filterType} />
+            <Box sx={{flex: '1 1 auto', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', position: 'relative' }}>
+                <Doughnut data={data} options={options} />
             </Box>
         </Box>
     );
