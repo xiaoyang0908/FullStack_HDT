@@ -81,7 +81,7 @@ export function Middleware({children}){
              }else if(cookieUser.role === "Therapist"){
                  router.replace("/therapistPage");
              }else if(cookieUser.role === "Caregiver"){
-                 router.replace("/thirdPartyPAge");
+                 router.replace("/thirdPartyPage");
              }
         }else{
             router.push("/");
