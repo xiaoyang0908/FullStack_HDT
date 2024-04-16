@@ -8,7 +8,7 @@ import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
-
+// import {updateCurrentPatient} from "../../contexts/PatientContext";
 import { reqPatientsList } from '../../api/api';
 import { usePatient } from '../../contexts/PatientContext';
 import { useEffect, useState } from 'react';
@@ -42,7 +42,7 @@ export default function TherapistOverview() {
     // const { updateCurrentPatient } = usePatient();
 
     const detailsButtonPath = '/patientsDetails';
-    const manageTaskButtonPath = '/manafeDetails';
+    const manageTaskButtonPath = '/manageTasks';
     const addClientButtonPath = '/addClient';
     const archivedClientsButtonPath = '/archievedClients';
     
@@ -113,12 +113,12 @@ export default function TherapistOverview() {
     };
 
     const handleButtonClick = (path, patientData) => {   // Redirect to different page
+        console.log(patientData);
         if (patientData) {
             // updateCurrentPatient(patientData);
-            router.push(`${path}?patient=${JSON.stringify(patientData)}`);
-        }else{
-            router.push(path)
+            router.push(`${path}?patient=${patientData}`);
         }
+        router.push(path);
     };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
@@ -130,7 +130,7 @@ export default function TherapistOverview() {
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
     return (
-        <Container maxWidth="lg" sx={{ display: 'flex', flexDirection: 'column', height: '100vh', paddingTop: '8vh' }}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh', minWidth:"100%", paddingTop:"6vh"}}>
 
             {/* Search Grid */}
             <Grid container spacing={2} sx={{ mb: 2, width: gridAndSearchBarWidth }}>
@@ -227,7 +227,7 @@ export default function TherapistOverview() {
                                         startIcon={<ManageTasksIcon />}
                                         // size="large"
                                         sx={{ textTransform: 'none' }}
-                                        onClick={() => handleButtonClick(manageTaskButtonPath, {})}
+                                        onClick={() => handleButtonClick(manageTaskButtonPath, patient)}
                                     >
                                         Manage tasks
                                     </Button>

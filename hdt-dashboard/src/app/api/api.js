@@ -25,3 +25,11 @@ export const reqPatientsList = ()=>{
         throw err;
     }
 };
+
+export const reqGame = ()=>{
+    try{
+        return get("http://127.0.0.1:8090/game");
+    }catch(err){
+        throw err;
+    }
+}

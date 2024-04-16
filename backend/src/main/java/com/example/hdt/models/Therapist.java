@@ -5,31 +5,38 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
-@Document
+@Document("therapistProfile")
 public class Therapist {
     @Id
     private String id;
     @Field
-    private String clinicId;
+    private String ClinicId;
     @Field
-    private String name;
+    private String Name;
     @Field
-    private String email;
+    private String Email;
     @Field
-    private String password;
+    private String Password;
     @Field
-    private ArrayList<String> activePatients;
+    private String Phone;
     @Field
-    private ArrayList<String> archivedPatients;
+    private String Picture;
+    @Field
+    private ArrayList<String> ActivePatients;
+    @Field
+    private ArrayList<String> ArchivedPatients;
 
-    public Therapist(String id, String clinicId, String name, String email, String password, ArrayList<String> activePatients, ArrayList<String> archivedPatients) {
+
+    public Therapist(String id, String clinicId, String name, String email, String password, String phone, String picture, ArrayList<String> activePatients, ArrayList<String> archivedPatients) {
         this.id = id;
-        this.clinicId = clinicId;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.activePatients = activePatients;
-        this.archivedPatients = archivedPatients;
+        ClinicId = clinicId;
+        Name = name;
+        Email = email;
+        Password = password;
+        Phone = phone;
+        Picture = picture;
+        ActivePatients = activePatients;
+        ArchivedPatients = archivedPatients;
     }
 
     public String getId() {
@@ -41,63 +48,66 @@ public class Therapist {
     }
 
     public String getClinicId() {
-        return clinicId;
+        return ClinicId;
     }
 
     public void setClinicId(String clinicId) {
-        this.clinicId = clinicId;
+        ClinicId = clinicId;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        Email = email;
     }
 
     public String getPassword() {
-        return password;
+        return Password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        Password = password;
+    }
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
+    }
+
+    public String getPicture() {
+        return Picture;
+    }
+
+    public void setPicture(String picture) {
+        Picture = picture;
     }
 
     public ArrayList<String> getActivePatients() {
-        return activePatients;
+        return ActivePatients;
     }
 
     public void setActivePatients(ArrayList<String> activePatients) {
-        this.activePatients = activePatients;
+        ActivePatients = activePatients;
     }
 
     public ArrayList<String> getArchivedPatients() {
-        return archivedPatients;
+        return ArchivedPatients;
     }
 
     public void setArchivedPatients(ArrayList<String> archivedPatients) {
-        this.archivedPatients = archivedPatients;
-    }
-
-    @Override
-    public String toString() {
-        return "Therapist{" +
-                "id='" + id + '\'' +
-                ", clinicId='" + clinicId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", activePatients=" + activePatients +
-                ", archivedPatients=" + archivedPatients +
-                '}';
+        ArchivedPatients = archivedPatients;
     }
 }

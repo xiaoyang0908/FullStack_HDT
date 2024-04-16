@@ -1,12 +1,20 @@
-import { Box } from "@mui/material";
+'use client'
+import { Link } from "@mui/icons-material";
+import { Box, Typography} from "@mui/material";
+import { useRouter } from "next/navigation";
 
-export function ClickBack(){
+export function ClickBack({username, pagename}){
+    const router = useRouter();
+    const handleClickBack = () =>{
+        router.back();
+    }
 
     return(
-        <Box fullwidth sx={{display:"flex", justifyContent:""}}>
-            <Box>
-                
+        <Box sx={{display:"flex", width:"400px", alignItems:"center"}}>
+            <Box sx={{marginRight:1}} onClick={handleClickBack}>
+                <img src="/backIcon.svg" alt="click back" sx={{width:"40px", height:"40px"}} loading="lazy"/>
             </Box>
+            <Typography variant="text">Clients / {username} / {pagename}</Typography>
         </Box>
     )
 }

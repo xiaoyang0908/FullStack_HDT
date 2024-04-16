@@ -1,6 +1,7 @@
 package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
+import com.example.hdt.models.Tasks;
 import com.example.hdt.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -10,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Repository
@@ -27,11 +27,11 @@ public class PatientImpl{
     public List<Patient> getPatientList(){
         return mongoTemplate.findAll(Patient.class);
     }
-    //    update
-    public void updatePatient(Patient patient){
+    //    update Tasks
+    public void updateTasks(Patient patient){
         Query query = new Query(Criteria.where("PatientId").is(patient.getPatientID()));
-        Update update = new Update().set("photo",patient.getPhoto());
+        Update update = new Update().set("tasks",patient.getTasks());
         mongoTemplate.updateFirst(query,update,Patient.class);
-
     }
+
 }

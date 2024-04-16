@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { usePatient } from "../../contexts/PatientContext";
+// import { usePatient } from "../../contexts/PatientContext";
 import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar } from "@readyplayerme/visage";
 import {
@@ -36,9 +36,10 @@ import { useSearchParams } from "next/navigation";
  */
 
 export default function TherapistPatientsDetails() {
-     // current.patient is the patient data
+    //  current.patient is the patient data
      const searchParams = useSearchParams();
-     const currentPatient = JSON.parse(searchParams.get("patient"));
+     const currentPatient = searchParams.get("patient");
+    // const {currentPatient} = usePatient();
      console.log(currentPatient);
 
     // Avatar creator configuration
@@ -137,7 +138,7 @@ export default function TherapistPatientsDetails() {
     )
 
     return (
-        <Container sx={{ paddingTop: '60px', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>
+        <Container sx={{ paddingTop: '6vh', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>
             <Grid container spacing={2}>
 
                 {/* Personal Info Section, assuming it's now smaller let's say md={3} */}
