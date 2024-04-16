@@ -18,7 +18,6 @@ import {
   Avatar,
   Button,
   Card,
-  CardContent,
   Typography,
   Grid,
   IconButton,
@@ -114,9 +113,9 @@ export default function TherapistOverview() {
 
     const handleButtonClick = (path, patientData) => {   // Redirect to different page
         if (patientData) {
-            // updateCurrentPatient(patientData);
-            router.push(`${path}?patient=${JSON.stringify(patientData)}`);
-        }else{
+            const patientDataString = encodeURIComponent(JSON.stringify(patientData));
+            router.push(`${path}?patient=${patientDataString}`);
+        } else {
             router.push(path)
         }
     };

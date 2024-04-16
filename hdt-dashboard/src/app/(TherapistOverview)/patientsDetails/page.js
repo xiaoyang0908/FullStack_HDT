@@ -18,7 +18,8 @@ import {
 
 export default function TherapistPatientsDetails() {
     const searchParams = useSearchParams();
-    const currentPatient = JSON.parse(searchParams.get("patient") || "{}");
+    const patientDataString = decodeURIComponent(searchParams.get("patient") || "{}");
+    const currentPatient = JSON.parse(patientDataString);
     const [avatarUrl, setAvatarUrl] = useState('');
 
     const handleOnAvatarExported = (avatarEvent) => {
