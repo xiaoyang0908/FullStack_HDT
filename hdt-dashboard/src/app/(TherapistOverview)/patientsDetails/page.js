@@ -1,8 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 // import { usePatient } from "../../contexts/PatientContext";
-import { AvatarCreator, AvatarCreatorConfig, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
-import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import ThreeDAvatar from "@/app/components/three";
 import {
     Box,
     Grid,
@@ -23,18 +22,6 @@ import {
 } from "@mui/icons-material";
 import { useSearchParams } from "next/navigation";
 
-/**
- * @typedef {Object} AvatarCreatorConfig
- * @property {boolean} [clearCache]
- * @property {BodyType} [bodyType]
- * @property {boolean} [quickStart]
- * @property {Language} [language]
- * @property {string} [token]
- * @property {string} [avatarId]
- * 
- * @param {AvatarExportedEvent} avatarEvent
- */
-
 export default function TherapistPatientsDetails() {
     //  current.patient is the patient data
      const searchParams = useSearchParams();
@@ -44,11 +31,14 @@ export default function TherapistPatientsDetails() {
 
     // Avatar creator configuration
     const style = { width: '100%', height: '90vh', border: 'none' };
-    const [avatarUrl, setAvatarUrl] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('https://models.readyplayer.me/661f8f7bb5024e52af0ae319.glb');
+    
     const handleOnAvatarExported = (avatarEvent) => {
-        console.log(`Avatar URL is: ${avatarEvent.data.url}`);
+        const avatarUrl = avatarEvent.data.url; // Get the URL from the avatar event
+        console.log(`Avatar URL is: ${avatarUrl}`);
+        setAvatarUrl(avatarUrl); // Set the state with the new avatar URL
     };
-
+    
     const config = {
         clearCache: true,
         bodyType: 'fullbody',
@@ -56,6 +46,12 @@ export default function TherapistPatientsDetails() {
         language: 'en',
     };
 
+    const userAvatar = (
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
+            <ThreeDAvatar modelUrl={avatarUrl} />
+        </Grid>
+    );
+    
     useEffect(() => {   // Prevents scrolling on page
         document.body.style.overflow = 'hidden';
     }, []);
@@ -66,35 +62,34 @@ export default function TherapistPatientsDetails() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                            <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}} />
+                            { <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}}/> }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                             <Typography variant="h5">
-                                {currentPatient.name}
-                            </Typography>
+                            {currentPatient && currentPatient.name ? currentPatient.name : 'Error Loading'}                        </Typography>
                         </Box>
                         <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
                     </Grid>
                     <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
                         <Grid item xs={12}>
                             <Typography variant="body1">Birth date</Typography>
-                            <Typography variant="body2" color="text.secondary">12 / 06 / 2000</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.birth ? currentPatient.birth : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Client's Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">+45 12 34 56 78</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.phone ? currentPatient.phone : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Email</Typography>
-                            <Typography variant="body2" color="text.secondary">{currentPatient.email}</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.email ? currentPatient.email : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact person</Typography>
-                            <Typography variant="body2" color="text.secondary">Anna Jensen</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.therapists ? currentPatient.therapists : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact Person Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">+45 87 65 43 21</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.therapistsPhone ? currentPatient.therapistsPhone : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Type of Movement impairment</Typography>
@@ -102,11 +97,11 @@ export default function TherapistPatientsDetails() {
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Dominant arm</Typography>
-                            <Typography variant="body2" color="text.secondary">Left</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.domiantArm ? currentPatient.domiantArm : 'Error Loading' }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Therapy goals</Typography>
-                            <Typography variant="body2" color="text.secondary">Increase range of motion, Reduce pain, Strenghten shoulder</Typography>
+                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.goals ? currentPatient.goals : 'Error Loading' }</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -129,13 +124,6 @@ export default function TherapistPatientsDetails() {
             </List>
         </Paper>
     );
-
-    const userAvatar = (
-        <Grid container sx={{ display: 'flex', alignItems: 'flex-start' }}>
-            <AvatarCreator subdomain="demo" config={config} style={style} onAvatarExported={handleOnAvatarExported} />
-            {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
-        </Grid>
-    )
 
     return (
         <Container sx={{ paddingTop: '6vh', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>

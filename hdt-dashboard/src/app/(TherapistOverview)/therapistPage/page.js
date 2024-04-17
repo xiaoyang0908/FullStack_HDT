@@ -46,7 +46,7 @@ export default function TherapistOverview() {
 
     const detailsButtonPath = '/patientsDetails';
     const manageTaskButtonPath = '/manageTasks';
-    const addClientButtonPath = '/addClient';
+    const addClientButtonPath = '/createPatientPage';
     const archivedClientsButtonPath = '/archievedClients';
     
      // Fetch patients
