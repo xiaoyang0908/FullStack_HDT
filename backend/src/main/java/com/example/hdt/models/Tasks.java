@@ -15,9 +15,12 @@ public class Tasks {
     @Field
     private int sets;
     @Field
-    private String status = "Awaiting Start";
+    private String status;
     @Field
     private String date;
+
+    public Tasks() {
+    }
 
     public Tasks(String _id, Game game, String difficulty, int sets, String status, String date) {
         this._id = _id;
@@ -26,7 +29,17 @@ public class Tasks {
         this.sets = sets;
         this.status = status;
         this.date = date;
+
     }
+
+//    public int getTotalTime() {
+//        return totalTime;
+//    }
+//
+//    public void setTotalTime() {
+//       int totalTime = this.game.getSlots() * this.getSets();
+//       this.totalTime = totalTime/60;
+//    }
 
     public String get_id() {
         return _id;

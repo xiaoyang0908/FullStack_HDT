@@ -20,13 +20,13 @@ public class TherapistImpl {
     private PatientImpl patientimlpl;
 
 //    getActivityPatient
-    public List<Patient> findAllAcitvePatient(String id){
+    public List<Patient> findAllAcitvePatient(String email){
         List<Patient> activePatient = new ArrayList<>();
-        Query query = new Query(Criteria.where("id").is(id));
+        Query query = new Query(Criteria.where("Email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
         List<String> activePatientsId = t.getActivePatients();
         for (String patientId: activePatientsId) {
-            Patient p = patientimlpl.findPatientById(patientId);
+            Patient p = patientimlpl.findPatientByPatientId(patientId);
             if (p!= null){
                 activePatient.add(p);
             }

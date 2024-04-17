@@ -10,7 +10,7 @@ export function ClickBack({username, pagename}){
     }
 
     return(
-        <Box sx={{display:"flex", width:"400px", alignItems:"center"}}>
+        <Box sx={{display:"flex", width:"30vw", alignItems:"center"}}>
             <Box sx={{marginRight:1}} onClick={handleClickBack}>
                 <img src="/backIcon.svg" alt="click back" sx={{width:"40px", height:"40px"}} loading="lazy"/>
             </Box>

@@ -9,9 +9,10 @@ import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 // import {updateCurrentPatient} from "../../contexts/PatientContext";
-import { reqPatientsList } from '../../api/api';
+import { reqActivePatientsList } from '../../api/api';
 import { usePatient } from '../../contexts/PatientContext';
 import { useEffect, useState } from 'react';
+import { useCookies } from "react-cookie";
 import {
   TextField, 
   Box,
@@ -40,26 +41,29 @@ export default function TherapistOverview() {
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const router = useRouter();
     // const { updateCurrentPatient } = usePatient();
+    const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
+    const therapistInfo = cookies.user_token;
 
     const detailsButtonPath = '/patientsDetails';
     const manageTaskButtonPath = '/manageTasks';
     const addClientButtonPath = '/addClient';
     const archivedClientsButtonPath = '/archievedClients';
     
-    useEffect(() => {   // Fetch patients
-        const fetchPatients = async () => {
-            setLoading(true);
-            try {
-                const response = await reqPatientsList();
-                setPatientsList(response);
-                setLoading(false);
-            } catch (error) {
-                console.error("Failed to fetch patients:", error);
-                setError('Failed to fetch patients');
-                setLoading(false);
-            }
-        };
-
+     // Fetch patients
+     const fetchPatients = async () => {
+        setLoading(true);
+        try {
+            const response = await reqActivePatientsList(therapistInfo.email);
+            console.log(response)
+            setPatientsList(response);
+            setLoading(false);
+        } catch (error) {
+            console.error("Failed to fetch patients:", error);
+            setError('Failed to fetch patients');
+            setLoading(false);
+        }
+    };
+    useEffect(() => {  
         fetchPatients();
     }, []);
 
@@ -114,11 +118,16 @@ export default function TherapistOverview() {
 
     const handleButtonClick = (path, patientData) => {   // Redirect to different page
         console.log(patientData);
-        if (patientData) {
-            // updateCurrentPatient(patientData);
-            router.push(`${path}?patient=${patientData}`);
+        try {
+            if (patientData) {
+                // updateCurrentPatient(patientData);
+                router.push(`${path}?patient=${JSON.stringify(patientData)}`);
+            }
+        } catch (error) {
+            console.log(error);
         }
-        router.push(path);
+       
+        // router.push(path);
     };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
@@ -199,14 +208,14 @@ export default function TherapistOverview() {
                                     <Avatar sx={{ marginRight: 2 }}>{/* Patient's Avatar */}</Avatar>
                                     <Box sx={{ flexDirection: 'column' }}>
                                         <Typography variant="h6">{patient.name || 'No data available'}</Typography>
-                                        <Typography variant="body2">Current tasks: {patient.currentTasks || 'No data available'}</Typography>
+                                        <Typography variant="body2">Current tasks: {patient.tasks!==null? patient.tasks.length :'No data available'}</Typography>
                                     </Box>
                                 </Box>
 
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
-                                    <Typography variant="body2">Total exercise: {patient.exerciseTime || 'No data available'}</Typography>
+                                    <Typography variant="body2">Total exercise: {patient.tasks!==null? patient.tasks.totalTime :'No data available'}</Typography>
                                     <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available'}</Typography>
                                 </Box>
 

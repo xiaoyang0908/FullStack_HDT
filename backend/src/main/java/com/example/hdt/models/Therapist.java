@@ -4,40 +4,39 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 @Document("therapistProfile")
 public class Therapist {
-    @Id
-    private String id;
-    @Field
-    private String ClinicId;
-    @Field
-    private String Name;
-    @Field
-    private String Email;
-    @Field
-    private String Password;
-    @Field
-    private String Phone;
-    @Field
-    private String Picture;
-    @Field
-    private ArrayList<String> ActivePatients;
-    @Field
-    private ArrayList<String> ArchivedPatients;
+        @Id
+        private String id;
 
+        @Field("Name")
+        private String name;
 
-    public Therapist(String id, String clinicId, String name, String email, String password, String phone, String picture, ArrayList<String> activePatients, ArrayList<String> archivedPatients) {
-        this.id = id;
-        ClinicId = clinicId;
-        Name = name;
-        Email = email;
-        Password = password;
-        Phone = phone;
-        Picture = picture;
-        ActivePatients = activePatients;
-        ArchivedPatients = archivedPatients;
-    }
+        @Field("Email")
+        private String email;
+
+        @Field("Password")
+        private String password;
+
+        @Field("Phone")
+        private String phone;
+
+        @Field("Picture")
+        private String picture;
+
+        @Field("ActivePatients")
+        private ArrayList<String> activePatients;
+
+        @Field("ArchivedPatients")
+        private ArrayList<String> archivedPatients;
+
+        @Field("TherapistID")
+        private String therapistID;
+
+        @Field("ClinicID")
+        private String clinicID;
 
     public String getId() {
         return id;
@@ -47,67 +46,83 @@ public class Therapist {
         this.id = id;
     }
 
-    public String getClinicId() {
-        return ClinicId;
-    }
-
-    public void setClinicId(String clinicId) {
-        ClinicId = clinicId;
-    }
-
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        Phone = phone;
+        this.phone = phone;
     }
 
     public String getPicture() {
-        return Picture;
+        return picture;
     }
 
     public void setPicture(String picture) {
-        Picture = picture;
+        this.picture = picture;
     }
 
     public ArrayList<String> getActivePatients() {
-        return ActivePatients;
+        return activePatients;
     }
 
     public void setActivePatients(ArrayList<String> activePatients) {
-        ActivePatients = activePatients;
+        this.activePatients = activePatients;
     }
 
     public ArrayList<String> getArchivedPatients() {
-        return ArchivedPatients;
+        return archivedPatients;
     }
 
     public void setArchivedPatients(ArrayList<String> archivedPatients) {
-        ArchivedPatients = archivedPatients;
+        this.archivedPatients = archivedPatients;
     }
+
+    public String getTherapistID() {
+        return therapistID;
+    }
+
+    public void setTherapistID(String therapistID) {
+        this.therapistID = therapistID;
+    }
+
+    public String getClinicID() {
+        return clinicID;
+    }
+
+    public void setClinicID(String clinicID) {
+        this.clinicID = clinicID;
+    }
+
+    // Getters and setters
+
+
+
+
+
+
 }

@@ -8,22 +8,14 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Game {
     @Id
     private String _id;
-    @Field
+    @Field("type")
     private String type;
-    @Field
+    @Field("equippment")
     private String equippment;
-    @Field
-    private String slots;
-    @Field
+    @Field("slots")
+    private int slots;
+    @Field("img")
     private String img;
-
-    public Game(String _id, String type, String equippment, String slots, String img) {
-        this._id = _id;
-        this.type = type;
-        this.equippment = equippment;
-        this.slots = slots;
-        this.img = img;
-    }
 
     public String get_id() {
         return _id;
@@ -49,11 +41,11 @@ public class Game {
         this.equippment = equippment;
     }
 
-    public String getSlots() {
+    public int getSlots() {
         return slots;
     }
 
-    public void setSlots(String slots) {
+    public void setSlots(int slots) {
         this.slots = slots;
     }
 

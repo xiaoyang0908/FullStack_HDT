@@ -4,9 +4,11 @@ import com.example.hdt.models.Game;
 import com.example.hdt.models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class GameImpl {
 
     @Autowired(required = false)

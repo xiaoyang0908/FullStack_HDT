@@ -19,8 +19,8 @@ public class PatientImpl{
     private MongoTemplate mongoTemplate;
 
     //    get user
-    public Patient findPatientById(String id){
-        Query query = new Query(Criteria.where("PatientId").is(id));
+    public Patient findPatientByPatientId(String patientId){
+        Query query = new Query(Criteria.where("patientID").is(patientId));
         return mongoTemplate.findOne(query,Patient.class);
     }
 
@@ -29,7 +29,7 @@ public class PatientImpl{
     }
     //    update Tasks
     public void updateTasks(Patient patient){
-        Query query = new Query(Criteria.where("PatientId").is(patient.getPatientID()));
+        Query query = new Query(Criteria.where("PatientID").is(patient.getPatientID()));
         Update update = new Update().set("tasks",patient.getTasks());
         mongoTemplate.updateFirst(query,update,Patient.class);
     }

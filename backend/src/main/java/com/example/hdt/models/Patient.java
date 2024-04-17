@@ -11,50 +11,142 @@ import java.util.List;
 @Document("patientProfile")
 public class Patient {
     @Id
-    private String PatientID;
-    @Field
-    private String Birth;
-    @Field
-    private String Name;
-    @Field
-    private String Email;
-    @Field
-    private String Phone;
-    @Field
-    private String Photo;
-    @Field
-    private ArrayList<String> Caregivers;
+    private String id;
 
-    @DBRef
-    private ArrayList<String> Therapists;
-    @Field
-    private String Impaired;
-    @Field
-    private String DominantArm;
-    @Field
-    private String Goals;
-    @Field
-    private String ActivityStatus;
-    @DBRef
+    @Field("PatientID")
+    private String patientID;
+
+    @Field("Birth")
+    private String birth;
+
+    @Field("Name")
+    private String name;
+
+    @Field("Email")
+    private String email;
+
+    @Field("Phone")
+    private String phone;
+
+    @Field("Photo")
+    private String photo;
+
+    @Field("Caregivers")
+    private ArrayList<String> caregivers;
+
+    @Field("Therapists")
+    private ArrayList<String> therapists;
+
+    @Field("Impaired")
+    private String impaired;
+
+    @Field("DominantArm")
+    private String dominantArm;
+
+    @Field("Goals")
+    private String goals;
+
+    @Field("ActivityStatus")
+    private String activityStatus;
+
+    @Field("Tasks")
     private ArrayList<Tasks> tasks;
 
-    public Patient() {
+
+
+    public String getId() {
+        return id;
     }
 
-    public Patient(String patientID, String birth, String name, String email, String phone, String photo, ArrayList<String> caregivers, ArrayList<String> therapists, String impaired, String dominantArm, String goals, String activityStatus, ArrayList<Tasks> tasks) {
-        PatientID = patientID;
-        Birth = birth;
-        Name = name;
-        Email = email;
-        Phone = phone;
-        Photo = photo;
-        Caregivers = caregivers;
-        Therapists = therapists;
-        Impaired = impaired;
-        DominantArm = dominantArm;
-        Goals = goals;
-        ActivityStatus = activityStatus;
-        this.tasks = tasks;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPatientID() {
+        return patientID;
+    }
+
+    public void setPatientID(String patientID) {
+        this.patientID = patientID;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+    public String getImpaired() {
+        return impaired;
+    }
+
+    public void setImpaired(String impaired) {
+        this.impaired = impaired;
+    }
+
+    public String getDominantArm() {
+        return dominantArm;
+    }
+
+    public void setDominantArm(String dominantArm) {
+        this.dominantArm = dominantArm;
+    }
+
+    public String getGoals() {
+        return goals;
+    }
+
+    public void setGoals(String goals) {
+        this.goals = goals;
+    }
+
+    public String getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        this.activityStatus = activityStatus;
+    }
+
+    public void setCaregivers(ArrayList<String> caregivers) {
+        this.caregivers = caregivers;
+    }
+
+    public void setTherapists(ArrayList<String> therapists) {
+        this.therapists = therapists;
     }
 
     public ArrayList<Tasks> getTasks() {
@@ -62,102 +154,7 @@ public class Patient {
     }
 
     public void addTasks(Tasks task) {
-        tasks.add(task);
-    }
-
-    public String getPatientID() {
-        return PatientID;
-    }
-
-    public void setPatientID(String patientID) {
-        PatientID = patientID;
-    }
-
-    public String getBirth() {
-        return Birth;
-    }
-
-    public void setBirth(String birth) {
-        Birth = birth;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
-
-    public String getPhone() {
-        return Phone;
-    }
-
-    public void setPhone(String phone) {
-        Phone = phone;
-    }
-
-    public String getPhoto() {
-        return Photo;
-    }
-
-    public void setPhoto(String photo) {
-        Photo = photo;
-    }
-
-    public ArrayList<String> getCaregivers() {
-        return Caregivers;
-    }
-
-    public void setCaregivers(ArrayList<String> caregivers) {
-        Caregivers = caregivers;
-    }
-
-    public ArrayList<String> getTherapists() {
-        return Therapists;
-    }
-
-    public void addTherapists(String therapistId) {
-        Therapists.add(therapistId);
-    }
-
-    public String getImpaired() {
-        return Impaired;
-    }
-
-    public void setImpaired(String impaired) {
-        Impaired = impaired;
-    }
-
-    public String getDominantArm() {
-        return DominantArm;
-    }
-
-    public void setDominantArm(String dominantArm) {
-        DominantArm = dominantArm;
-    }
-
-    public String getGoals() {
-        return Goals;
-    }
-
-    public void setGoals(String goals) {
-        Goals = goals;
-    }
-
-    public String getActivityStatus() {
-        return ActivityStatus;
-    }
-
-    public void setActivityStatus(String activityStatus) {
-        ActivityStatus = activityStatus;
+        this.tasks = new ArrayList<>();
+        this.tasks.add(task);
     }
 }

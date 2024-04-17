@@ -17,19 +17,26 @@ export const reqLoginOUt = ()=>{
 }
 
 
-export const reqPatientsList = ()=>{
+export const reqActivePatientsList = (email)=>{
     try {
-        return get("http://127.0.0.1:8090/api/patients");
+        return post("http://localhost:8090/therapist/activePatients",{email:email});
     } catch (err) {
-        console.error('Failed to fetch patients:', err);
         throw err;
     }
 };
 
 export const reqGame = ()=>{
     try{
-        return get("http://127.0.0.1:8090/game");
+        return get("http://127.0.0.1:8090/game/gameList");
     }catch(err){
+        throw err;
+    }
+}
+
+export const reqTaskList = (patientID,taskinfo)=>{
+    try {
+        return post("http://localhost:8090/patient/tasks",{patientID:patientID,taskinfo:taskinfo});
+    } catch (error) {
         throw err;
     }
 }
