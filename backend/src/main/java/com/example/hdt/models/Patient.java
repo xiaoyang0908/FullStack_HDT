@@ -154,7 +154,9 @@ public class Patient {
     }
 
     public void addTasks(Tasks task) {
-        this.tasks = new ArrayList<>();
+        if (this.tasks.isEmpty()){
+            this.tasks = new ArrayList<>();
+        }
         this.tasks.add(task);
     }
 }
