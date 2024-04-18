@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.scheduling.config.Task;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Document("patientProfile")
@@ -150,13 +151,37 @@ public class Patient {
     }
 
     public ArrayList<Tasks> getTasks() {
+        if (this.tasks==null){
+            return new ArrayList<>();
+        }
         return tasks;
     }
 
+    public Tasks findTask(String taskId){
+        Iterator<Tasks> tasksIterator = this.tasks.iterator();
+        while (tasksIterator.hasNext()){
+            Tasks task = tasksIterator.next();
+            if (task.get_id().equals(taskId)){
+                return task;
+            }
+            break;
+        }
+        return null;
+    }
+
     public void addTasks(Tasks task) {
-        if (this.tasks.isEmpty()){
+        if (this.tasks==null){
             this.tasks = new ArrayList<>();
         }
         this.tasks.add(task);
+    }
+    public void deleteTask(String taskId){
+        Iterator<Tasks> tasksIterator = this.tasks.iterator();
+        while (tasksIterator.hasNext()){
+            Tasks task = tasksIterator.next();
+            if (task.get_id().equals(taskId)){
+                tasksIterator.remove();
+            }
+        }
     }
 }

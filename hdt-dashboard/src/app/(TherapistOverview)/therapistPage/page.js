@@ -208,14 +208,14 @@ export default function TherapistOverview() {
                                     <Avatar sx={{ marginRight: 2 }}>{/* Patient's Avatar */}</Avatar>
                                     <Box sx={{ flexDirection: 'column' }}>
                                         <Typography variant="h6">{patient.name || 'No data available'}</Typography>
-                                        <Typography variant="body2">Current tasks: {patient.tasks!==null? patient.tasks.length :'No data available'}</Typography>
+                                        <Typography variant="body2">Current tasks: {patient.tasks? patient.tasks.length :'No data available'}</Typography>
                                     </Box>
                                 </Box>
 
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
-                                    <Typography variant="body2">Total exercise: {patient.tasks!==null? patient.tasks.totalTime :'No data available'}</Typography>
+                                    <Typography variant="body2">Total exercise: {'No data available'}</Typography>
                                     <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available'}</Typography>
                                 </Box>
 

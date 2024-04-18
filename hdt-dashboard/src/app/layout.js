@@ -13,13 +13,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
         <CookiesProvider>
-          <PatientProvider>
+          {/* <PatientProvider> */}
             <body className={inter.className}>
               <Middleware>
                 {children}
               </Middleware>
             </body>
-          </PatientProvider>
+          {/* </PatientProvider> */}
         </CookiesProvider>
     </html>
   );

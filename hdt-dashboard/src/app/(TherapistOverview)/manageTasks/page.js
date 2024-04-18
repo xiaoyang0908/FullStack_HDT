@@ -17,14 +17,14 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import EditICon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
-import { reqGame, reqTaskList } from "@/app/api/api";
+import { reqDeleteTask, reqGame, reqTaskList, reqEditTask} from "@/app/api/api";
 import formatDate from "@/app/util/date";
 
 
 export default function ManageTask(){
     const searchParams = useSearchParams();
     const currentPatient = JSON.parse(searchParams.get("patient"));
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(currentPatient.tasks || null);
     // if (currentPatient.tasks) {
     //     setTasks(currentPatient.tasks);
     // }
@@ -87,6 +87,19 @@ export default function ManageTask(){
 
     });
 
+    const handleDeleteTask = (id) =>{
+        reqDeleteTask(currentPatient.patientID,id).then((res)=>{
+            setTasks(res);
+        }).catch((error)=>{
+            console.log(error);
+        })
+    }
+
+    const handleEditTask = (task) =>{
+        setOpenDia(true);
+        setTaskInfo(task);
+    }
+
     // show dialog
     const [openDia,setOpenDia] = useState(false);
     const handleStartDate = (value) => {
@@ -126,12 +139,12 @@ export default function ManageTask(){
         setOpenDia(false);
     };
 
-    // useEffect(()=>{
-    //     setTaskInfo((prev) =>({
-    //         ...prev,
-    //         date:`${date.start}-${date.end}`
-    //     }))
-    // },[date])
+    useEffect(()=>{
+        setTaskInfo((prev) =>({
+            ...prev,
+            date:`${date.start}-${date.end}`
+        }))
+    },[date])
 
     useEffect(()=>{
         window.dispatchEvent(new Event("resize"));
@@ -283,10 +296,10 @@ export default function ManageTask(){
                                         <TableCell align="left">Status</TableCell>
                                         <TableCell align="left">{task.date}</TableCell>  
                                         <TableCell>
-                                            <IconButton aria-label="edit">
+                                            <IconButton aria-label="edit" onClick={()=>handleEditTask(task)}>
                                                 <EditICon color="#5A6ACF"/>
                                             </IconButton>
-                                            <IconButton aria-label="delete">
+                                            <IconButton aria-label="delete" onClick={()=>{handleDeleteTask(task._id)}}>
                                                 <DeleteIcon color="red"/>
                                             </IconButton>
                                         </TableCell>                           

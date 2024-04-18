@@ -40,3 +40,11 @@ export const reqTaskList = (patientID,taskinfo)=>{
         throw err;
     }
 }
+
+export const reqDeleteTask = (patientID,taskId)=>{
+    try {
+        return post("http://localhost:8090/patient/deteteTask",{patientID:patientID,taskId:taskId});
+    } catch (error) {
+        throw err;
+    }
+}
