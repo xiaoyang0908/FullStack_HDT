@@ -53,6 +53,14 @@ public class Patient {
     @Field("Tasks")
     private ArrayList<Tasks> tasks;
 
+    @Field("sexual")
+    private String sexual;
+
+    @Field("Avatar")
+    private String avatar;
+
+
+
 
 
     public String getId() {
