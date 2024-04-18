@@ -223,21 +223,27 @@ export default function AddPatient() {
     const AvatarContent = () => {
         const [avatarUrl, setAvatarUrl] = useState('');
         const handleOnAvatarExported = (avatarEvent) => {
-            console.log(`Avatar URL is: ${avatarEvent.data.url}`);
-            setAvatarUrl(avatarUrl);
+            console.log('Avatar event object:', avatarEvent);
+            if (avatarEvent.detail && avatarEvent.detail.url) {
+                console.log(`Avatar URL is: ${avatarEvent.detail.url}`);
+                setAvatarUrl(avatarEvent.detail.url);
+            } else {
+                console.error('No avatar URL found in the event object');
+            }
         };
-
+        
         const config = {
             clearCache: true,
             bodyType: 'fullbody',
             quickStart: false,
             language: 'en',
+            //token: 'sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU'   // API Key: sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU
         };
-
+    
         return (
             <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
                 <AvatarCreator
-                    subdomain="demo"
+                    subdomain="rehab.readyplayer.me?frameApi"  // Subdomain provided by readyplayer.me developer account
                     config={config}
                     style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
                     onAvatarExported={handleOnAvatarExported}

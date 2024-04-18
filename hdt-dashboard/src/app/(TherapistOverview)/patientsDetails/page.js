@@ -30,21 +30,7 @@ export default function TherapistPatientsDetails() {
      console.log(currentPatient);
 
     // Avatar creator configuration
-    const style = { width: '100%', height: '90vh', border: 'none' };
-    const [avatarUrl, setAvatarUrl] = useState('https://models.readyplayer.me/661f8f7bb5024e52af0ae319.glb');
-    
-    const handleOnAvatarExported = (avatarEvent) => {
-        const avatarUrl = avatarEvent.data.url; // Get the URL from the avatar event
-        console.log(`Avatar URL is: ${avatarUrl}`);
-        setAvatarUrl(avatarUrl); // Set the state with the new avatar URL
-    };
-    
-    const config = {
-        clearCache: true,
-        bodyType: 'fullbody',
-        quickStart: false,
-        language: 'en',
-    };
+    const avatarUrl = 'https://models.readyplayer.me/661f8f7bb5024e52af0ae319.glb';   // change this when we have DB setup
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>

@@ -122,12 +122,12 @@ export default function TherapistOverview() {
             if (patientData) {
                 // updateCurrentPatient(patientData);
                 router.push(`${path}?patient=${JSON.stringify(patientData)}`);
+            } else {
+                router.push(path);
             }
         } catch (error) {
             console.log(error);
         }
-       
-        // router.push(path);
     };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
