@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import { AvatarCreator } from '@readyplayerme/react-avatar-creator';
-import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import ThreeDAvatar from "@/app/components/three";
 import Tooltip from '@mui/material/Tooltip';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import IconButton from '@mui/material/IconButton';
@@ -18,24 +17,12 @@ import {
     Card,
     CardContent
 } from "@mui/material";
-import { tasksList } from "@/app/components/taskList";
-
 
 export default function TrdPage() {
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
-    const [avatarUrl, setAvatarUrl] = useState('');
-    const handleClickMore = () => {
-        if (open) {
-            setShowList("auto");
-            setButton("fold");
-        } else {
-            setShowList("hidden");
-            setButton("more");
-        }
-        setOpen(!open);
-    }
+    const avatarUrl = 'https://models.readyplayer.me/661f8f7bb5024e52af0ae319.glb';   // change this when we have DB setup
 
     useEffect(() => {   // Prevent scrolling 
         document.body.style.overflow = 'hidden';
@@ -157,198 +144,46 @@ export default function TrdPage() {
         </Box>
     );
 
-
-    // Avatar settings
-    const handleOnAvatarExported = (avatarEvent) => {
-        setAvatarUrl(avatarEvent.data.url);
-    };
-
-    const config = {
-        clearCache: true,
-        bodyType: 'fullbody',
-        quickStart: false,
-        language: 'en',
-    };
-
-    const UserAvatar = () => (
-        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
-            <AvatarCreator subdomain="demo" config={config} style={{ width: '100%', height: '100%', border: 'none' }} onAvatarExported={handleOnAvatarExported} />
-            {avatarUrl && <VisageAvatar modelSrc={avatarUrl} style={{ height: '100%' }} />}
-        </Grid>
-    );
-
     return (
         <Container sx={{
             paddingTop: '5%',
-            display: 'flex',
             overflow: 'hidden',
-            height: '98%', // Ensures the container takes up nearly the full height
+            minHeight: '98vh',
             minWidth: '100%',
-            display: 'flex', // Make this a flex container
-            flexDirection: 'column' // Stack children vertically
+            display: 'flex',
+            flexDirection: 'row',
         }}>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <LiveStreamCard />
-                        <Divider orientation="horizontal" flexItem sx={{ pb: 1, pt: 1 }} />
-                        <TherapistCard />
-                    </Paper>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={8}>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <Paper sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <LiveStreamCard />
+                                <Divider />
+                                <TherapistCard />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                <ThumbsUpCard />
+                                <Divider />
+                                <UserCard />
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper sx={{ flexGrow: 1, height: '100%', overflow: 'hidden' }}>
+                                <ExerciseTasksCard />
+                            </Paper>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                    <Paper sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <ThumbsUpCard />
-                        <Divider orientation="horizontal" flexItem sx={{ pb: 1, pt: 1 }} />
-                        <UserCard />
-                    </Paper>
-                </Grid>
-                <Grid item xs={6} sm={6} md={4} lg={6} sx={{ flexGrow: 1 }}>
-                    <UserAvatar />
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper sx={{ height: '100%', display: 'flex' }}>
-                        <ExerciseTasksCard />
-                    </Paper>
+
+                <Grid item xs={12} md={4} >
+                    <Box sx={{ width: '100%', height: '100%' }}>
+                        <ThreeDAvatar modelUrl={avatarUrl} />
+                    </Box>
                 </Grid>
             </Grid>
         </Container>
     );
-
 }
-
-
-
-
-
-
-
-
-// Old code setup
-/*
-    return(
-        <Grid container spacing={2}  >
-        <Grid item xs={7} sm={7} md={7} lg={7} >
-            <Box sx={{display:"flex", justifyContent:"space-between"}}>
-                <Box sx={{width:"49%"}}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: "23vh",
-                            backgroundColor:'lightblue',
-                            justifyContent:"center"
-                        }}
-                        >
-                            
-                            <h3>Welcome!</h3>
-                            <h3>You're doing great</h3>
-                            <p>Check your exercise data here</p>   
-                    </Paper>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            height: "23vh",
-                            backgroundColor:'white',
-                            alignItems:"center"
-                        }}
-                        >
-                            <Avatar alt="Remy Sharp"
-                                    src=""
-                                    sx={{ width: 80, height: 80, border:"1px solid black", marginRight:1 }} />
-                            <Box>
-                            <p>Jack Smith</p>
-                            <p>Age    34</p>
-                            <p>Exercise    17days</p>
-                            </Box>   
-                    </Paper>
-                </Box>
-                <Box sx={{width:"49%"}}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: "23vh",
-                            backgroundColor:'lightblue',
-                            justifyContent:"center"
-                        }}
-                        >
-                            
-                            <h3>Welcome!</h3>
-                            <h3>You're doing great</h3>
-                            <p>Check your exercise data here</p>   
-                    </Paper>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            height: "23vh",
-                            backgroundColor:'white',
-                            alignItems:"center"
-                        }}
-                        >
-                            <Avatar alt="Remy Sharp"
-                                    src=""
-                                    sx={{ width: 80, height: 80, border:"1px solid black", marginRight:1 }} />
-                            <Box>
-                            <p>Jack Smith</p>
-                            <p>Age    34</p>
-                            <p>Exercise    17days</p>
-                            </Box>   
-                    </Paper>
-                </Box>
-            </Box>
-                <Box>
-                    <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                marginTop:"4vh",
-                                height: "50vh",
-                                backgroundColor:'white',
-                                overflow:showList,
-                            }}
-                            >
-                            <Box sx={{justifyContent:"space-between", display:"flex"}}>
-                                <Box sx={{display:"flex", marginTop:1, alignItems:"center"}}>
-                                    <h3>Tasks</h3> 
-                                    <p>You have {tasksList.length} tasks now</p>
-                                </Box>
-                                <Button variant="contained" sx={{width:"80px", height:"40px"}} onClick={handleClickMore}> {buttonName} </Button>
-                            </Box>
-                            <Box sx={{display:"flex", marginTop:1, flexWrap:"wrap"}}>
-                                {tasksList.map((v,i)=>(
-                                    <Paper key={i} sx={{width:"31%",height:"40vh",p:2, margin:1}}>
-                                        <p>{v.type}</p>
-                                        <Box>
-                                            <Box sx={{width:50, height:50}}></Box>
-                                        </Box>
-                                    </Paper>
-                                ))}
-                            </Box>
-                           
-                           
-                    </Paper>
-                </Box>
-            </Grid>
-        <Grid item xs={5} sm={5} md={5} lg={5}>
-            <Paper
-                sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: "100vh",
-                    backgroundColor:'white',
-                }}
-                >
-                    <h3>Avatar</h3>
-            </Paper>
-        </Grid>
-
-    </Grid>
-
-    )
-    */
