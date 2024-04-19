@@ -13,7 +13,10 @@ import {
     List,
     ListItem,
     ListItemText,
-    Container
+    Container,
+    Card,
+    CardContent
+
 } from "@mui/material";
 import {
     PaddingTwoTone,
@@ -21,16 +24,15 @@ import {
     EditIcon
 } from "@mui/icons-material";
 import { useSearchParams } from "next/navigation";
+import PieChart from "@/app/components/pieChart";
 
 export default function TherapistPatientsDetails() {
-    //  current.patient is the patient data
-     const searchParams = useSearchParams();
-     const currentPatient = searchParams.get("patient");
-    // const {currentPatient} = usePatient();
-     console.log(currentPatient);
+
+    const searchParams = useSearchParams();
+    const currentPatient = JSON.parse(searchParams.get("patient"));
 
     // Avatar creator configuration
-    const avatarUrl = 'https://api.avaturn.me/avatars/exports/018ef558-eb6c-72ff-aac7-e09aaf5aa057/model';   // change this when we have DB setup
+    const avatarUrl = 'https://api.avaturn.me/avatars/exports/018ef558-eb6c-72ff-aac7-e09aaf5aa057/model';   // change to this when it works: currentPatient?.avatar
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
@@ -42,52 +44,63 @@ export default function TherapistPatientsDetails() {
         document.body.style.overflow = 'hidden';
     }, []);
 
+    function checkPatientData(property) {
+        if (currentPatient && currentPatient[property]) {
+            if (Array.isArray(currentPatient[property])) {
+                return currentPatient[property].join(', ');
+            } else {
+                return currentPatient[property];
+            }
+        } else {
+            return 'Error Loading';
+        }
+    }
+
     const personalInfoSection = (
         <Grid>
-            <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh' }}>
+            <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh', overflow: 'auto'  }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
                             { <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}}/> }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
-                            <Typography variant="h5">
-                            {currentPatient && currentPatient.name ? currentPatient.name : 'Error Loading'}                        </Typography>
+                            <Typography variant="h5">{ checkPatientData('name') }</Typography>
                         </Box>
                         <Divider orientation="horizontal" flexItem sx={{ my: 3 }} />
                     </Grid>
                     <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
                         <Grid item xs={12}>
                             <Typography variant="body1">Birth date</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.birth ? currentPatient.birth : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('birth') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Client's Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.phone ? currentPatient.phone : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('phone') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Email</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.email ? currentPatient.email : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('email') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact person</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.therapists ? currentPatient.therapists : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('caregivers') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact Person Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.therapistsPhone ? currentPatient.therapistsPhone : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('caregiversPhone') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Type of Movement impairment</Typography>
-                            <Typography variant="body2" color="text.secondary">Limited Shoulder Mobility</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('impaired') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Dominant arm</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.domiantArm ? currentPatient.domiantArm : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('domiantArm') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Therapy goals</Typography>
-                            <Typography variant="body2" color="text.secondary">{ currentPatient && currentPatient.goals ? currentPatient.goals : 'Error Loading' }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('') }</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -97,18 +110,37 @@ export default function TherapistPatientsDetails() {
 
     // Exercise Completion section
     const exerciseCompletionChartSection = (
-        <Paper sx={{ p: 2, minHeight: '44.2vh'}}>
-            <Typography variant="h6">Exercise Completion Rate</Typography>
+        <Paper sx={{ p: 2, minHeight: '100%'}}>
+            <Typography align="center" variant="h6">Exercise Completion Rate</Typography>
+            <PieChart />
         </Paper>
     );
 
     // Tasks Section
     const tasksSection = (
-        <Paper sx={{ p: 2, minHeight: '44.2vh' }}>
-            <Typography variant="h6">Tasks</Typography>
-            <List>
-            </List>
-        </Paper>
+        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>  
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '55vh' }}>
+                <Typography textAlign="center" variant="h6" sx={{ paddingBottom: 1 }}>Tasks</Typography>
+                <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
+                    <Grid container spacing={2}>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
+                            <Grid item xs={12} key={item}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography variant="h7" component="div">
+                                            Placeholder Title {item}
+                                        </Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            Placeholder content here...
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Paper>
+        </Box>
     );
 
     return (
