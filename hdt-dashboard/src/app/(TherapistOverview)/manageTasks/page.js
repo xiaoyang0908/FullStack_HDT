@@ -25,9 +25,6 @@ export default function ManageTask(){
     const searchParams = useSearchParams();
     const currentPatient = JSON.parse(searchParams.get("patient"));
     const [tasks, setTasks] = useState(currentPatient.tasks || null);
-    // if (currentPatient.tasks) {
-    //     setTasks(currentPatient.tasks);
-    // }
 
      // get game list
      const [gameList, setGameList] = useState([]);
@@ -104,7 +101,6 @@ export default function ManageTask(){
     const [openDia,setOpenDia] = useState(false);
     const handleStartDate = (value) => {
         setSelectedSatrtDate(value);
-        console.log(value);
         setDate((prev) => ({
             ...prev,
             start:formatDate(value), // toString
@@ -157,7 +153,7 @@ export default function ManageTask(){
         event.preventDefault();
     //    post operation
         reqTaskList(currentPatient.patientID,taskInfo).then((res)=>{
-            console.log(res);
+            // console.log(res);
             if (res) {
                 setTasks(res);
             } 

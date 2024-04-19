@@ -59,6 +59,9 @@ public class Patient {
     @Field("Avatar")
     private String avatar;
 
+    @Field("Contact")
+    private Object contact;
+
 
 
 
