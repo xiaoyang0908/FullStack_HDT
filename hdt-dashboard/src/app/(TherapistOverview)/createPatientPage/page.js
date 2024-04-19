@@ -1,7 +1,8 @@
 'use client'
-import { useState, useEffect } from "react";
-import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
-import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import { useState, useEffect, useRef } from "react";
+//import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+//import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import { AvaturnSDK } from "@avaturn/sdk";
 import {
     Box,
     Grid,
@@ -15,6 +16,7 @@ import {
     MenuItem
 } from "@mui/material";
 
+/*
 /**
  * @typedef {Object} AvatarCreatorConfig
  * @property {boolean} [clearCache]
@@ -219,42 +221,37 @@ export default function AddPatient() {
 
     const [content, setContent] = useState(userInfoContent);
 
-    // Information to be rendered within the avatar section
     const AvatarContent = () => {
-        const [avatarUrl, setAvatarUrl] = useState('');
-        const handleOnAvatarExported = (avatarEvent) => {
-            console.log('Avatar event object:', avatarEvent);
-            if (avatarEvent.detail && avatarEvent.detail.url) {
-                console.log(`Avatar URL is: ${avatarEvent.detail.url}`);
-                setAvatarUrl(avatarEvent.detail.url);
-            } else {
-                console.error('No avatar URL found in the event object');
-            }
-        };
-        
-        const config = {
-            clearCache: true,
-            bodyType: 'fullbody',
-            quickStart: false,
-            language: 'en',
-            //token: 'sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU'   // API Key: sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU
-        };
+        const containerRef = useRef(null);
+    
+        useEffect(() => {
+            const loadAvaturn = async () => {
+                if (!containerRef.current) return;
+    
+                const subdomain = "demo";  // Use your subdomain once you have one
+                const url = `https://${subdomain}.avaturn.dev`;
+    
+                try {
+                    const sdk = new AvaturnSDK();
+                    await sdk.init(containerRef.current, { url });
+    
+                    sdk.on("export", (data) => {
+                        console.log('Avatar exported:', data);
+                        // You can update state or perform other actions with the exported avatar data
+                    });
+                } catch (error) {
+                    console.error('Failed to initialize Avaturn SDK:', error);
+                }
+            };
+    
+            loadAvaturn();
+        }, []);
     
         return (
-            <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
-                <AvatarCreator
-                    subdomain="rehab.readyplayer.me?frameApi"  // Subdomain provided by readyplayer.me developer account
-                    config={config}
-                    style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
-                    onAvatarExported={handleOnAvatarExported}
-                />
-                {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
-            </Grid>
+            <div ref={containerRef} style={{ width: '100%', height: '89vh' }} />
         );
     };
-    
-    const avatarContent = <AvatarContent />;
-
+        
     // Update the content displayed based on the menu item selected
     const UpdateContent = (newTitle) => {
         switch (newTitle) {
@@ -262,7 +259,7 @@ export default function AddPatient() {
                 setContent(userInfoContent);
                 break;
             case 'Avatar':
-                setContent(avatarContent);
+                setContent(<AvatarContent />);
                 break;
             default:
                 setContent('No content available');
@@ -304,3 +301,39 @@ export default function AddPatient() {
         </Container>
     );
 }
+
+// Code for readyplayer.me avatar creator
+/*
+const AvatarContent = () => {
+    const [avatarUrl, setAvatarUrl] = useState('');
+    const handleOnAvatarExported = (avatarEvent) => {
+        console.log('Avatar event object:', avatarEvent);
+        if (avatarEvent.detail && avatarEvent.detail.url) {
+            console.log(`Avatar URL is: ${avatarEvent.detail.url}`);
+            setAvatarUrl(avatarEvent.detail.url);
+        } else {
+            console.error('No avatar URL found in the event object');
+        }
+    };
+
+    const config = {
+        clearCache: true,
+        bodyType: 'fullbody',
+        quickStart: false,
+        language: 'en',
+        //token: 'sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU'   // API Key: sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU
+    };
+
+    return (
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
+            <AvatarCreator
+                subdomain="rehab.readyplayer.me?frameApi"  // Subdomain provided by readyplayer.me developer account
+                config={config}
+                style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
+                onAvatarExported={handleOnAvatarExported}
+            />
+            {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
+        </Grid>
+    );
+};
+*/
