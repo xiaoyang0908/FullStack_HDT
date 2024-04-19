@@ -15,6 +15,9 @@ import {
     TextField,
     MenuItem
 } from "@mui/material";
+import { reqSavePatient } from "@/app/api/api";
+import { useCookies } from "react-cookie";
+import formatDate from "@/app/util/date";
 
 /*
 /**
@@ -30,26 +33,79 @@ import {
  */
 
 export default function AddPatient() {
+    const [cookies] = useCookies(["user_token"]);
+    const therapistInfo = cookies.user_token;
 
     // Information to be rendered within the basic info section
     const UserInfoContent = () => {
+        const [patientProfile,setPatientProfile] = useState({});
         const [firstName, setFirstName] = useState('Error Loading');
         const [lastName, setLastName] = useState('Error Loading');
         const [birthDate, setBirthDate] = useState(new Date());
         const [phoneNumber, setPhoneNumber] = useState('Error Loading');
         const [email, setEmail] = useState('Error Loading');
-        const [biologicalSex, setBiologicalSex] = useState('Error Loading');
+        const [biologicalSex, setBiologicalSex] = useState("female");
         const [typeOfMovement, setTypeOfMovement] = useState('Error Loading');
-        const [dominantArm, setDominantArm] = useState('Error Loading');
+        const [dominantArm, setDominantArm] = useState("left");
         const [therapyGoals, setTherapyGoals] = useState('Error Loading');
+        const [contact,setContact] = useState({
+            firstName:"",
+            lastName:"",
+            email:"",
+            phoneNumber:""
+
+        })
+        const handleContact = (event) =>{
+            const{name,value} = event.target;
+            setContact((prevUserData) => ({
+                ...prevUserData,
+                [name]: value,
+            }));
+        }
+        useEffect(()=>{
+            setPatientProfile({
+                    patientID:"",
+                    birth:formatDate(birthDate),
+                    name:`${firstName} ${lastName}`,
+                    email:email,
+                    phone:phoneNumber,
+                    photo:"",
+                    caregivers:[],
+                    therapists:[],
+                    impaired:typeOfMovement,
+                    dominantArm:dominantArm,
+                    goals:therapyGoals,
+                    activityStatus:"Online",
+                    tasks:[],
+                    sexual:biologicalSex,
+                    avatar:"",
+                    contact:{
+                        fullName:`${contact.firstName} ${contact.lastName}`,
+                        email:contact.email,
+                        phoneNumber:contact.phoneNumber
+                    }
+            })
+        },[birthDate,firstName,lastName,email,biologicalSex,typeOfMovement,dominantArm,therapyGoals,biologicalSex,contact])
+
+
+        const handleSubmit = (event) =>{
+            event.preventDefault();
+            console.log(patientProfile);
+            reqSavePatient(therapistInfo.email,patientProfile).then((res)=>{
+                    if(res==="success"){
+                    console.log("saved patient");
+                    }   
+            })
+           
+        }
 
         const containerSpacing = 8;    // spacing between grid items (name, birthday, number, email, sex)
         const bottomSpacingToTitle = 4; // spacing between title and first text field
 
         return (
             <>
-                <Box sx={{ maxHeight: '90vh', overflowY: 'auto' }}>
-                    <Box sx={{ p: 3, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <Box component="form" sx={{ maxHeight: '90vh', overflowY: 'auto' }}  onSubmit={handleSubmit}>
+                    <Box  sx={{ p: 3, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 1, width: '30%' }}>
                             <Typography variant="h5">Basic Information</Typography>
                             <Avatar alt="Profile Picture" src="/path/to/avatar.jpg" sx={{ width: '150px', height: '150px', marginTop: 2 }} />
@@ -58,7 +114,7 @@ export default function AddPatient() {
                                 <input type="file" hidden onChange={(event) => {/* handle img upload */ }} />
                             </Button>
                         </Box>
-                        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', mr: 3, ml: 3 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', mr: 3, ml: 3 }}>
                             <Grid container spacing={containerSpacing}>
                                 <Grid item xs={6}>
                                     <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} fullWidth />
@@ -173,17 +229,21 @@ export default function AddPatient() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="First Name"
+                                    name="firstName"
                                     placeholder="Enter first name"
                                     variant="outlined"
                                     fullWidth
+                                    onChange={handleContact}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Last Name"
+                                    name="lastName"
                                     placeholder="Enter last name"
                                     variant="outlined"
                                     fullWidth
+                                    onChange={handleContact}
                                 />
                             </Grid>
                         </Grid>
@@ -191,28 +251,31 @@ export default function AddPatient() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Email"
+                                    name="email"
                                     placeholder="Enter email"
                                     variant="outlined"
                                     fullWidth
+                                    onChange={handleContact}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Phone Number"
+                                    name="phoneNumber"
                                     placeholder="Enter phone number"
                                     variant="outlined"
                                     fullWidth
+                                    onChange={handleContact}
                                 />
                             </Grid>
                         </Grid>
                         <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" color="primary">
+                            <Button variant="contained" color="primary" type="submit">
                                 Save
                             </Button>
                         </Box>
                     </Box>
                 </Box>
-
             </>
         );
     };

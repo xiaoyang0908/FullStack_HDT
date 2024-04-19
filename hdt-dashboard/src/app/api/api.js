@@ -48,3 +48,11 @@ export const reqDeleteTask = (patientID,taskId)=>{
         throw err;
     }
 }
+
+export const reqSavePatient = (therapistEmail,patientProfile)=>{
+    try {
+        return post("http://localhost:8090/therapist/savePatient",{therapistEmail:therapistEmail,patientProfile:patientProfile});
+    } catch (error) {
+        throw err;
+    }
+}

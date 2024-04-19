@@ -90,16 +90,16 @@ public class Therapist {
         return activePatients;
     }
 
-    public void setActivePatients(ArrayList<String> activePatients) {
-        this.activePatients = activePatients;
+    public void addActivePatients(String patientId) {
+        this.activePatients.add(patientId);
     }
 
     public ArrayList<String> getArchivedPatients() {
         return archivedPatients;
     }
 
-    public void setArchivedPatients(ArrayList<String> archivedPatients) {
-        this.archivedPatients = archivedPatients;
+    public void addArchivedPatients(String patientId) {
+        this.archivedPatients.add(patientId);
     }
 
     public String getTherapistID() {

@@ -141,6 +141,26 @@ public class Patient {
         return goals;
     }
 
+    public void setTherapists(ArrayList<String> therapists) {
+        this.therapists = therapists;
+    }
+
+    public void setTasks(ArrayList<Tasks> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setSexual(String sexual) {
+        this.sexual = sexual;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setContact(Object contact) {
+        this.contact = contact;
+    }
+
     public void setGoals(String goals) {
         this.goals = goals;
     }
@@ -157,8 +177,8 @@ public class Patient {
         this.caregivers = caregivers;
     }
 
-    public void setTherapists(ArrayList<String> therapists) {
-        this.therapists = therapists;
+    public void addTherapists(String id) {
+        this.therapists.add(id);
     }
 
     public ArrayList<Tasks> getTasks() {
@@ -166,6 +186,26 @@ public class Patient {
             return new ArrayList<>();
         }
         return tasks;
+    }
+
+    public ArrayList<String> getCaregivers() {
+        return caregivers;
+    }
+
+    public ArrayList<String> getTherapists() {
+        return therapists;
+    }
+
+    public String getSexual() {
+        return sexual;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public Object getContact() {
+        return contact;
     }
 
     public Tasks findTask(String taskId){

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -34,5 +35,15 @@ public class TherapistImpl {
         return activePatient;
     }
 
+    public void addPatientsList(Patient patient, String email){
+        Query query = new Query(Criteria.where("email").is(email));
+        Therapist t = mongoTemplate.findOne(query,Therapist.class);
 
+        patient.setPatientID("PAT-"+patientimlpl.uniqueId());
+        patient.addTherapists(t.getTherapistID());
+        patientimlpl.savePatient(patient);
+        t.addActivePatients(patient.getPatientID());
+        Update update = new Update().set("activePatients",t.getActivePatients());
+        mongoTemplate.updateFirst(query,update,Therapist.class);
+    }
 }
