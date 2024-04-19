@@ -30,7 +30,7 @@ export default function TherapistPatientsDetails() {
      console.log(currentPatient);
 
     // Avatar creator configuration
-    const avatarUrl = 'https://models.readyplayer.me/661f8f7bb5024e52af0ae319.glb';   // change this when we have DB setup
+    const avatarUrl = 'https://api.avaturn.me/avatars/exports/018ef558-eb6c-72ff-aac7-e09aaf5aa057/model';   // change this when we have DB setup
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
