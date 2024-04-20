@@ -120,7 +120,6 @@ export default function TherapistOverview() {
         console.log(patientData);
         try {
             if (patientData) {
-                // updateCurrentPatient(patientData);
                 router.push(`${path}?patient=${JSON.stringify(patientData)}`);
             } else {
                 router.push(path);

@@ -1,7 +1,5 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
-//import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
-//import { Avatar as VisageAvatar } from "@readyplayerme/visage";
 import { AvaturnSDK } from "@avaturn/sdk";
 import {
     Box,
@@ -19,35 +17,36 @@ import { reqSavePatient } from "@/app/api/api";
 import { useCookies } from "react-cookie";
 import formatDate from "@/app/util/date";
 
-/*
-/**
- * @typedef {Object} AvatarCreatorConfig
- * @property {boolean} [clearCache]
- * @property {BodyType} [bodyType]
- * @property {boolean} [quickStart]
- * @property {Language} [language]
- * @property {string} [token]
- * @property {string} [avatarId]
- * 
- * @param {AvatarExportedEvent} avatarEvent
- */
-
 export default function AddPatient() {
     const [cookies] = useCookies(["user_token"]);
     const therapistInfo = cookies.user_token;
+    const [patientProfile, setPatientProfile] = useState({});
+    const [content, setContent] = useState(null);
+
+    const updateAvatarUrl = (avatarUrl) => {
+        setPatientProfile((prevProfile) => ({
+            ...prevProfile,
+            avatar: avatarUrl
+        }));
+    };
+
+    useEffect(() => {
+        setContent(<UserInfoContent setAvatarUrl={updateAvatarUrl} setPatientProfile={setPatientProfile} />);
+    }, []);
 
     // Information to be rendered within the basic info section
     const UserInfoContent = () => {
         const [patientProfile,setPatientProfile] = useState({});
-        const [firstName, setFirstName] = useState('Error Loading');
-        const [lastName, setLastName] = useState('Error Loading');
+        const [firstName, setFirstName] = useState('');
+        const [lastName, setLastName] = useState('');
         const [birthDate, setBirthDate] = useState(new Date());
-        const [phoneNumber, setPhoneNumber] = useState('Error Loading');
-        const [email, setEmail] = useState('Error Loading');
+        const [phoneNumber, setPhoneNumber] = useState('');
+        const [email, setEmail] = useState('');
         const [biologicalSex, setBiologicalSex] = useState("female");
-        const [typeOfMovement, setTypeOfMovement] = useState('Error Loading');
+        const [typeOfMovement, setTypeOfMovement] = useState('');
         const [dominantArm, setDominantArm] = useState("left");
-        const [therapyGoals, setTherapyGoals] = useState('Error Loading');
+        const [therapyGoals, setTherapyGoals] = useState('');
+        const [password, setPassword] = useState('');
         const [contact,setContact] = useState({
             firstName:"",
             lastName:"",
@@ -64,28 +63,30 @@ export default function AddPatient() {
         }
         useEffect(()=>{
             setPatientProfile({
-                    patientID:"",
-                    birth:formatDate(birthDate),
-                    name:`${firstName} ${lastName}`,
-                    email:email,
-                    phone:phoneNumber,
-                    photo:"",
-                    caregivers:[],
-                    therapists:[],
-                    impaired:typeOfMovement,
-                    dominantArm:dominantArm,
-                    goals:therapyGoals,
-                    activityStatus:"Online",
-                    tasks:[],
-                    sexual:biologicalSex,
-                    avatar:"",
-                    contact:{
-                        fullName:`${contact.firstName} ${contact.lastName}`,
-                        email:contact.email,
-                        phoneNumber:contact.phoneNumber
-                    }
+                patientID: "",
+                password: password,
+                birth: formatDate(birthDate),
+                name: `${firstName} ${lastName}`,
+                email: email,
+                phone: phoneNumber,
+                photo: "",
+                caregivers: [],
+                therapists: [],
+                impaired: typeOfMovement,
+                dominantArm: dominantArm,
+                goals: therapyGoals,
+                activityStatus: "Online",
+                tasks: [],
+                sexual: biologicalSex,
+                avatar: "",
+                contact: {
+                    fullName: `${contact.firstName} ${contact.lastName}`,
+                    email: contact.email,
+                    phoneNumber: contact.phoneNumber
+                }
             })
-        },[birthDate,firstName,lastName,email,biologicalSex,typeOfMovement,dominantArm,therapyGoals,biologicalSex,contact])
+        }, [password, birthDate, firstName, lastName, email, biologicalSex, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact])
+
 
 
         const handleSubmit = (event) =>{
@@ -117,10 +118,10 @@ export default function AddPatient() {
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', mr: 3, ml: 3 }}>
                             <Grid container spacing={containerSpacing}>
                                 <Grid item xs={6}>
-                                    <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} fullWidth />
+                                    <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="off" fullWidth />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} fullWidth />
+                                    <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="off" fullWidth />
                                 </Grid>
                             </Grid>
                             <Grid container spacing={containerSpacing}>
@@ -133,15 +134,23 @@ export default function AddPatient() {
                                         value={birthDate}
                                         onChange={(e) => setBirthDate(e.target.value)}
                                         fullWidth
+                                        autoComplete="off"
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TextField label="Phone number" variant="outlined" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} fullWidth />
+                                    <TextField label="Phone number" variant="outlined" autoComplete="off" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} fullWidth />
                                 </Grid>
                             </Grid>
                             <Grid container spacing={containerSpacing}>
                                 <Grid item xs={6}>
-                                    <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
+                                    <TextField 
+                                    label="Email" 
+                                    variant="outlined" 
+                                    value={email} 
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    fullWidth
+                                    autoComplete="off"
+                                    />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField
@@ -156,6 +165,18 @@ export default function AddPatient() {
                                         <MenuItem value="female">Female</MenuItem>
                                         <MenuItem value="other">Other</MenuItem>
                                     </TextField>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={containerSpacing}>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        label="Password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        fullWidth
+                                        autoComplete="new-password"
+                                        />
                                 </Grid>
                             </Grid>
                         </Box>
@@ -282,47 +303,45 @@ export default function AddPatient() {
 
     const userInfoContent = <UserInfoContent />;
 
-    const [content, setContent] = useState(userInfoContent);
-
-    const AvatarContent = () => {
+    const AvatarContent = ({ setAvatarUrl }) => {
         const containerRef = useRef(null);
-    
+
         useEffect(() => {
+            const subdomain = "demo";
+            const url = `https://${subdomain}.avaturn.dev`;
+            const sdk = new AvaturnSDK();
+
             const loadAvaturn = async () => {
                 if (!containerRef.current) return;
-    
-                const subdomain = "demo";  // Use your subdomain once you have one
-                const url = `https://${subdomain}.avaturn.dev`;
-    
+
                 try {
-                    const sdk = new AvaturnSDK();
                     await sdk.init(containerRef.current, { url });
-    
                     sdk.on("export", (data) => {
                         console.log('Avatar exported:', data);
-                        // You can update state or perform other actions with the exported avatar data
+                        setAvatarUrl(data.url);
                     });
                 } catch (error) {
                     console.error('Failed to initialize Avaturn SDK:', error);
                 }
             };
-    
+
             loadAvaturn();
+
+            return () => {
+                sdk.destroy();
+            };
         }, []);
-    
-        return (
-            <div ref={containerRef} style={{ width: '100%', height: '89vh' }} />
-        );
+
+        return <div ref={containerRef} style={{ width: '100%', height: '89vh' }} />;
     };
         
-    // Update the content displayed based on the menu item selected
     const UpdateContent = (newTitle) => {
         switch (newTitle) {
             case 'User Information':
-                setContent(userInfoContent);
+                setContent(<UserInfoContent setAvatarUrl={updateAvatarUrl} setPatientProfile={setPatientProfile} />);
                 break;
             case 'Avatar':
-                setContent(<AvatarContent />);
+                setContent(<AvatarContent setAvatarUrl={updateAvatarUrl} />);
                 break;
             default:
                 setContent('No content available');
@@ -365,7 +384,26 @@ export default function AddPatient() {
     );
 }
 
+
+
 // Code for readyplayer.me avatar creator
+
+//import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+//import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+
+/*
+/**
+ * @typedef {Object} AvatarCreatorConfig
+ * @property {boolean} [clearCache]
+ * @property {BodyType} [bodyType]
+ * @property {boolean} [quickStart]
+ * @property {Language} [language]
+ * @property {string} [token]
+ * @property {string} [avatarId]
+ * 
+ * @param {AvatarExportedEvent} avatarEvent
+ */
+
 /*
 const AvatarContent = () => {
     const [avatarUrl, setAvatarUrl] = useState('');

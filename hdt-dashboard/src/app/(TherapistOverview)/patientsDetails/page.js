@@ -1,12 +1,11 @@
 'use client'
 import { useEffect, useState } from "react";
-// import { usePatient } from "../../contexts/PatientContext";
 import ThreeDAvatar from "@/app/components/three";
 import {
     Box,
     Grid,
     Paper,
-    Avatar,
+    Avatar as MuiAvatar, // Renamed to avoid confusion with Avatar component
     Button,
     Typography,
     Divider,
@@ -29,16 +28,7 @@ import PieChart from "@/app/components/pieChart";
 export default function TherapistPatientsDetails() {
 
     const searchParams = useSearchParams();
-    const currentPatient = JSON.parse(searchParams.get("patient"));
-
-    // Avatar creator configuration
-    const avatarUrl = 'https://api.avaturn.me/avatars/exports/018ef558-eb6c-72ff-aac7-e09aaf5aa057/model';   // change to this when it works: currentPatient?.avatar
-
-    const userAvatar = (
-        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
-            <ThreeDAvatar modelUrl={avatarUrl} />
-        </Grid>
-    );
+    const currentPatient = JSON.parse(searchParams.get("patient") || '{}');
     
     useEffect(() => {   // Prevents scrolling on page
         document.body.style.overflow = 'hidden';
@@ -56,13 +46,19 @@ export default function TherapistPatientsDetails() {
         }
     }
 
+    const userAvatar = (
+        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
+            <ThreeDAvatar modelUrl={checkPatientData('avatar')} />  
+        </Grid>
+    );
+
     const personalInfoSection = (
         <Grid>
             <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh', overflow: 'auto'  }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                            { <Avatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}}/> }
+                            { <MuiAvatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}}/> }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                             <Typography variant="h5">{ checkPatientData('name') }</Typography>

@@ -17,6 +17,9 @@ public class Patient {
     @Field("PatientID")
     private String patientID;
 
+    @Field("Password")
+    private String password;
+
     @Field("Birth")
     private String birth;
 
@@ -80,6 +83,14 @@ public class Patient {
 
     public void setPatientID(String patientID) {
         this.patientID = patientID;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getBirth() {
