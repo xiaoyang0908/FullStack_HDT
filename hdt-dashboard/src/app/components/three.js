@@ -43,8 +43,6 @@ function ThreeDAvatar({ modelUrl }) {
         const gltfLoader = new GLTFLoader();
         gltfLoader.load(modelUrl, gltf => {
             scene.add(gltf.scene);
-        }, undefined, error => {
-            console.error('An error happened:', error);
         });
 
         // Animation loop

@@ -116,18 +116,18 @@ export default function TherapistOverview() {
         setIsAscending(!isAscending);
     };
 
-    const handleButtonClick = (path, patientData) => {   // Redirect to different page
-        console.log(patientData);
+    const handleButtonClick = (path, patientData) => {
         try {
             if (patientData) {
-                router.push(`${path}?patient=${JSON.stringify(patientData)}`);
+                localStorage.setItem('currentPatient', JSON.stringify(patientData));    // Save patient data to local storage
+                router.push(path);
             } else {
                 router.push(path);
             }
         } catch (error) {
             console.log(error);
         }
-    };
+    };    
 
     const filteredPatientsList = searchQuery    // Filter patients by name
         ? patientsList.filter(patient =>

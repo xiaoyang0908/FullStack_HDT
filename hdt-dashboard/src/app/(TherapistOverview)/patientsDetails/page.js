@@ -15,7 +15,6 @@ import {
     Container,
     Card,
     CardContent
-
 } from "@mui/material";
 import {
     PaddingTwoTone,
@@ -27,12 +26,30 @@ import PieChart from "@/app/components/pieChart";
 
 export default function TherapistPatientsDetails() {
 
-    const searchParams = useSearchParams();
-    const currentPatient = JSON.parse(searchParams.get("patient") || '{}');
+    const [currentPatient, setCurrentPatient] = useState({});
+    const [loading, setLoading] = useState(true);
+
+
+
+    useEffect(() => {
+        const patientData = localStorage.getItem('currentPatient');
+        if (patientData) {
+            setCurrentPatient(JSON.parse(patientData));
+            setLoading(false);
+        } else {
+            // Handle the case where there's no patient data, perhaps by setting loading to false and managing the empty state
+            setLoading(false);
+        }
     
-    useEffect(() => {   // Prevents scrolling on page
         document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
     }, []);
+    
+    if (loading) {
+        return <div>Loading...</div>; // Or some other loading indicator
+    }
 
     function checkPatientData(property) {
         if (currentPatient && currentPatient[property]) {
@@ -58,7 +75,7 @@ export default function TherapistPatientsDetails() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                            { <MuiAvatar alt="Jack Smith" src="/path/to/avatar.jpg" sx={{ width: 100, height: 100}}/> }
+                            { <MuiAvatar alt="PB" src={checkPatientData('photo')} sx={{ width: 100, height: 100}}/> }
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                             <Typography variant="h5">{ checkPatientData('name') }</Typography>

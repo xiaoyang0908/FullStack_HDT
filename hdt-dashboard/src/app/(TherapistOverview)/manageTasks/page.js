@@ -22,19 +22,29 @@ import formatDate from "@/app/util/date";
 
 
 export default function ManageTask(){
-    const searchParams = useSearchParams();
-    const currentPatient = JSON.parse(searchParams.get("patient"));
-    const [tasks, setTasks] = useState(currentPatient.tasks || null);
+    const [currentPatient, setCurrentPatient] = useState({});
+    const [tasks, setTasks] = useState([]);
 
-     // get game list
-     const [gameList, setGameList] = useState([]);
-     useEffect(()=>{
-        reqGame().then((res)=>{
+        // Fetch patient data from localStorage
+        useEffect(() => {
+            const patientData = localStorage.getItem('currentPatient');
+            if (patientData) {
+                const parsedData = JSON.parse(patientData);
+                setCurrentPatient(parsedData);
+                setTasks(parsedData.tasks || []);
+            }
+        }, []);
+
+    // Fetch game list
+    const [gameList, setGameList] = useState([]);
+    useEffect(() => {
+        reqGame().then((res) => {
             setGameList(res);
-       }).catch((error)=>{
-        console.log(error);
-       })
-     },[currentPatient])
+        }).catch((error) => {
+            console.log(error);
+        });
+    }, [currentPatient]);  // Depend on currentPatient to re-fetch when it changes
+
 
     //  set more button in case of more games
     const [open, setOpen] = useState(false);
