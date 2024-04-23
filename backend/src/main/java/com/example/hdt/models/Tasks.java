@@ -6,18 +6,19 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("tasks")
 public class Tasks {
-    @Id
-    private String _id;
-    @Field
-    private Game game;
-    @Field
-    private String difficulty;
-    @Field
-    private int sets;
-    @Field
-    private String status;
-    @Field
-    private String date;
+        @Id
+        private String _id;
+        @Field
+        private Game game;
+        @Field
+        private String difficulty;
+        @Field
+        private int sets;
+        @Field
+        private String status;
+        @Field
+        private String date;
+
 
     public Tasks() {
     }
