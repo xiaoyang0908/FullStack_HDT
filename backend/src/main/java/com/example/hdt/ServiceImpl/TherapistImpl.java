@@ -35,6 +35,7 @@ public class TherapistImpl {
         return activePatient;
     }
 
+
     public void addPatientsList(Patient patient, String email){
         Query query = new Query(Criteria.where("email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
