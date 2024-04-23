@@ -16,20 +16,25 @@ import {
     Card,
     CardContent
 } from "@mui/material";
-import {
-    PaddingTwoTone,
-    Male,
-    EditIcon
-} from "@mui/icons-material";
-import { useSearchParams } from "next/navigation";
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import PieChart from "@/app/components/pieChart";
+import { useRouter } from 'next/navigation';
 
 export default function TherapistPatientsDetails() {
 
     const [currentPatient, setCurrentPatient] = useState({});
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
-
+    const handleEditClick = () => {
+        try {
+            localStorage.setItem('currentPatient', JSON.stringify(currentPatient)); // Save patient data to local storage
+            router.push('/createPatientPage');
+        } catch (error) {
+            console.error("Error navigating with patient data:", error);
+        }
+    };
 
     useEffect(() => {
         const patientData = localStorage.getItem('currentPatient');
@@ -84,9 +89,15 @@ export default function TherapistPatientsDetails() {
                     </Grid>
                     <Grid container spacing={2} sx={{ pl: 4, pb: 2 }}>
                         <Grid item xs={12}>
-                            <Typography variant="body1">Birth date</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('birth') }</Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Typography variant="body1">Birth date</Typography>
+                                <IconButton aria-label="edit" onClick={handleEditClick}>
+                                    <EditIcon />
+                                </IconButton>
+                            </Box>
+                            <Typography variant="body2" color="text.secondary">{checkPatientData('birth')}</Typography>
                         </Grid>
+
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Client's Tel.</Typography>
                             <Typography variant="body2" color="text.secondary">{ checkPatientData('phone') }</Typography>
