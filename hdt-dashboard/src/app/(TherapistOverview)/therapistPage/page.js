@@ -118,16 +118,16 @@ export default function TherapistOverview() {
 
     const handleButtonClick = (path, patientData) => {
         try {
-            if (patientData) {
-                localStorage.setItem('currentPatient', JSON.stringify(patientData));    // Save patient data to local storage
-                router.push(path);
-            } else {
-                router.push(path);
+            if (path === addClientButtonPath) {     // Clear any existing patient data from localStorage when adding a new patient
+                localStorage.removeItem('currentPatient');
+            } else if (patientData) {
+                localStorage.setItem('currentPatient', JSON.stringify(patientData));    // Save patient data to local storage for other scenarios
             }
+            router.push(path);
         } catch (error) {
             console.log(error);
         }
-    };    
+    };
 
     const filteredPatientsList = searchQuery    // Filter patients by name
         ? patientsList.filter(patient =>
