@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
-import { AvaturnSDK } from "@avaturn/sdk";
+import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import { Avatar as VisageAvatar } from "@readyplayerme/visage";
 import {
     Box,
     Grid,
@@ -16,6 +17,19 @@ import {
 import { reqSavePatient } from "@/app/api/api";
 import { useCookies } from "react-cookie";
 import formatDate from "@/app/util/date";
+
+
+/**
+ * @typedef {Object} AvatarCreatorConfig
+ * @property {boolean} [clearCache]
+ * @property {BodyType} [bodyType]
+ * @property {boolean} [quickStart]
+ * @property {Language} [language]
+ * @property {string} [token]
+ * @property {string} [avatarId]
+ * 
+ * @param {AvatarExportedEvent} avatarEvent
+ */
 
 export default function AddPatient() {
     const [cookies] = useCookies(["user_token"]);
@@ -303,37 +317,52 @@ export default function AddPatient() {
 
     const userInfoContent = <UserInfoContent />;
 
-    const AvatarContent = ({ setAvatarUrl }) => {
-        const containerRef = useRef(null);
 
+    function AvatarContent() {
+        const [avatarUrl, setAvatarUrl] = useState('');
+        const iframeRef = useRef(null);
+    
+        const parseMessage = (event) => {
+            console.log('Event Data:', event.data); // Log event data for debugging
+            if (typeof event.data !== 'string') {
+                console.error('Event data is not a string:', event.data);
+                return null;
+            }
+            // Check if the event data starts with 'https://' to indicate a URL
+            if (event.data.startsWith('https://')) {
+                return event.data; // Return the URL directly
+            } else {
+                console.warn('Event data does not appear to be a URL:', event.data);
+                return null;
+            }
+        };
+        
         useEffect(() => {
-            const subdomain = "demo";
-            const url = `https://${subdomain}.avaturn.dev`;
-            const sdk = new AvaturnSDK();
-
-            const loadAvaturn = async () => {
-                if (!containerRef.current) return;
-
-                try {
-                    await sdk.init(containerRef.current, { url });
-                    sdk.on("export", (data) => {
-                        console.log('Avatar exported:', data);
-                        setAvatarUrl(data.url);
-                    });
-                } catch (error) {
-                    console.error('Failed to initialize Avaturn SDK:', error);
+            const handleMessages = (event) => {
+                const data = parseMessage(event);
+                if (data) {
+                    setAvatarUrl(data); // Set the URL as the avatar URL
                 }
             };
-
-            loadAvaturn();
-
+        
+            window.addEventListener('message', handleMessages);
             return () => {
-                sdk.destroy();
+                window.removeEventListener('message', handleMessages);
             };
         }, []);
-
-        return <div ref={containerRef} style={{ width: '100%', height: '89vh' }} />;
-    };
+        
+        return (
+            <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
+                <iframe
+                    ref={iframeRef}
+                    style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
+                    src="https://rehab.readyplayer.me/avatar?frameApi"
+                    allow="camera *; microphone *; clipboard-write"
+                />
+                {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
+            </Grid>
+        );
+    }
         
     const UpdateContent = (newTitle) => {
         switch (newTitle) {

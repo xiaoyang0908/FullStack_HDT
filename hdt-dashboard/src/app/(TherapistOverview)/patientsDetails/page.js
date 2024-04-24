@@ -23,6 +23,8 @@ import { useRouter } from 'next/navigation';
 
 export default function TherapistPatientsDetails() {
 
+    const objModelPath = ''
+
     const [currentPatient, setCurrentPatient] = useState({});
     const [loading, setLoading] = useState(true);
     const router = useRouter();
@@ -70,7 +72,8 @@ export default function TherapistPatientsDetails() {
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
-            <ThreeDAvatar modelUrl={checkPatientData('avatar')} />  
+            <ThreeDAvatar glbModelUrl={checkPatientData('avatar')} objModelUrl={objModelPath} />
+
         </Grid>
     );
 

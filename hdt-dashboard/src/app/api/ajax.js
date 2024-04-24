@@ -7,6 +7,16 @@ const service = axios.create({
     withCredentials: false,
 })
 
+// Set the API key in the request headers
+service.interceptors.request.use(
+    config => {
+        config.headers['Authorization'] = 'Bearer sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU';
+        return config;
+    },
+    error => {
+        Promise.reject(error);
+    }
+);
 
 //get/post
 export function get(url,params){
