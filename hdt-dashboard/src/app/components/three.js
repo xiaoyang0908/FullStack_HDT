@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-function ThreeDAvatar({ modelUrl }) {
+function ThreeDAvatar({ glbModelUrl, objModelUrl }) {
     const mountRef = useRef();
 
     useEffect(() => {
         if (!mountRef.current) return;
 
-        // Setup scene, camera and renderer
         const width = mountRef.current.clientWidth;
         const height = mountRef.current.clientHeight;
         const scene = new THREE.Scene();
@@ -19,14 +19,12 @@ function ThreeDAvatar({ modelUrl }) {
         renderer.setSize(width, height);
         mountRef.current.appendChild(renderer.domElement);
 
-        // Setup controls
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.minDistance = 1.4;
         controls.maxDistance = 1.7;
         controls.target.set(0, 0.9, 0);
         controls.update();
 
-        // Setup lighting
         const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5);
         hemiLight.position.set(0, 20, 0);
         scene.add(hemiLight);
@@ -39,13 +37,25 @@ function ThreeDAvatar({ modelUrl }) {
         spotLight2.castShadow = true;
         scene.add(spotLight2);
 
-        // Load model
         const gltfLoader = new GLTFLoader();
-        gltfLoader.load(modelUrl, gltf => {
+        gltfLoader.load(glbModelUrl, gltf => {
             scene.add(gltf.scene);
+        }, undefined, error => {
+            console.error('An error happened with the GLB loader.', error);
         });
 
-        // Animation loop
+        const objLoader = new OBJLoader();
+        objLoader.load(objModelUrl, obj => {
+            obj.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.material = new THREE.MeshStandardMaterial({ color: 0x555555 });
+                }
+            });
+            scene.add(obj);
+        }, undefined, error => {
+            console.error('An error happened with the OBJ loader.', error);
+        });
+
         const animate = () => {
             requestAnimationFrame(animate);
             controls.update();
@@ -53,20 +63,16 @@ function ThreeDAvatar({ modelUrl }) {
         };
         animate();
 
-        // Resize observer for responsiveness
         const resizeObserver = new ResizeObserver(entries => {
             if (!entries || entries.length === 0) return;
             const entry = entries[0];
-            if (entry) {
-                const { width, height } = entry.contentRect;
-                renderer.setSize(width, height);
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-            }
+            const { width, height } = entry.contentRect;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
         });
         resizeObserver.observe(mountRef.current);
 
-        // Cleanup on unmount
         return () => {
             if (mountRef.current) {
                 mountRef.current.removeChild(renderer.domElement);
@@ -75,7 +81,7 @@ function ThreeDAvatar({ modelUrl }) {
             scene.clear();
             renderer.dispose();
         };
-    }, [modelUrl]);
+    }, [glbModelUrl, objModelUrl]);
 
     return <div ref={mountRef} style={{ width: '100%', height: '100%' }} />;
 }
