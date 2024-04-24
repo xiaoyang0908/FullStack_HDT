@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
-import { AvaturnSDK } from "@avaturn/sdk";
+import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
+import { Avatar as VisageAvatar } from "@readyplayerme/visage";
 import {
     Box,
     Grid,
