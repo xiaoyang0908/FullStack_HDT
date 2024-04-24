@@ -108,11 +108,11 @@ export default function TherapistPatientsDetails() {
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact person</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('caregivers') }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('contact').fullName }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Contact Person Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('caregiversPhone') }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('contact').phoneNumber }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Type of Movement impairment</Typography>
@@ -120,11 +120,11 @@ export default function TherapistPatientsDetails() {
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Dominant arm</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('domiantArm') }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('dominantArm') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Therapy goals</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('') }</Typography>
+                            <Typography variant="body2" color="text.secondary">{ checkPatientData('goals') }</Typography>
                         </Grid>
                     </Grid>
                 </Grid>

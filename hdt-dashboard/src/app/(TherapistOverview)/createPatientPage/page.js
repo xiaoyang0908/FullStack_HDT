@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { AvaturnSDK } from "@avaturn/sdk";
 import {
     Box,
@@ -18,6 +19,7 @@ import { useCookies } from "react-cookie";
 import formatDate from "@/app/util/date";
 
 export default function AddPatient() {
+    const router = useRouter();
     const [cookies] = useCookies(["user_token"]);
     const therapistInfo = cookies.user_token;
     const [patientProfile, setPatientProfile] = useState({});
@@ -36,24 +38,42 @@ export default function AddPatient() {
 
     // Information to be rendered within the basic info section
     const UserInfoContent = () => {
-        const [patientProfile,setPatientProfile] = useState({});
-        const [firstName, setFirstName] = useState('');
-        const [lastName, setLastName] = useState('');
-        const [birthDate, setBirthDate] = useState(new Date());
-        const [phoneNumber, setPhoneNumber] = useState('');
-        const [email, setEmail] = useState('');
-        const [biologicalSex, setBiologicalSex] = useState("female");
-        const [typeOfMovement, setTypeOfMovement] = useState('');
-        const [dominantArm, setDominantArm] = useState("left");
-        const [therapyGoals, setTherapyGoals] = useState('');
-        const [password, setPassword] = useState('');
-        const [contact,setContact] = useState({
-            firstName:"",
-            lastName:"",
-            email:"",
-            phoneNumber:""
+        const storedPatientData = localStorage.getItem("currentPatient");
+        const editPatient = storedPatientData ? JSON.parse(storedPatientData) : {};
+        console.log(editPatient);
 
-        })
+        // Extract name and contact details from editPatient if available
+        const nameArray = editPatient.name ? editPatient.name.split(" ") : [];
+        const contactName = editPatient.contact && editPatient.contact.fullName ? editPatient.contact.fullName.split(" ") : [];
+        const storedBirth = editPatient.birth?new Date(editPatient.birth):new Date(); 
+        const formattedBirthDate = storedBirth.toISOString().split('T')[0]; 
+        // const formattedBirthDate = storedBirth instanceof Date? storedBirth.toISOString().split('T')[0]:new Date();
+
+
+        const storedSex = editPatient.sexual? editPatient.sexual: "female";
+        const storedArm = editPatient.dominantArm? editPatient.dominantArm: "left";
+        // console.log(storedBirth);
+
+        // set initial value
+        const [patientProfile,setPatientProfile] = useState({} || editPatient);
+        const [patientID,setPatientID] = useState('' || editPatient.patientID);
+        const [id,setId] = useState('' || editPatient.id);
+        const [firstName, setFirstName] = useState('' || nameArray[0]);
+        const [lastName, setLastName] = useState('' || nameArray[1]);
+        const [birthDate, setBirthDate] = useState(formattedBirthDate);
+        const [phoneNumber, setPhoneNumber] = useState('' || editPatient.phone);
+        const [email, setEmail] = useState('' || editPatient.email);
+        const [biologicalSex, setBiologicalSex] = useState(storedSex);
+        const [typeOfMovement, setTypeOfMovement] = useState('' || editPatient.impaired);
+        const [dominantArm, setDominantArm] = useState(storedArm);
+        const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
+        const [password, setPassword] = useState('' || editPatient.password);
+        const [contact, setContact] = useState({
+            firstName: contactName[0] || '',
+            lastName: contactName[1] || '',
+            email: editPatient.contact ? editPatient.contact.email : '',
+            phoneNumber: editPatient.contact ? editPatient.contact.phoneNumber : ''
+        });
         const handleContact = (event) =>{
             const{name,value} = event.target;
             setContact((prevUserData) => ({
@@ -63,7 +83,8 @@ export default function AddPatient() {
         }
         useEffect(()=>{
             setPatientProfile({
-                patientID: "",
+                id:id,
+                patientID: patientID,
                 password: password,
                 birth: formatDate(birthDate),
                 name: `${firstName} ${lastName}`,
@@ -95,6 +116,7 @@ export default function AddPatient() {
             reqSavePatient(therapistInfo.email,patientProfile).then((res)=>{
                     if(res==="success"){
                     console.log("saved patient");
+                    router.back();
                     }   
             })
            
@@ -254,6 +276,7 @@ export default function AddPatient() {
                                     placeholder="Enter first name"
                                     variant="outlined"
                                     fullWidth
+                                    value ={contact.firstName}
                                     onChange={handleContact}
                                 />
                             </Grid>
@@ -264,6 +287,7 @@ export default function AddPatient() {
                                     placeholder="Enter last name"
                                     variant="outlined"
                                     fullWidth
+                                    value={contact.lastName}
                                     onChange={handleContact}
                                 />
                             </Grid>
@@ -276,6 +300,7 @@ export default function AddPatient() {
                                     placeholder="Enter email"
                                     variant="outlined"
                                     fullWidth
+                                    value={contact.email}
                                     onChange={handleContact}
                                 />
                             </Grid>
@@ -286,6 +311,7 @@ export default function AddPatient() {
                                     placeholder="Enter phone number"
                                     variant="outlined"
                                     fullWidth
+                                    value={contact.phoneNumber}
                                     onChange={handleContact}
                                 />
                             </Grid>

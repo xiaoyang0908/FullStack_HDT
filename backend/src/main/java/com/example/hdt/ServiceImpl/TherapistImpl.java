@@ -39,12 +39,17 @@ public class TherapistImpl {
     public void addPatientsList(Patient patient, String email){
         Query query = new Query(Criteria.where("email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
-
-        patient.setPatientID("PAT-"+patientimlpl.uniqueId());
-        patient.addTherapists(t.getTherapistID());
-        patientimlpl.savePatient(patient);
-        t.addActivePatients(patient.getPatientID());
-        Update update = new Update().set("activePatients",t.getActivePatients());
-        mongoTemplate.updateFirst(query,update,Therapist.class);
+        if (patient.getPatientID()==null && patient.getId()==null) {
+            patient.setPatientID("PAT-" + patientimlpl.uniqueId());
+            patient.addTherapists(t.getTherapistID());
+            t.addActivePatients(patient.getPatientID());
+            Update update = new Update().set("activePatients",t.getActivePatients());
+            mongoTemplate.updateFirst(query,update,Therapist.class);
+            patientimlpl.insertPatient(patient);
+        }else {
+            System.out.println(patient.toString());
+            patientimlpl.savePatient(patient);
+        }
     }
+
 }

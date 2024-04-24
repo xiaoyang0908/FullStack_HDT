@@ -34,8 +34,12 @@ public class PatientImpl{
 //    save patient
     public void savePatient(Patient patient){
         mongoTemplate.save(patient,"patientProfile");
-
     }
+    //inset patient
+    public  void insertPatient(Patient patient){
+        mongoTemplate.insert(patient,"patientProfile");
+    }
+
 
     public List<Patient> getPatientList(){
         return mongoTemplate.findAll(Patient.class);

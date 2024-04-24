@@ -37,7 +37,7 @@ public class TherapistController {
         ObjectMapper objectMapper = new ObjectMapper();
         String patientJson = objectMapper.writeValueAsString(patientProfile);
         Patient newPatient = objectMapper.readValue(patientJson,Patient.class);
-        if (newPatient!=null) {
+        if (newPatient!=null){
             therapistImpl.addPatientsList(newPatient, therapistEmail);
             return  ResponseEntity.ok("success");
         }

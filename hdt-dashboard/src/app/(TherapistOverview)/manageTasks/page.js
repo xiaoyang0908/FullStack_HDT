@@ -71,7 +71,7 @@ export default function ManageTask(){
                 slots:"",
                 img:""
             },
-            difficulty:"",
+            difficulty:"Adaptive control",
             sets:"", 
             status:"Awaiting Start",
             date:"", 
@@ -194,20 +194,22 @@ export default function ManageTask(){
                 <Box sx={{ display:"flex",flexDirection:"column"}}>
                         <InputLabel htmlFor="outlined-select-Difficulty">Difficulty</InputLabel>
                         <TextField
+                            disabled
+                            defaultValue="Adaptive control"
                             id='outlined-select-Difficulty'
-                            select
+                            // select
                             name="difficulty"
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={taskInfo.difficulty}
-                            onChange = {handleChange}
+                            // value={taskInfo.difficulty}
+                            // onChange = {handleChange}
                         >
-                           {difficultyLevel.map((op) =>(
+                           {/* {difficultyLevel.map((op) =>(
                                 <MenuItem key={op} value={op}>
                                     {op}
                                 </MenuItem>
-                            ))}
+                            ))} */}
                         </TextField>
                         <InputLabel htmlFor="outlined-select-Sets">Total Sets</InputLabel>
                         <TextField
@@ -299,7 +301,7 @@ export default function ManageTask(){
                                         <TableCell align="left">{task.difficulty}</TableCell>
                                         <TableCell align="left">{task.sets}</TableCell>
                                         <TableCell align="left">{task.game.slots}</TableCell>
-                                        <TableCell align="left">Status</TableCell>
+                                        <TableCell align="left">{task.status}</TableCell>
                                         <TableCell align="left">{task.date}</TableCell>  
                                         <TableCell>
                                             <IconButton aria-label="edit" onClick={()=>handleEditTask(task)}>
@@ -316,7 +318,7 @@ export default function ManageTask(){
                  </TableContainer>):
                  (
                  <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center", width:"100%", height:"100%"}}>
-                    <img src="/tasks/notask" width="83px" height="83px"/>
+                    <img src="public/tasks/notask.svg" width="83px" height="83px"/>
                     <Typography fontSize="24px" color="#555555">There is no task, please add</Typography>
                  </Box>
                  )
