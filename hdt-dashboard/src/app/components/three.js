@@ -4,8 +4,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-function ThreeDAvatar({ glbModelUrl, objModelUrl }) {
+function ThreeDAvatar({ glbModelUrl }) {
     const mountRef = useRef();
+
+    const wheelChairModel = ''; //'/Wheelchair.glb';
 
     useEffect(() => {
         if (!mountRef.current) return;
@@ -44,16 +46,16 @@ function ThreeDAvatar({ glbModelUrl, objModelUrl }) {
             console.error('An error happened with the GLB loader.', error);
         });
 
-        const objLoader = new OBJLoader();
-        objLoader.load(objModelUrl, obj => {
-            obj.traverse(function (child) {
+        const gltfLoader2 = new GLTFLoader();
+        gltfLoader2.load(wheelChairModel, gltf => {
+            gltf.scene.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.material = new THREE.MeshStandardMaterial({ color: 0x555555 });
                 }
             });
-            scene.add(obj);
+            scene.add(gltf.scene);
         }, undefined, error => {
-            console.error('An error happened with the OBJ loader.', error);
+            console.error('An error happened with the second GLB loader.', error);
         });
 
         const animate = () => {
@@ -81,7 +83,7 @@ function ThreeDAvatar({ glbModelUrl, objModelUrl }) {
             scene.clear();
             renderer.dispose();
         };
-    }, [glbModelUrl, objModelUrl]);
+    }, [glbModelUrl]);
 
     return <div ref={mountRef} style={{ width: '100%', height: '100%' }} />;
 }
