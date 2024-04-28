@@ -66,6 +66,7 @@ export default function AddPatient() {
         // set initial value
         const [patientProfile,setPatientProfile] = useState({} || editPatient);
         const [patientID,setPatientID] = useState('' || editPatient.patientID);
+        const [photo,setPhoto] = useState(''|| editPatient.photo)
         const [id,setId] = useState('' || editPatient.id);
         const [firstName, setFirstName] = useState('' || nameArray[0]);
         const [lastName, setLastName] = useState('' || nameArray[1]);
@@ -77,7 +78,7 @@ export default function AddPatient() {
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
         const [password, setPassword] = useState('' || editPatient.password);
-        const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
+        const [avatarUrl1, setAvatarUrl1] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
             lastName: contactName[1] || '',
@@ -92,6 +93,10 @@ export default function AddPatient() {
             }));
         }
         useEffect(()=>{
+            setAvatarUrl1(avatarUrl);
+        },avatarUrl)
+
+        useEffect(()=>{
             setPatientProfile({
                 id:id,
                 patientID: patientID,
@@ -100,7 +105,7 @@ export default function AddPatient() {
                 name: `${firstName} ${lastName}`,
                 email: email,
                 phone: phoneNumber,
-                photo: "",
+                photo: photo,
                 caregivers: [],
                 therapists: [],
                 impaired: typeOfMovement,
@@ -109,14 +114,14 @@ export default function AddPatient() {
                 activityStatus: "Online",
                 tasks: [],
                 sexual: biologicalSex,
-                avatar: avatarUrl,
+                avatar: avatarUrl1,
                 contact: {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
                 }
             })
-        }, [password, avatarUrl, birthDate, firstName, lastName, email, biologicalSex, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact])
+        }, [password, avatarUrl, birthDate, firstName, lastName,photo, email, biologicalSex, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact])
 
         const handleProfilePictureUpload = (event) => {
             const file = event.target.files[0];
@@ -124,10 +129,7 @@ export default function AddPatient() {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const newImageUrl = e.target.result;
-                    setPatientProfile((prevProfile) => ({
-                        ...prevProfile,
-                        photo: newImageUrl // Only update the photo URL in the state
-                    }));
+                    setPhoto(newImageUrl);
                 };
                 reader.readAsDataURL(file);
             }
@@ -359,10 +361,10 @@ export default function AddPatient() {
         const parseMessage = (event) => {
             if (typeof event.data === 'string' && event.data.startsWith('https://')) {
                 console.log('Valid URL received:', event.data);
-                setPatientProfile(prevProfile => ({
-                    ...prevProfile,
-                    avatar: event.data
-                }));
+                // setPatientProfile(prevProfile => ({
+                //     ...prevProfile,
+                //     avatar: event.data
+                // }));
                 setAvatarUrl(event.data); // Update avatar URL in parent component
             }
         };
@@ -376,7 +378,7 @@ export default function AddPatient() {
             return () => {
                 window.removeEventListener('message', handleMessages);
             };
-        }, [setPatientProfile, setAvatarUrl]);
+        }, [patientProfile, avatarUrl]);
     
         return (
             // Render the avatar using the avatarUrl prop
