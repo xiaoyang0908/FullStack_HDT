@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 
 export default function TherapistPatientsDetails() {
 
-    const objModelPath = ''
+    const objModelPath = '/Wheelchair.glb'
 
     const [currentPatient, setCurrentPatient] = useState({});
     const [loading, setLoading] = useState(true);
@@ -72,7 +72,7 @@ export default function TherapistPatientsDetails() {
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
-            <ThreeDAvatar glbModelUrl={checkPatientData('avatar')} objModelUrl={objModelPath} />
+            <ThreeDAvatar glbModelUrl={checkPatientData('avatar')} />
 
         </Grid>
     );

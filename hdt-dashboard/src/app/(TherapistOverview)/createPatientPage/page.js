@@ -38,16 +38,11 @@ export default function AddPatient() {
     const therapistInfo = cookies.user_token;
     const [patientProfile, setPatientProfile] = useState({});
     const [content, setContent] = useState(null);
+    const [avatarUrl, setAvatarUrl] = useState('');
 
-    const updateAvatarUrl = (avatarUrl) => {
-        setPatientProfile((prevProfile) => ({
-            ...prevProfile,
-            avatar: avatarUrl
-        }));
-    };
 
     useEffect(() => {
-        setContent(<UserInfoContent setAvatarUrl={updateAvatarUrl} setPatientProfile={setPatientProfile} />);
+        setContent(<UserInfoContent setPatientProfile={setPatientProfile} />);
     }, []);
 
     // Information to be rendered within the basic info section
@@ -82,6 +77,7 @@ export default function AddPatient() {
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
         const [password, setPassword] = useState('' || editPatient.password);
+        const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
             lastName: contactName[1] || '',
@@ -113,16 +109,29 @@ export default function AddPatient() {
                 activityStatus: "Online",
                 tasks: [],
                 sexual: biologicalSex,
-                avatar: "",
+                avatar: avatarUrl,
                 contact: {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
                 }
             })
-        }, [password, birthDate, firstName, lastName, email, biologicalSex, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact])
+        }, [password, avatarUrl, birthDate, firstName, lastName, email, biologicalSex, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact])
 
-
+        const handleProfilePictureUpload = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const newImageUrl = e.target.result;
+                    setPatientProfile((prevProfile) => ({
+                        ...prevProfile,
+                        photo: newImageUrl // Only update the photo URL in the state
+                    }));
+                };
+                reader.readAsDataURL(file);
+            }
+        };       
 
         const handleSubmit = (event) =>{
             event.preventDefault();
@@ -145,10 +154,10 @@ export default function AddPatient() {
                     <Box  sx={{ p: 3, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 1, width: '30%' }}>
                             <Typography variant="h5">Basic Information</Typography>
-                            <Avatar alt="Profile Picture" src="/path/to/avatar.jpg" sx={{ width: '150px', height: '150px', marginTop: 2 }} />
+                            <Avatar alt="Profile Picture" src={patientProfile.photo || "/path/to/default/avatar.jpg"} sx={{ width: '150px', height: '150px', marginTop: 2 }} />
                             <Button variant="contained" component="label" sx={{ margin: 2 }}>
                                 Upload
-                                <input type="file" hidden onChange={(event) => {/* handle img upload */ }} />
+                                <input type="file" hidden onChange={handleProfilePictureUpload} />
                             </Button>
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%', mr: 3, ml: 3 }}>
@@ -278,7 +287,8 @@ export default function AddPatient() {
                         />
                     </Box>
 
-                    <Divider sx={{ width: '95%', margin: 'auto', pt: 2 }} />
+
+                    <AvatarContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl} />
 
                     <Box sx={{ p: 6, display: 'flex', flexDirection: 'column', alignItems: 'left', width: '100%' }}>
                         <Typography variant="h5" >Contact Person</Typography>
@@ -341,82 +351,47 @@ export default function AddPatient() {
         );
     };
 
-    const userInfoContent = <UserInfoContent />;
-
-
-    function AvatarContent() {
-        const [avatarUrl, setAvatarUrl] = useState('');
+    //const userInfoContent = <UserInfoContent />;
+    
+    function AvatarContent({ setPatientProfile, avatarUrl }) {
         const iframeRef = useRef(null);
     
         const parseMessage = (event) => {
-            console.log('Event Data:', event.data); // Log event data for debugging
-            if (typeof event.data !== 'string') {
-                console.error('Event data is not a string:', event.data);
-                return null;
-            }
-            // Check if the event data starts with 'https://' to indicate a URL
-            if (event.data.startsWith('https://')) {
-                return event.data; // Return the URL directly
-            } else {
-                console.warn('Event data does not appear to be a URL:', event.data);
-                return null;
+            if (typeof event.data === 'string' && event.data.startsWith('https://')) {
+                console.log('Valid URL received:', event.data);
+                setPatientProfile(prevProfile => ({
+                    ...prevProfile,
+                    avatar: event.data
+                }));
+                setAvatarUrl(event.data); // Update avatar URL in parent component
             }
         };
-        
+    
         useEffect(() => {
             const handleMessages = (event) => {
-                const data = parseMessage(event);
-                if (data) {
-                    setAvatarUrl(data); // Set the URL as the avatar URL
-                }
+                parseMessage(event);
             };
-        
+    
             window.addEventListener('message', handleMessages);
             return () => {
                 window.removeEventListener('message', handleMessages);
             };
-        }, []);
-        
+        }, [setPatientProfile, setAvatarUrl]);
+    
         return (
+            // Render the avatar using the avatarUrl prop
             <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
                 <iframe
                     ref={iframeRef}
                     style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
                     src="https://rehab.readyplayer.me/avatar?frameApi"
-                    allow="camera *; microphone *; clipboard-write"
+                    allow="clipboard-write"
                 />
                 {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
             </Grid>
         );
     }
-        
-    const UpdateContent = (newTitle) => {
-        switch (newTitle) {
-            case 'User Information':
-                setContent(<UserInfoContent setAvatarUrl={updateAvatarUrl} setPatientProfile={setPatientProfile} />);
-                break;
-            case 'Avatar':
-                setContent(<AvatarContent setAvatarUrl={updateAvatarUrl} />);
-                break;
-            default:
-                setContent('No content available');
-        }
-    };
-
-    const menuItems = (
-        <Paper elevation={3}>
-            <Box>
-                <Button fullWidth onClick={() => UpdateContent("User Information")} sx={{ fontSize: '15px', padding: '10px 0' }}>
-                    User Information
-                </Button>
-                <Divider />
-                <Button fullWidth onClick={() => UpdateContent("Avatar")} sx={{ fontSize: '15px', padding: '10px 0' }}>
-                    Avatar
-                </Button>
-            </Box>
-        </Paper>
-    );
-
+    
     const displayCard = (
         <Grid item xs={12} md={10}>
             <Paper elevation={3} sx={{ minHeight: '90vh', overflowY: 'auto' }}>
@@ -429,67 +404,9 @@ export default function AddPatient() {
 
     return (
         <Container sx={{ paddingTop: '6vh', minWidth: '100%', maxHeight: '100%', overflow: 'hidden' }}>
-            <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} md={2}>
-                    {menuItems}
-                </Grid>
+            <Grid container spacing={0} justifyContent="center">
                 {displayCard}
             </Grid>
         </Container>
     );
 }
-
-
-
-// Code for readyplayer.me avatar creator
-
-//import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
-//import { Avatar as VisageAvatar } from "@readyplayerme/visage";
-
-/*
-/**
- * @typedef {Object} AvatarCreatorConfig
- * @property {boolean} [clearCache]
- * @property {BodyType} [bodyType]
- * @property {boolean} [quickStart]
- * @property {Language} [language]
- * @property {string} [token]
- * @property {string} [avatarId]
- * 
- * @param {AvatarExportedEvent} avatarEvent
- */
-
-/*
-const AvatarContent = () => {
-    const [avatarUrl, setAvatarUrl] = useState('');
-    const handleOnAvatarExported = (avatarEvent) => {
-        console.log('Avatar event object:', avatarEvent);
-        if (avatarEvent.detail && avatarEvent.detail.url) {
-            console.log(`Avatar URL is: ${avatarEvent.detail.url}`);
-            setAvatarUrl(avatarEvent.detail.url);
-        } else {
-            console.error('No avatar URL found in the event object');
-        }
-    };
-
-    const config = {
-        clearCache: true,
-        bodyType: 'fullbody',
-        quickStart: false,
-        language: 'en',
-        //token: 'sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU'   // API Key: sk_live_D3y4i9OPTMUmg70fvpiu3XS-Qc52ALS3QnwU
-    };
-
-    return (
-        <Grid container sx={{ display: 'flex', alignItems: 'flex-start', height: 'auto' }}>
-            <AvatarCreator
-                subdomain="rehab.readyplayer.me?frameApi"  // Subdomain provided by readyplayer.me developer account
-                config={config}
-                style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
-                onAvatarExported={handleOnAvatarExported}
-            />
-            {avatarUrl && <VisageAvatar modelSrc={avatarUrl} />}
-        </Grid>
-    );
-};
-*/
