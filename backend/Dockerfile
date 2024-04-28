@@ -1,0 +1,2 @@
+FROM openjdk:17.0.2-jdk-slim
+ARG JAR_FILE=
