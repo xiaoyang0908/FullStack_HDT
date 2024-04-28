@@ -4,10 +4,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 @Document("therapistProfile")
-public class Therapist {
+public class Therapist implements Serializable {
         @Id
         private String id;
 

@@ -1,8 +1,10 @@
 package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
+import com.example.hdt.models.RedisDao;
 import com.example.hdt.models.Therapist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,7 +22,15 @@ public class TherapistImpl {
     @Autowired
     private PatientImpl patientimlpl;
 
+    private static final String REDIS_KEY = "therapist:";
+    private static RedisDao<Patient> cachePatients;
+
+    @Autowired
+    public TherapistImpl(RedisDao<Patient> cachePatients) {
+        this.cachePatients = cachePatients;
+    }
 //    getActivityPatient
+    @Cacheable(value = "activePatients",key = "#email ?: 'default'")
     public List<Patient> findAllAcitvePatient(String email){
         List<Patient> activePatient = new ArrayList<>();
         Query query = new Query(Criteria.where("Email").is(email));
@@ -31,6 +41,10 @@ public class TherapistImpl {
             if (p!= null){
                 activePatient.add(p);
             }
+        }
+        if (!activePatient.isEmpty()){
+            String redisKey = String.format(REDIS_KEY,"patientList");
+            cachePatients.setRedisList(redisKey,activePatient);
         }
         return activePatient;
     }

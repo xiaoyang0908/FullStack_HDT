@@ -1,0 +1,16 @@
+version: '3'
+services:
+  hdt_backend_compose:
+    image: "hdt_backend:0.0.1"
+    container_name: hdt_backend_compose
+    ports:
+      - "8090:8090"
+    environment:
+      - SPRING.PROFILES.ACTIVE=default, in-memory
+  hdt_frontend_compose:
+    image: "hdt_frontend:0.0.1"
+    container_name: hdt_frontend_compose
+    ports:
+      - "3000:3000"
+    links:
+      - hdt_backend_compose

@@ -1,12 +1,11 @@
 package com.example.hdt.controller;
 
 import com.example.hdt.ServiceImpl.PatientImpl;
-import com.example.hdt.models.Game;
-import com.example.hdt.models.Patient;
-import com.example.hdt.models.Tasks;
+import com.example.hdt.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
@@ -22,22 +21,30 @@ import java.util.UUID;
 public class PatientController {
     @Autowired
     private PatientImpl patientImpl;
+    private static final String REDIS_KEY = "patient:";
+    private static RedisDao<Patient> cachePatients = new RedisDao<>();
+
     @GetMapping("/")
+    @Cacheable(value = "patient")
     public ResponseEntity<List<Patient>> getAllPatients() throws Exception{
             List<Patient> patients = patientImpl.getPatientList();
             if (patients.isEmpty()) {
                 return ResponseEntity.status(400).body(null);
             }
+            String redisKey = String.format(REDIS_KEY,"list");
+            cachePatients.setRedisList(redisKey,patients);
             return ResponseEntity.ok(patients);
     }
 
     @PostMapping("/tasks")
+    @Cacheable(value = "task",key = "#patientID ?: 'default'")
     public  ResponseEntity<List<Tasks>> getAllTasks(@RequestBody Map<String, Object> requestBody) throws Exception{
         LinkedHashMap<String,Object> taskInfo = (LinkedHashMap<String, Object>) requestBody.get("taskinfo");
         String curPatintId = (String) requestBody.get("patientID");
         ObjectMapper objectMapper = new ObjectMapper();
         String taskJson = objectMapper.writeValueAsString(taskInfo);
         Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
+
         System.out.println(newTask);
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
         if (curPatient.findTask(newTask.get_id())!=null) {
@@ -67,8 +74,6 @@ public class PatientController {
         String taskJson = objectMapper.writeValueAsString(taskInfo);
         Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
-
-
         return ResponseEntity.ok(curPatient.getTasks());
     }
 

@@ -17,6 +17,7 @@ import {
 import { reqSavePatient } from "@/app/api/api";
 import { useCookies } from "react-cookie";
 import formatDate from "@/app/util/date";
+import { useRouter } from "next/navigation";
 
 
 /**

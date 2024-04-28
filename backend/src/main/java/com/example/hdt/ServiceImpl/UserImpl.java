@@ -1,5 +1,7 @@
 package com.example.hdt.ServiceImpl;
 
+import com.example.hdt.models.Patient;
+import com.example.hdt.models.RedisDao;
 import com.example.hdt.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -18,7 +20,8 @@ public class UserImpl {
 //    get user
     public User findUserByEmail(String email){
         Query query = new Query(Criteria.where("email").is(email));
-        return mongoTemplate.findOne(query,User.class);
+        User curUser = mongoTemplate.findOne(query,User.class);
+        return curUser;
     }
 
     public List<User> getUserList(){
@@ -29,6 +32,5 @@ public class UserImpl {
         Query query = new Query(Criteria.where("_id").is(user.get_id()));
         Update update = new Update().set("status",user.getStatus());
         mongoTemplate.updateFirst(query,update,User.class);
-
     }
 }

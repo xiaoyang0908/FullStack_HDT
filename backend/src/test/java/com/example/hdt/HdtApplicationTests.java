@@ -5,18 +5,19 @@ import com.example.hdt.models.Patient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 
 @SpringBootTest
 class HdtApplicationTests {
     @Autowired
-    private PatientImpl patientImpl;
+    private RedisTemplate redisTemplate;
 
     @Test
-    void testGetPatient() {
-        List<Patient> patientList = patientImpl.getPatientList();
-        System.out.println(patientList);
+    void testRedis() {
+        redisTemplate.opsForValue().set("1","yang");
+        System.out.println(redisTemplate.opsForValue().get("1"));
 
     }
 

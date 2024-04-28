@@ -5,12 +5,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.scheduling.config.Task;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 @Document("patientProfile")
-public class Patient {
+public class Patient implements Serializable {
     @Id
     private String id;
 

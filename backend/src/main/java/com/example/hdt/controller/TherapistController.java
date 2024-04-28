@@ -2,8 +2,10 @@ package com.example.hdt.controller;
 
 import com.example.hdt.ServiceImpl.TherapistImpl;
 import com.example.hdt.models.Patient;
+import com.example.hdt.models.RedisDao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 public class TherapistController {
     @Autowired
     private TherapistImpl therapistImpl;
+
 
     @PostMapping("/activePatients")
     public ResponseEntity<List<Patient>> getAllActivePatients(@RequestBody Map<String, Object> requestBody) throws Exception{
