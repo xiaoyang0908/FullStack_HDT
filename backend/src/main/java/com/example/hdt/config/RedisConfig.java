@@ -26,7 +26,7 @@ public class RedisConfig {
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer(){
         return (builder)->builder
-                .withCacheConfiguration("patientCache",
+                .withCacheConfiguration("activePatients",
                         RedisCacheConfiguration
                         .defaultCacheConfig()
                         .entryTtl(Duration.ofMinutes(60)));

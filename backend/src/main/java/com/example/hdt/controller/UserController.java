@@ -53,12 +53,12 @@ public class UserController {
         String username = u.getEmail();
         System.out.println(username);
         User cueUser = userImpl.findUserByEmail(username);
-        String redisKey = String.format(REDIS_KEY,username);
+//        String redisKey = String.format(REDIS_KEY,username);
         if (cueUser!=null) {
             if (cueUser.getStatus().equals("online")) {
                 cueUser.setStatus("offline");
                 userImpl.updateStatus(cueUser);
-                cacheUser.del(redisKey);
+//                cacheUser.del(redisKey);
             }
             return ResponseEntity.ok(cueUser);
         }

@@ -186,13 +186,13 @@ export default function TherapistOverview() {
                     >
                         Add client
                     </Button>
-                    <Button 
+                    {/* <Button 
                     variant="outlined" 
                     startIcon={<ArchivedIcon />}
                     onClick={() => handleButtonClick(archivedClientsButtonPath)}
                     >
                         Archived Clients
-                    </Button>
+                    </Button> */}
                 </Box>
             </Box>
 

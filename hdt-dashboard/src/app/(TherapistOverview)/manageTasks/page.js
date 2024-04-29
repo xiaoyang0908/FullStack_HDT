@@ -6,10 +6,7 @@ import {Box, Button, Container,Typography,
     Table, TableBody, TableHead, TableContainer, TableCell, TableRow, InputLabel,TextField
     } from "@mui/material"
 import HistoryIcon from "@mui/icons-material/HistoryRounded";
-import { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
-import { usePatient } from "../../contexts/PatientContext";
-import { tasksList } from "@/app/components/taskList";
+import { useEffect, useState} from "react";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
 import { DemoContainer,DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,7 +14,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import EditICon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutline";
-import { reqDeleteTask, reqGame, reqTaskList, reqEditTask} from "@/app/api/api";
+import { reqDeleteTask, reqGame, reqTaskList} from "@/app/api/api";
 import formatDate from "@/app/util/date";
 
 
@@ -49,17 +46,17 @@ export default function ManageTask(){
     //  set more button in case of more games
     const [open, setOpen] = useState(false);
     const [showList, setShowList] = useState("hidden");
-    const [buttonName, setButton] = useState("more");
-    const handleClickMore = () =>{
-        if(open){
-            setShowList("auto");
-            setButton("fold");
-        }else{
-            setShowList("hidden");
-            setButton("more");
-        }
-        setOpen(!open);
-    }
+    // const [buttonName, setButton] = useState("more");
+    // const handleClickMore = () =>{
+    //     if(open){
+    //         setShowList("auto");
+    //         setButton("fold");
+    //     }else{
+    //         setShowList("hidden");
+    //         setButton("more");
+    //     }
+    //     setOpen(!open);
+    // }
 
 
     // encapsulate the taskinfo
@@ -336,7 +333,7 @@ export default function ManageTask(){
           > 
             <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between",marginBottom:1, height:"50px"}}>
                 <Typography variant="h6" color={"black"}>Add Tasks</Typography>
-                <Button variant="contained" sx={{height:"35px"}} onClick={handleClickMore}> {buttonName} </Button>
+                {/* <Button variant="contained" sx={{height:"35px"}} onClick={handleClickMore}> {buttonName} </Button> */}
             </Box>
            
             <Grid container spacing={2} sx={{ flexGrow: 1}}>
