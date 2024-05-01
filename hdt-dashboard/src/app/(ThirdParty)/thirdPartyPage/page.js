@@ -180,7 +180,7 @@ export default function TrdPage() {
 
                 <Grid item xs={12} md={4} >
                     <Box sx={{ width: '100%', height: '100%' }}>
-                        <ThreeDAvatar modelUrl={avatarUrl} />
+                        <ThreeDAvatar glbModelUrl={avatarUrl} />
                     </Box>
                 </Grid>
             </Grid>
