@@ -22,8 +22,8 @@ export default function TrdPage() {
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
-    const avatarUrl = 'https://api.avaturn.me/avatars/exports/018ef558-eb6c-72ff-aac7-e09aaf5aa057/model';   // change this when we have DB setup
-
+    const avatarUrl = 'currentPatient.avatar' + '?lod=2';
+    
     useEffect(() => {   // Prevent scrolling 
         document.body.style.overflow = 'hidden';
 
