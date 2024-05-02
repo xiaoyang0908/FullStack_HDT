@@ -22,7 +22,6 @@ export default function TrdPage() {
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
-    const avatarUrl = 'currentPatient.avatar' + '?lod=2';
     
     useEffect(() => {   // Prevent scrolling 
         document.body.style.overflow = 'hidden';
@@ -180,7 +179,7 @@ export default function TrdPage() {
 
                 <Grid item xs={12} md={4} >
                     <Box sx={{ width: '100%', height: '100%' }}>
-                        <ThreeDAvatar glbModelUrl={avatarUrl} />
+                        <ThreeDAvatar glbModelUrl={'currentPatient.avatar'} />
                     </Box>
                 </Grid>
             </Grid>
