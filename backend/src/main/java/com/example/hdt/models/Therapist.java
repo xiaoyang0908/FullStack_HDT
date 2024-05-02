@@ -39,6 +39,10 @@ public class Therapist implements Serializable {
         @Field("ClinicID")
         private String clinicID;
 
+        @Field("thumbs")
+        private ArrayList<Thumbs> thumbs;
+
+
     public String getId() {
         return id;
     }
@@ -117,6 +121,17 @@ public class Therapist implements Serializable {
 
     public void setClinicID(String clinicID) {
         this.clinicID = clinicID;
+    }
+
+    public ArrayList<Thumbs> getThumbs() {
+        if (thumbs==null){
+            thumbs = new ArrayList<>();
+        }
+        return thumbs;
+    }
+
+    public void setThumbs(ArrayList<Thumbs> thumbsList) {
+        this.thumbs = thumbsList;
     }
 
     // Getters and setters

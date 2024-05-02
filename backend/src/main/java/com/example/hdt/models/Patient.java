@@ -66,6 +66,9 @@ public class Patient implements Serializable {
     @Field("Contact")
     private Object contact;
 
+    @Field("thumbs")
+    private ArrayList<Thumbs> thumbs;
+
 
 
 
@@ -246,5 +249,13 @@ public class Patient implements Serializable {
                 tasksIterator.remove();
             }
         }
+    }
+
+    public ArrayList<Thumbs> getThumbs() {
+        return thumbs;
+    }
+
+    public void setThumbs(ArrayList<Thumbs> thumbs) {
+        this.thumbs.addAll(thumbs);
     }
 }

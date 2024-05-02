@@ -2,6 +2,7 @@ package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
 import com.example.hdt.models.Tasks;
+import com.example.hdt.models.Thumbs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -70,6 +71,14 @@ public class PatientImpl{
 //        System.out.println(TherapistImpl.therapistEmail);
         Query query = new Query(Criteria.where("PatientID").is(id));
         Update update = new Update().set("tasks",tasks);
+        mongoTemplate.updateFirst(query,update,Patient.class);
+    }
+
+    //update thumbs count
+    @CacheEvict(value = "activePatients",allEntries = true)
+    public void updateThumbs(String id, int count){
+        Query query = new Query(Criteria.where("PatientID").is(id).and("thumbs.id").is(TherapistImpl.curTherapist.getTherapistID()));
+        Update update = new Update().set("thumbs.$.thumbsCount",count);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 

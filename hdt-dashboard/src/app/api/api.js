@@ -56,3 +56,11 @@ export const reqSavePatient = (therapistEmail,patientProfile)=>{
         throw err;
     }
 }
+
+export const reqUpdateThumbs = (thumbsID)=>{
+    try {
+        return post("http://localhost:8090/therapist/Thumbs",{thumbsID:thumbsID});
+    } catch (error) {
+        throw err;
+    }
+}

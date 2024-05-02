@@ -9,7 +9,7 @@ import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
 import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 // import {updateCurrentPatient} from "../../contexts/PatientContext";
-import { reqActivePatientsList } from '../../api/api';
+import { reqActivePatientsList, reqUpdateThumbs } from '../../api/api';
 import { usePatient } from '../../contexts/PatientContext';
 import { useEffect, useState } from 'react';
 import { useCookies } from "react-cookie";
@@ -137,6 +137,20 @@ export default function TherapistOverview() {
 
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
+    const [thumbCount,setThumbCount] = useState(-1);
+
+    const handleClickThumbsUp =(p) =>{
+        setThumbCount(thumbCount+1);
+        console.log(thumbCount);
+        reqUpdateThumbs(p.patientID).then((res)=>{
+            if(res===thumbCount){
+                setThumbCount(res);
+            }else{
+                console.log(res+"fail in updating in database");
+            }
+        })
+    }
+
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh', minWidth:"100%", paddingTop:"6vh"}}>
 
@@ -214,7 +228,7 @@ export default function TherapistOverview() {
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
-                                    <Typography variant="body2">Total exercise: {'No data available'}</Typography>
+                                    <Typography variant="body2">Total exercise hours: {'No data available'}</Typography>
                                     <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available'}</Typography>
                                 </Box>
 
@@ -239,7 +253,7 @@ export default function TherapistOverview() {
                                     >
                                         Manage tasks
                                     </Button>
-                                    <IconButton aria-label="thumbs up" size="large">
+                                    <IconButton aria-label="thumbs up" size="large" onClick={()=>handleClickThumbsUp(patient)}>
                                         <ThumbUp />
                                     </IconButton>
                                     <IconButton aria-label="archive" size="large" sx={{ mr: 2 }}>

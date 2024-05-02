@@ -6,7 +6,7 @@ import {Box, Button, Container,Typography,
     Table, TableBody, TableHead, TableContainer, TableCell, TableRow, InputLabel,TextField
     } from "@mui/material"
 import HistoryIcon from "@mui/icons-material/HistoryRounded";
-import { useEffect, useState} from "react";
+import { Fragment, useEffect, useState} from "react";
 import AddIcon from "@mui/icons-material/AddCircleTwoTone";
 import { DemoContainer,DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -22,13 +22,30 @@ export default function ManageTask(){
     const [currentPatient, setCurrentPatient] = useState({});
     const [tasks, setTasks] = useState([]);
 
+
+    function sortPatientData(unsortedData, isAscending = true) {
+        return [...unsortedData].sort((a, b) => {
+            const nameA = a.status ? a.status.toUpperCase() : '';
+            const nameB = b.status ? b.status.toUpperCase() : '';
+            if (nameA < nameB) {
+                return isAscending ? -1 : 1;
+            }
+            if (nameA > nameB) {
+                return isAscending ? 1 : -1;
+            }
+            return 0;
+        });
+    }
+    
+
         // Fetch patient data from localStorage
         useEffect(() => {
             const patientData = localStorage.getItem('currentPatient');
             if (patientData) {
                 const parsedData = JSON.parse(patientData);
                 setCurrentPatient(parsedData);
-                setTasks(parsedData.tasks || []);
+                const sortedData = sortPatientData(parsedData.tasks);
+                setTasks(sortedData || []);
             }
         }, []);
 
@@ -70,7 +87,7 @@ export default function ManageTask(){
             },
             difficulty:"",
             sets:"", 
-            status:"Done",
+            status:"Not Done",
             date:"", 
             
         }
@@ -93,7 +110,8 @@ export default function ManageTask(){
 
     const handleDeleteTask = (id) =>{
         reqDeleteTask(currentPatient.patientID,id).then((res)=>{
-            setTasks(res);
+            const sortesRes = sortPatientData(res);
+            setTasks(sortesRes);
         }).catch((error)=>{
             console.log(error);
         })
@@ -162,14 +180,15 @@ export default function ManageTask(){
         reqTaskList(currentPatient.patientID,taskInfo).then((res)=>{
             // console.log(res);
             if (res) {
-                setTasks(res);
+                const sortesRes = sortPatientData(res);
+                setTasks(sortesRes);
             } 
         }).catch((error)=>{
             console.log(error);
         })
         handleClose();
     }
-    
+
     const handleAddTask = (openDia,taskInfo) =>{
         const difficultyLevel = ["Adaptive control","easy","medium","hard"];
         const totalSets =[1,2,3,4,5,6];
@@ -267,9 +286,9 @@ export default function ManageTask(){
         <Container  sx={{paddingTop: '6vh', minWidth: '100%', maxHeight: '100vh', overflow: 'hidden'}}>
           <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                 <ClickBack username={currentPatient?.name} pagename={"Manage Tasks"} path={"/manageTasks"}/>
-                <Button variant="outlined" startIcon={<HistoryIcon/>} sx={{height:40}}>History</Button>
+                {/* <Button variant="outlined" startIcon={<HistoryIcon/>} sx={{height:40}}>History</Button> */}
           </Box>
-        <Box sx={{width:"100%",height:"60vh", marginTop:1}} >
+        <Box sx={{width:"100%",height:"60vh", marginTop:1,overflow:"auto"}} >
             {/* display={showTable} */}
             {
                 tasks.length>0? 
@@ -290,30 +309,30 @@ export default function ManageTask(){
         
                         <TableBody>
                             {tasks.map((task,i)=>(
-                                <TableRow key={i} sx={{'& > *': {border:0},}}>
-                                        <TableCell component="th" scope="row" align="left">{task.game.type}</TableCell>
-                                        <TableCell align="left">{task.game.equippment}</TableCell>
-                                        <TableCell align="left">{task.difficulty}</TableCell>
-                                        <TableCell align="left">{task.sets}</TableCell>
-                                        <TableCell align="left">{task.game.slots}</TableCell>
-                                        <TableCell align="left">{task.status}</TableCell>
-                                        <TableCell align="left">{task.date}</TableCell>  
+                                <TableRow key={i} sx={{'& > *': {border:0, }}}>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} component="th" scope="row" align="left">{task.game.type}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.game.equippment}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.difficulty}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.sets}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.game.slots}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.status}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.date}</TableCell>  
                                         <TableCell>
-                                            <IconButton aria-label="edit" onClick={()=>handleEditTask(task)}>
+                                            <IconButton aria-label="edit" onClick={()=>handleEditTask(task)} sx={{...((task.status === "Done" || task.status==="Not Done") && {display:"none"} )}}>
                                                 <EditICon color="#5A6ACF"/>
                                             </IconButton>
-                                            <IconButton aria-label="delete" onClick={()=>{handleDeleteTask(task._id)}}>
+                                            <IconButton aria-label="delete" onClick={()=>{handleDeleteTask(task._id)}} sx={{...((task.status === "Done" || task.status==="Not Done") && {display:"none"} )}}>
                                                 <DeleteIcon color="red"/>
                                             </IconButton>
                                         </TableCell>                           
-                                </TableRow>    
+                                </TableRow>  
                             ))}
                         </TableBody>
                     </Table>
                  </TableContainer>):
                  (
                  <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center", width:"100%", height:"100%"}}>
-                    <img src="public/tasks/notask.svg" width="83px" height="83px"/>
+                    <img src="/tasks/notask.svg" width="83px" height="83px"/>
                     <Typography fontSize="24px" color="#555555">There is no task, please add</Typography>
                  </Box>
                  )
@@ -337,10 +356,11 @@ export default function ManageTask(){
             <Grid container spacing={2} sx={{ flexGrow: 1}}>
                 {gameList.map((v,i)=>(
                     <Grid item xs={4} sm={4} md={4} lg={4} key={i}>
-                        <Paper sx={{display:"flex", overflow:"hidden", bgcolor:"#F9F9F9"}}>
-                            <Box sx={{width:"90px", height:"100px",border:"1px solid grey"}}>
-                            <img src={v.img} alt={v.type} loading="lazy"/>
+                        <Paper sx={{display:"flex", overflow:"hidden", bgcolor:"#F9F9F9", p:0}}>
+                            <Box sx={{width:"90px", height:"100px"}}>
+                                <img src={v.img} alt={v.type} width="90px" height="100px" loading="lazy"/>
                             </Box>
+
                             <Box sx={{paddingLeft:1,paddingRight:2}}>
                                 <Typography variant="h6" fontWeight={"bold"}>{v.type}</Typography>
                                 <Box sx={{display:"flex", marginTop:1}}>
@@ -352,6 +372,7 @@ export default function ManageTask(){
                                     <Typography variant="text" color={"#5A6ACF"} fontWeight={"bold"}> {v.slots} mins</Typography>
                                 </Box>
                             </Box>
+
                             <IconButton onClick={()=>handleClickOpen(v)}>
                                     <AddIcon sx={{color:"#5A6ACF", width:"40px", height:"40px"}}/>
                             </IconButton>

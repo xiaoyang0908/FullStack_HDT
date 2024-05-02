@@ -3,6 +3,7 @@ package com.example.hdt.ServiceImpl;
 import com.example.hdt.models.Patient;
 import com.example.hdt.models.RedisDao;
 import com.example.hdt.models.Therapist;
+import com.example.hdt.models.Thumbs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -26,6 +27,8 @@ public class TherapistImpl {
 
     public static RedisDao<Patient> cachePatients;
 
+    public static Therapist curTherapist = new Therapist();
+
     @Autowired
     public TherapistImpl(RedisDao<Patient> cachePatients) {
         this.cachePatients = cachePatients;
@@ -35,6 +38,13 @@ public class TherapistImpl {
     public List<Patient> findAllAcitvePatient(String email){
         Query query = new Query(Criteria.where("Email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
+        curTherapist.setEmail(t.getEmail());
+        curTherapist.setTherapistID(t.getTherapistID());
+        for (Thumbs thumb:
+             t.getThumbs()) {
+            curTherapist.getThumbs().add(thumb);
+        }
+//        curTherapist.getThumbs().forEach(System.out::print);
         List<String> activePatientsId = t.getActivePatients();
         System.out.println("fetch from database");
         return getActivePaitents(activePatientsId);
@@ -48,7 +58,11 @@ public class TherapistImpl {
             patient.setPatientID("PAT-" + patientimlpl.uniqueId());
             patient.addTherapists(t.getTherapistID());
             t.addActivePatients(patient.getPatientID());
-            Update update = new Update().set("activePatients",t.getActivePatients());
+            Thumbs thumbs = new Thumbs();
+            thumbs.setId(t.getTherapistID());
+            t.getThumbs().add(thumbs);
+            patient.getThumbs().add(thumbs);
+            Update update = new Update().set("activePatients",t.getActivePatients()).push("thumbs",thumbs);
             mongoTemplate.updateFirst(query,update,Therapist.class);
             patientimlpl.insertPatient(patient);
         }else {
@@ -57,7 +71,14 @@ public class TherapistImpl {
         }
     }
 
+    @CacheEvict(value = "activePatients",allEntries = true)
+    public void updateThumbsUp( String id, int count){
+        Query query = new Query(Criteria.where("email").is(curTherapist.getEmail()).and("thumbs.id").is(id));
+        Update update = new Update().set("thumbs.$.thumbsCount",count);
+        mongoTemplate.updateFirst(query,update,Therapist.class);
+        patientimlpl.updateThumbs(id,count);
 
+    }
 
     public List<Patient> getActivePaitents(List<String> activePatientsId){
         List<Patient> activePatient = new ArrayList<>();
@@ -67,11 +88,12 @@ public class TherapistImpl {
                 activePatient.add(p);
             }
         }
-//        if (!activePatient.isEmpty()){
-//            cachePatients.setRedisList(activePatientsId,activePatient);
-//        }
         return activePatient;
     }
+
+
+
+
 
 
 }

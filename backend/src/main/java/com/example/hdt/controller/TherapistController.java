@@ -3,6 +3,7 @@ package com.example.hdt.controller;
 import com.example.hdt.ServiceImpl.TherapistImpl;
 import com.example.hdt.models.Patient;
 import com.example.hdt.models.RedisDao;
+import com.example.hdt.models.Thumbs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,7 +20,6 @@ import java.util.Map;
 public class TherapistController {
     @Autowired
     private TherapistImpl therapistImpl;
-
 
     @PostMapping("/activePatients")
     public ResponseEntity<List<Patient>> getAllActivePatients(@RequestBody Map<String, Object> requestBody) throws Exception{
@@ -44,7 +44,24 @@ public class TherapistController {
             return  ResponseEntity.ok("success");
         }
         return ResponseEntity.status(400).body(null);
+    }
 
+    @PostMapping("/Thumbs")
+    public ResponseEntity<Integer> getThumbs(@RequestBody Map<String, Object> requestBody) throws Exception{
+        String thumbsId = (String) requestBody.get("thumbsID");
+        int count=0;
+        TherapistImpl.curTherapist.getThumbs().forEach(System.out::print);
+        for (Thumbs t: TherapistImpl.curTherapist.getThumbs()) {
+            if (t.getId().equals(thumbsId)){
+                count = t.getThumbsCount();
+                count++;
+                t.setThumbsCount(count);
+                therapistImpl.updateThumbsUp(thumbsId,count);
+                break;
+            }
+        }
+        return ResponseEntity.ok(count);
 
     }
+
 }
