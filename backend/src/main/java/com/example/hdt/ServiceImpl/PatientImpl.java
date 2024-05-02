@@ -2,8 +2,10 @@ package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
 import com.example.hdt.models.Tasks;
-import com.example.hdt.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -41,23 +43,37 @@ public class PatientImpl{
     }
 
 
+    @Cacheable(value = "patient", key = "list")
     public List<Patient> getPatientList(){
-        return mongoTemplate.findAll(Patient.class);
+        List<Patient> patients= mongoTemplate.findAll(Patient.class);
+        List<String> patientIds = new ArrayList<>();
+        for (Patient p:
+                patients) {
+            patientIds.add(p.getPatientID());
+        }
+        TherapistImpl.cachePatients.setRedisList(patientIds,patients);
+        return patients;
     }
 
     //    insert Tasks
+    @CacheEvict(value = "activePatients",allEntries = true)
     public void insertTasks(String id, Tasks task){
+//        System.out.println(TherapistImpl.therapistEmail);
         Query query = new Query(Criteria.where("PatientID").is(id));
         Update update = new Update().push("tasks",task);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
     // update tasks
+    @CacheEvict(value = "activePatients",allEntries = true)
     public void updateTasks(String id, ArrayList<Tasks> tasks){
+//        System.out.println(TherapistImpl.therapistEmail);
         Query query = new Query(Criteria.where("PatientID").is(id));
         Update update = new Update().set("tasks",tasks);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
+
+
 
 
 }

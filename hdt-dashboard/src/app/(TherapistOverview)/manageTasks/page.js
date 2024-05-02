@@ -68,9 +68,9 @@ export default function ManageTask(){
                 slots:"",
                 img:""
             },
-            difficulty:"Adaptive control",
+            difficulty:"",
             sets:"", 
-            status:"Awaiting Start",
+            status:"Done",
             date:"", 
             
         }
@@ -171,7 +171,7 @@ export default function ManageTask(){
     }
     
     const handleAddTask = (openDia,taskInfo) =>{
-        const difficultyLevel = ["easy","medium","hard"];
+        const difficultyLevel = ["Adaptive control","easy","medium","hard"];
         const totalSets =[1,2,3,4,5,6];
         return (
             <Dialog
@@ -191,22 +191,20 @@ export default function ManageTask(){
                 <Box sx={{ display:"flex",flexDirection:"column"}}>
                         <InputLabel htmlFor="outlined-select-Difficulty">Difficulty</InputLabel>
                         <TextField
-                            disabled
-                            defaultValue="Adaptive control"
                             id='outlined-select-Difficulty'
-                            // select
+                            select
                             name="difficulty"
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            // value={taskInfo.difficulty}
-                            // onChange = {handleChange}
+                            value={taskInfo.difficulty}
+                            onChange = {handleChange}
                         >
-                           {/* {difficultyLevel.map((op) =>(
+                           {difficultyLevel.map((op) =>(
                                 <MenuItem key={op} value={op}>
                                     {op}
                                 </MenuItem>
-                            ))} */}
+                            ))}
                         </TextField>
                         <InputLabel htmlFor="outlined-select-Sets">Total Sets</InputLabel>
                         <TextField

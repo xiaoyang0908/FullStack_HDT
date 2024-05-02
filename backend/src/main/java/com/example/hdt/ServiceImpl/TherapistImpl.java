@@ -4,6 +4,8 @@ import com.example.hdt.models.Patient;
 import com.example.hdt.models.RedisDao;
 import com.example.hdt.models.Therapist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,34 +24,23 @@ public class TherapistImpl {
     @Autowired
     private PatientImpl patientimlpl;
 
-    private static final String REDIS_KEY = "therapist:";
-    private static RedisDao<Patient> cachePatients;
+    public static RedisDao<Patient> cachePatients;
 
     @Autowired
     public TherapistImpl(RedisDao<Patient> cachePatients) {
         this.cachePatients = cachePatients;
     }
 //    getActivityPatient
-    @Cacheable(value = "activePatients",key = "#email ?: 'default'")
+    @Cacheable(value = "activePatients",key = "#email")
     public List<Patient> findAllAcitvePatient(String email){
-        List<Patient> activePatient = new ArrayList<>();
         Query query = new Query(Criteria.where("Email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
         List<String> activePatientsId = t.getActivePatients();
-        for (String patientId: activePatientsId) {
-            Patient p = patientimlpl.findPatientByPatientId(patientId);
-            if (p!= null){
-                activePatient.add(p);
-            }
-        }
-        if (!activePatient.isEmpty()){
-            String redisKey = String.format(REDIS_KEY,"patientList");
-            cachePatients.setRedisList(redisKey,activePatient);
-        }
-        return activePatient;
+        System.out.println("fetch from database");
+        return getActivePaitents(activePatientsId);
     }
 
-
+    @CacheEvict(value = "activePatients",allEntries = true)
     public void addPatientsList(Patient patient, String email){
         Query query = new Query(Criteria.where("email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
@@ -65,5 +56,22 @@ public class TherapistImpl {
             patientimlpl.savePatient(patient);
         }
     }
+
+
+
+    public List<Patient> getActivePaitents(List<String> activePatientsId){
+        List<Patient> activePatient = new ArrayList<>();
+        for (String patientId: activePatientsId) {
+            Patient p = patientimlpl.findPatientByPatientId(patientId);
+            if (p!= null){
+                activePatient.add(p);
+            }
+        }
+//        if (!activePatient.isEmpty()){
+//            cachePatients.setRedisList(activePatientsId,activePatient);
+//        }
+        return activePatient;
+    }
+
 
 }

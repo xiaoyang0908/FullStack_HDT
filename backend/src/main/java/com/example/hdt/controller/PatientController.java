@@ -3,16 +3,11 @@ package com.example.hdt.controller;
 import com.example.hdt.ServiceImpl.PatientImpl;
 import com.example.hdt.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -21,41 +16,37 @@ import java.util.UUID;
 public class PatientController {
     @Autowired
     private PatientImpl patientImpl;
-    private static final String REDIS_KEY = "patient:";
-    private static RedisDao<Patient> cachePatients = new RedisDao<>();
+
 
     @GetMapping("/")
-    @Cacheable(value = "patient")
     public ResponseEntity<List<Patient>> getAllPatients() throws Exception{
             List<Patient> patients = patientImpl.getPatientList();
             if (patients.isEmpty()) {
                 return ResponseEntity.status(400).body(null);
             }
-            String redisKey = String.format(REDIS_KEY,"list");
-            cachePatients.setRedisList(redisKey,patients);
             return ResponseEntity.ok(patients);
     }
 
     @PostMapping("/tasks")
-    @Cacheable(value = "task",key = "#patientID ?: 'default'")
     public  ResponseEntity<List<Tasks>> getAllTasks(@RequestBody Map<String, Object> requestBody) throws Exception{
         LinkedHashMap<String,Object> taskInfo = (LinkedHashMap<String, Object>) requestBody.get("taskinfo");
         String curPatintId = (String) requestBody.get("patientID");
         ObjectMapper objectMapper = new ObjectMapper();
         String taskJson = objectMapper.writeValueAsString(taskInfo);
         Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
-
         System.out.println(newTask);
+
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
+        //edit
         if (curPatient.findTask(newTask.get_id())!=null) {
             Tasks oldTask = curPatient.findTask(newTask.get_id());
             oldTask.setSets(newTask.getSets());
             oldTask.setDifficulty(newTask.getDifficulty());
             oldTask.setDate(newTask.getDate());
-            System.out.println(curPatient.getTasks());
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());
             return ResponseEntity.ok(curPatient.getTasks());
         }else if (newTask!=null && curPatient.findTask(newTask.get_id())==null){
+            //insert new task
             String uuid = patientImpl.uniqueId();
             newTask.set_id(curPatintId+ uuid);
             curPatient.addTasks(newTask);
@@ -66,16 +57,17 @@ public class PatientController {
 
     }
 
-    @PostMapping("/editTask")
-    public ResponseEntity<List<Tasks>> editTask(@RequestBody Map<String, Object> requestBody) throws Exception{
-        LinkedHashMap<String,Object> taskInfo = (LinkedHashMap<String, Object>) requestBody.get("taskinfo");
-        String curPatintId = (String) requestBody.get("patientID");
-        ObjectMapper objectMapper = new ObjectMapper();
-        String taskJson = objectMapper.writeValueAsString(taskInfo);
-        Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
-        Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
-        return ResponseEntity.ok(curPatient.getTasks());
-    }
+//    @PostMapping("/editTask")
+//    public ResponseEntity<List<Tasks>> editTask(@RequestBody Map<String, Object> requestBody) throws Exception{
+//        LinkedHashMap<String,Object> taskInfo = (LinkedHashMap<String, Object>) requestBody.get("taskinfo");
+//        String curPatintId = (String) requestBody.get("patientID");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String taskJson = objectMapper.writeValueAsString(taskInfo);
+//        Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
+////        TherapistImpl.changeSymbol = 1;
+//        Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
+//        return ResponseEntity.ok(curPatient.getTasks());
+//    }
 
     @PostMapping("/deteteTask")
     public ResponseEntity<List<Tasks>> afterDeleteTasks(@RequestBody Map<String, Object> requestBody) throws Exception{

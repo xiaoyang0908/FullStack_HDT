@@ -15,21 +15,14 @@ public class RedisDao<T> {
     private RedisTemplate redisTemplate;
 
 
-    public void setRedis(String key, T t){
-        ValueOperations operations = redisTemplate.opsForValue();
-
-        if (redisTemplate.hasKey(key)){
-            System.out.println(operations.get(key));
-        }else{
-            operations.set(key,t);
-            System.out.println("add to redis successfully");
-        }
+    public boolean hasKey(String key){
+        return redisTemplate.hasKey(key);
     }
 
-    public void setRedisList(String key, List<T> tlist){
+    public void setRedisList(List<String> keys, List<T> tlist){
         ListOperations listOps = redisTemplate.opsForList();
-        for (T t:tlist) {
-            listOps.leftPush(key,t);
+        for (int i = 0; i < tlist.size(); i++) {
+            listOps.leftPush(keys.get(i),tlist.get(i));
         }
     }
 

@@ -28,7 +28,6 @@ public class TherapistController {
         if (activePatients.isEmpty()){
             return ResponseEntity.ok(null);
         }
-        System.out.println(activePatients);
         return ResponseEntity.ok(activePatients);
     }
 
