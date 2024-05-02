@@ -72,10 +72,10 @@ export default function TherapistPatientsDetails() {
 
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
-            <ThreeDAvatar glbModelUrl={checkPatientData('avatar')} />
-
+            <ThreeDAvatar glbModelUrl={`${checkPatientData('avatar')}?lod=0`} />   
         </Grid>
-    );
+    ); // lod=2 is the level of detail, you can adjust this as needed. Values: 0, 1 2.
+    
 
     const personalInfoSection = (
         <Grid>
