@@ -55,6 +55,7 @@ function ThreeDAvatar({ glbModelUrl }) {
 
         renderer.setClearColor(0x000000);   // Set background color
 
+        /*
         const loader = new TextureLoader();
         loader.load(backgroundUrl,  // Path to your background image
             function (texture) {
@@ -65,6 +66,7 @@ function ThreeDAvatar({ glbModelUrl }) {
                 console.error('An error occurred loading the texture:', err);
             }
         );
+        */
 
         const gltfLoader = new GLTFLoader();
         gltfLoader.load(glbModelUrl, gltf => {
@@ -77,7 +79,7 @@ function ThreeDAvatar({ glbModelUrl }) {
             const coverYPosition = bbox.min.y + coverHeight / 2; // Position cover at the bottom
 
             // Use the width and depth from the bounding box
-            const topWidth = 0.4;
+            const topWidth = 0.5;
             const bottomWidth = 0.53;
 
             // Create a cover object
