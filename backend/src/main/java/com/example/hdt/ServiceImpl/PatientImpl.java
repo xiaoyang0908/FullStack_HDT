@@ -75,10 +75,9 @@ public class PatientImpl{
     }
 
     //update thumbs count
-    @CacheEvict(value = "activePatients",allEntries = true)
     public void updateThumbs(String id, int count){
-        Query query = new Query(Criteria.where("PatientID").is(id).and("thumbs.id").is(TherapistImpl.curTherapist.getTherapistID()));
-        Update update = new Update().set("thumbs.$.thumbsCount",count);
+        Query query = new Query(Criteria.where("PatientID").is(id));
+        Update update = new Update().set("thumbs",count);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 

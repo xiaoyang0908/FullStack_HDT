@@ -137,16 +137,13 @@ export default function TherapistOverview() {
 
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
-    const [thumbCount,setThumbCount] = useState(-1);
-
     const handleClickThumbsUp =(p) =>{
-        setThumbCount(thumbCount+1);
-        console.log(thumbCount);
+      
         reqUpdateThumbs(p.patientID).then((res)=>{
-            if(res===thumbCount){
-                setThumbCount(res);
+            if(res===p.thumbs+1){
+                console.log("updating in database")
             }else{
-                console.log(res+"fail in updating in database");
+                console.log("fail in updating in database");
             }
         })
     }
@@ -254,7 +251,7 @@ export default function TherapistOverview() {
                                         Manage tasks
                                     </Button>
                                     <IconButton aria-label="thumbs up" size="large" onClick={()=>handleClickThumbsUp(patient)}>
-                                        <ThumbUp />
+                                        <ThumbUp />{patient.thumbs}
                                     </IconButton>
                                     <IconButton aria-label="archive" size="large" sx={{ mr: 2 }}>
                                         <ArchivedIcon />

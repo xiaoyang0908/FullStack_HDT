@@ -6,7 +6,6 @@ import com.example.hdt.models.Therapist;
 import com.example.hdt.models.Thumbs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -58,12 +57,15 @@ public class TherapistImpl {
             patient.setPatientID("PAT-" + patientimlpl.uniqueId());
             patient.addTherapists(t.getTherapistID());
             t.addActivePatients(patient.getPatientID());
+
+//            new thumbs obeject fot therapist
             Thumbs thumbs = new Thumbs();
-            thumbs.setId(t.getTherapistID());
+            thumbs.setId(patient.getPatientID());
             t.getThumbs().add(thumbs);
-            patient.getThumbs().add(thumbs);
             Update update = new Update().set("activePatients",t.getActivePatients()).push("thumbs",thumbs);
             mongoTemplate.updateFirst(query,update,Therapist.class);
+
+            patient.setThumbs(0);
             patientimlpl.insertPatient(patient);
         }else {
             System.out.println(patient.toString());

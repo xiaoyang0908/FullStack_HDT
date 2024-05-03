@@ -67,7 +67,10 @@ public class Patient implements Serializable {
     private Object contact;
 
     @Field("thumbs")
-    private ArrayList<Thumbs> thumbs;
+    private int thumbs;
+
+    @Field("thumbs_caregivers")
+    private int thumbs_caregivers;
 
 
 
@@ -251,11 +254,19 @@ public class Patient implements Serializable {
         }
     }
 
-    public ArrayList<Thumbs> getThumbs() {
+    public int getThumbs() {
         return thumbs;
     }
 
-    public void setThumbs(ArrayList<Thumbs> thumbs) {
-        this.thumbs.addAll(thumbs);
+    public void setThumbs(int thumbs) {
+        this.thumbs = thumbs;
+    }
+
+    public int getThumbs_caregivers() {
+        return thumbs_caregivers;
+    }
+
+    public void setThumbs_caregivers(int thumbs_caregivers) {
+        this.thumbs_caregivers = thumbs_caregivers;
     }
 }
