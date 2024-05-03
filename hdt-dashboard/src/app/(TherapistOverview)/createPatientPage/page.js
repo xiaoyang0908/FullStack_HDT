@@ -140,15 +140,14 @@ export default function AddPatient() {
             }
         };       
 
-        const handleSubmit = (event) => {
+        const handleSubmit = async(event) => {
             event.preventDefault();    
             console.log("handle submit",patientProfile);
-            reqSavePatient(therapistInfo.email, patientProfile).then((res) => {
-                if (res === "success") {
-                    console.log("saved patient");
-                    router.back();
-                }
-            });
+            const res = await reqSavePatient(therapistInfo.email, patientProfile);
+            if (res === "success") {
+                console.log("saved patient");
+                router.back();
+            }
         };
 
         const containerSpacing = 8;    // spacing between grid items (name, birthday, number, email, sex)

@@ -137,15 +137,15 @@ export default function TherapistOverview() {
 
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
-    const handleClickThumbsUp =(p) =>{
+    const handleClickThumbsUp = async(p) =>{
       
-        reqUpdateThumbs(p.patientID).then((res)=>{
+        const res = await reqUpdateThumbs(p.patientID);
             if(res===p.thumbs+1){
                 console.log("updating in database")
             }else{
                 console.log("fail in updating in database");
             }
-        })
+       
     }
 
     return (
