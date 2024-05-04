@@ -72,6 +72,9 @@ public class Patient implements Serializable {
     @Field("thumbs_caregivers")
     private int thumbs_caregivers;
 
+    @Field("performance")
+    private ArrayList<Object> performance;
+
 
 
 
@@ -268,5 +271,13 @@ public class Patient implements Serializable {
 
     public void setThumbs_caregivers(int thumbs_caregivers) {
         this.thumbs_caregivers = thumbs_caregivers;
+    }
+
+    public ArrayList<Object> getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(ArrayList<Object> performance) {
+        this.performance = performance;
     }
 }

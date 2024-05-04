@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef} from "react";
 import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
 import { Avatar as VisageAvatar } from "@readyplayerme/visage";
 import {
@@ -41,7 +41,7 @@ export default function AddPatient() {
     const [avatarUrl1, setAvatarUrl1] = useState('');
 
     useEffect(() => {
-        setContent(<UserInfoContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl1} />);
+        setContent(<UserInfoContent setPatientProfile={patientProfile} avatarUrl={avatarUrl1} />);
     }, [avatarUrl1]);
 
     // Information to be rendered within the basic info section
@@ -77,6 +77,8 @@ export default function AddPatient() {
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
         const [password, setPassword] = useState('' || editPatient.password);
+        const [thumbs,setThumbs] = useState(editPatient.thumbs);
+        const [thumbs_caregivers,setThumbsCare] = useState(editPatient.thumbs_caregivers);
         //const [avatarUrl1, setAvatarUrl1] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
@@ -124,7 +126,9 @@ export default function AddPatient() {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
-                }
+                },
+                thumbs: thumbs,
+                thumbs_caregivers: thumbs_caregivers
             });
         }, [id, patientID, password, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl1]);
         
@@ -140,13 +144,16 @@ export default function AddPatient() {
             }
         };       
 
+        console.log(router);
         const handleSubmit = async(event) => {
             event.preventDefault();    
             console.log("handle submit",patientProfile);
             const res = await reqSavePatient(therapistInfo.email, patientProfile);
             if (res === "success") {
                 console.log("saved patient");
+                console.log(router);
                 router.back();
+                // History.back();
             }
         };
 
@@ -293,7 +300,7 @@ export default function AddPatient() {
                     </Box>
 
 
-                    <AvatarContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl} />
+                    <AvatarContent setPatientProfile={patientProfile} avatarUrl={avatarUrl} />
 
                     <Box sx={{ p: 6, display: 'flex', flexDirection: 'column', alignItems: 'left', width: '100%' }}>
                         <Typography variant="h5" >Contact Person</Typography>
@@ -358,7 +365,7 @@ export default function AddPatient() {
 
     //const userInfoContent = <UserInfoContent />;
     
-    function AvatarContent({ setPatientProfile, avatarUrl1 }) {
+    function AvatarContent({ patientProfile, avatarUrl1 }) {
         const iframeRef = useRef(null);
     
         const parseMessage = (event) => {
