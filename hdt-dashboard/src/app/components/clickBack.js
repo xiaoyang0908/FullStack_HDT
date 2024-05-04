@@ -14,7 +14,7 @@ export function ClickBack({username, pagename}){
             <Box sx={{marginRight:1}} onClick={handleClickBack}>
                 <img src="/backIcon.svg" alt="click back" sx={{width:"40px", height:"40px"}} loading="lazy"/>
             </Box>
-            <Typography variant="text">Clients / {username} / {pagename}</Typography>
+            <Typography variant="text">Students / {username} / {pagename}</Typography>
         </Box>
     )
 }

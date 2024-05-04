@@ -216,7 +216,7 @@ export default function TherapistOverview() {
                     sx={{ mr: 1 }}
                     onClick={() => handleButtonClick(addClientButtonPath)}
                     >
-                        Add client
+                        New Student
                     </Button>
                     {/* <Button 
                     variant="outlined" 

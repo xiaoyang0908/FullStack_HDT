@@ -18,6 +18,7 @@ import { reqSavePatient } from "@/app/api/api";
 import { useCookies } from "react-cookie";
 import formatDate from "@/app/util/date";
 import { useRouter } from "next/navigation";
+import { ClickBack } from "@/app/components/clickBack"
 
 
 /**
@@ -150,14 +151,14 @@ export default function AddPatient() {
             } catch (error) {
                 console.error("Error during submission:", error);
             }
-        };        
+        };
 
         const containerSpacing = 8;    // spacing between grid items (name, birthday, number, email, sex)
         const bottomSpacingToTitle = 4; // spacing between title and first text field
 
         return (
             <>
-                <Box component="form" sx={{ maxHeight: '90vh', overflowY: 'auto' }}  onSubmit={handleSubmit}>
+                <Box component="form" sx={{ maxHeight: '87vh', overflowY: 'auto' }}  onSubmit={handleSubmit}>
                     <Box  sx={{ p: 3, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: 1, width: '30%' }}>
                             <Typography variant="h5">Basic Information</Typography>
@@ -414,6 +415,7 @@ export default function AddPatient() {
 
     return (
         <Container sx={{ paddingTop: '6vh', minWidth: '100%', maxHeight: '100%', overflow: 'hidden' }}>
+            <ClickBack username={"New Student"} pagename={"Basic Information"} path={"/therapistPage"} />
             <Grid container spacing={0} justifyContent="center">
                 {displayCard}
             </Grid>

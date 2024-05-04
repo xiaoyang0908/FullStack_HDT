@@ -10,15 +10,17 @@ export const mainListItems = [
   // A common pattern in React is for a component to return multiple elements.
   // Fragments let you group a list of children without adding extra nodes to the DOM.
   {
-    title: 'Patients',
+    title: 'Students',
     key: '/therapistPage',
     icon: <PatientIcon />,
   },
+  /*
   {
     title: 'Setting',
     key: '/setting',
     icon: <SettingIcon />,
   }
+  */
   /*
   {
     title: 'Overiview',
