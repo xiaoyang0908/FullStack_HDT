@@ -413,4 +413,5 @@ export default function AddPatient() {
             </Grid>
         </Container>
     );
+    */
 }

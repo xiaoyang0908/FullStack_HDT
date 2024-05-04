@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CookieSetting } from "../util/cookieSetting";
+
 //create axios instance
 const service = axios.create({
     baseURL: "", //default url

@@ -37,10 +37,10 @@ public class Patient implements Serializable {
     private String photo;
 
     @Field("Caregivers")
-    private ArrayList<String> caregivers;
+    private String caregivers;
 
     @Field("Therapists")
-    private ArrayList<String> therapists;
+    private String therapists;
 
     @Field("Impaired")
     private String impaired;
@@ -162,9 +162,6 @@ public class Patient implements Serializable {
         return goals;
     }
 
-    public void setTherapists(ArrayList<String> therapists) {
-        this.therapists = therapists;
-    }
 
     public void setTasks(ArrayList<Tasks> tasks) {
         this.tasks = tasks;
@@ -194,12 +191,9 @@ public class Patient implements Serializable {
         this.activityStatus = activityStatus;
     }
 
-    public void setCaregivers(ArrayList<String> caregivers) {
-        this.caregivers = caregivers;
-    }
 
     public void addTherapists(String id) {
-        this.therapists.add(id);
+        this.therapists = id;
     }
 
     public ArrayList<Tasks> getTasks() {
@@ -209,13 +203,6 @@ public class Patient implements Serializable {
         return tasks;
     }
 
-    public ArrayList<String> getCaregivers() {
-        return caregivers;
-    }
-
-    public ArrayList<String> getTherapists() {
-        return therapists;
-    }
 
     public String getSexual() {
         return sexual;
@@ -279,5 +266,21 @@ public class Patient implements Serializable {
 
     public void setPerformance(ArrayList<Object> performance) {
         this.performance = performance;
+    }
+
+    public String getCaregivers() {
+        return caregivers;
+    }
+
+    public void setCaregivers(String caregivers) {
+        this.caregivers = caregivers;
+    }
+
+    public String getTherapists() {
+        return therapists;
+    }
+
+    public void setTherapists(String therapists) {
+        this.therapists = therapists;
     }
 }

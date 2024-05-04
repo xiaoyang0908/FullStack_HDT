@@ -64,3 +64,19 @@ export const reqUpdateThumbs = (thumbsID)=>{
         throw err;
     }
 }
+
+export const reqCareTherapist = (caregiverEmail)=>{
+    try {
+        return post("http://localhost:8090/caregiver",{caregiverEmail:caregiverEmail});
+    } catch (error) {
+        throw err;
+    }
+}
+
+export const reqCarePatient = (caregiverEmail)=>{
+    try {
+        return post("http://localhost:8090/caregiver/carePatient",{caregiverEmail:caregiverEmail});
+    } catch (error) {
+        throw err;
+    }
+}

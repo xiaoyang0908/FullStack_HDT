@@ -93,6 +93,12 @@ public class TherapistImpl {
         return activePatient;
     }
 
+    public Therapist findTherapistByTherapistID(String therapistID){
+        Query query = new Query(Criteria.where("TherapistID").is(therapistID));
+        Therapist therapist = mongoTemplate.findOne(query,Therapist.class);
+        return therapist;
+    }
+
 
 
 

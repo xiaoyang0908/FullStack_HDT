@@ -63,17 +63,17 @@ export default function ManageTask(){
     //  set more button in case of more games
     const [open, setOpen] = useState(false);
     const [showList, setShowList] = useState("hidden");
-    // const [buttonName, setButton] = useState("more");
-    // const handleClickMore = () =>{
-    //     if(open){
-    //         setShowList("auto");
-    //         setButton("fold");
-    //     }else{
-    //         setShowList("hidden");
-    //         setButton("more");
-    //     }
-    //     setOpen(!open);
-    // }
+    const [buttonName, setButton] = useState("more");
+    const handleClickMore = () =>{
+        if(open){
+            setShowList("auto");
+            setButton("fold");
+        }else{
+            setShowList("hidden");
+            setButton("more");
+        }
+        setOpen(!open);
+    }
 
 
     // encapsulate the taskinfo
@@ -341,7 +341,7 @@ export default function ManageTask(){
          </Box>
          {openDia && handleAddTask(openDia,taskInfo)}
           <Box  sx={{
-                height:160,
+                height:165,
                 width:"100%",
                 color: 'white',
                 overflow:showList, 
@@ -350,7 +350,7 @@ export default function ManageTask(){
           > 
             <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between",marginBottom:1, height:"50px"}}>
                 <Typography variant="h6" color={"black"}>Add Tasks</Typography>
-                {/* <Button variant="contained" sx={{height:"35px"}} onClick={handleClickMore}> {buttonName} </Button> */}
+                <Button variant="contained" sx={{height:"35px"}} onClick={handleClickMore}> {buttonName} </Button>
             </Box>
            
             <Grid container spacing={2} sx={{ flexGrow: 1}}>

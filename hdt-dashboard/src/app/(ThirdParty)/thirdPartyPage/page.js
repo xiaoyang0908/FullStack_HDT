@@ -17,12 +17,49 @@ import {
     Card,
     CardContent
 } from "@mui/material";
+import { useCookies } from "react-cookie";
+import { reqCare, reqCarePatient, reqCareTherapist } from "@/app/api/api";
 
 export default function TrdPage() {
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
     const [watchLiveEnabled, setWatchLiveEnabled] = useState(false);
+
+    //get caregiver infomation
+    const [cookies] = useCookies(["user_token"]);
+    const caregiverInfo = cookies.user_token;
+
+    //fetch caregiver and carepatient
+    const [careTherapist,setCareTherapist] = useState({});
+    const [carePatient,setCarePatient] = useState({});
+    const fetchCareTherapist = async() =>{
+        try {
+            const res = await reqCareTherapist(caregiverInfo.email);
+            if(res){
+                setCareTherapist(res);
+            }
+        } catch (error) {
+            console.log("fail to fetch caregiver's therapist")
+        }
+    }
+
+    const fecthCarePatient = async() =>{
+        try {
+            const res = await reqCarePatient(caregiverInfo.email);
+            if(res){
+                console.log(res);
+                setCarePatient(res);
+            }
+        } catch (error) {
+            console.log("fail to fetch caregiver's patient")
+        }
+    }
+
+    useEffect(()=>{
+        fetchCareTherapist();
+        fecthCarePatient();
+    },[])
     
     useEffect(() => {   // Prevent scrolling 
         document.body.style.overflow = 'hidden';
@@ -33,10 +70,10 @@ export default function TrdPage() {
     }, []);
 
     const LiveStreamCard = () => (
-        <Grid sx={{ p: 3, height: "70%", overflow: 'hidden' }}>
+        <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', backgroundImage:"/caregiverWelcome.svg"}}>
             <Box flexGrow={1} mb={5}>
                 <div><Typography variant="h6" align="left">Welcome!</Typography></div>
-                <div><Typography variant="h7" align="left">Watch Jack exercise</Typography></div>
+                <div><Typography variant="h7" align="left">Cheer on {carePatient.name} right here</Typography></div>
             </Box>
             <Tooltip title={watchLiveEnabled ? "" : "Can only be used while in the same room"} placement="top">
                 <span>
@@ -57,17 +94,17 @@ export default function TrdPage() {
         <Grid container alignItems="center" sx={{ p: 3, height: "100%", overflow: 'hidden' }}>
             <Avatar alt={'currentPatient.name'} src={"/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100 }} />
             <Box sx={{ pl: 3 }}>
-                <div><Typography variant="h6">Lotte Jensen</Typography></div>
-                <div><Typography variant="h7" align="left">Physiotherapist for Jack</Typography></div>
+                <div><Typography variant="h6" fontWeight="bold" color="#0D2560">{careTherapist.name}</Typography></div>
+                <div><Typography variant="h7" align="left">Physiotherapist for {carePatient.name}</Typography></div>
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
                 <Grid container direction="row" justifyContent="space-between">
                     <Typography variant="h7" align="left">Therapist:</Typography>
-                    <Typography variant="h7" align="right">Lotte Jensen</Typography>
+                    <Typography variant="h7" align="right"> {careTherapist.name}</Typography>
                 </Grid>
                 <Grid container direction="row" justifyContent="space-between">
                     <Typography variant="h7" align="left">Contact number:</Typography>
-                    <Typography variant="h7" align="right">12345678</Typography>
+                    <Typography variant="h7" align="right">{careTherapist.phone}</Typography>
                 </Grid>
             </Box>
         </Grid>
@@ -118,30 +155,18 @@ export default function TrdPage() {
                 height: '100%',
             }}>
                 <Grid sx={{ pb: 1, pl: 1, pr: 1 }} container direction="row" justifyContent="space-between">
-                    <Typography variant="h5" align="left">Journey</Typography>
-                    <div>
-                        <Typography variant="h5" align="right" display="inline">5</Typography>
-                        <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
-                    </div>
+                    <Box sx={{display:"flex", alignItems:"center"}}>
+                        <Typography variant="h5" align="left">Journey</Typography>
+                        <Box sx={{marginLeft:2}}>
+                            <Typography variant="h7" align="right" display="inline"> tasks left </Typography>
+                            <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">5</Typography>
+                            <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
+                        </Box>
+                    </Box>
+                        <Button variant="contained" sx={{height:"35px"}}> More </Button>
                 </Grid>
-                <Box sx={{ overflow: 'auto', flexGrow: 1, height: '100%' }}>
-                    <Grid container spacing={2} direction="row" sx={{ height: '100%' }}>
-                        {[1, 2, 3, 4, 5].map((item) => (
-                            <Grid item xs={4} key={item} sx={{ display: 'flex' }}>
-                                <Card sx={{ width: '100%', height: '300px' }}>
-                                    <CardContent>
-                                        <Typography variant="h7" component="div">
-                                            Placeholder Title {item}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Placeholder content here...
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
+
+                
             </Paper>
         </Box>
     );
