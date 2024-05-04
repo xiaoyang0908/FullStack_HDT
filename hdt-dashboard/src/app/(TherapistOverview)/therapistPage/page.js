@@ -137,16 +137,37 @@ export default function TherapistOverview() {
 
     let count = Math.ceil(filteredPatientsList.length / rowsPerPage);
 
-    const handleClickThumbsUp = async(p) =>{
-      
-        const res = await reqUpdateThumbs(p.patientID);
-            if(res===p.thumbs+1){
-                console.log("updating in database")
-            }else{
+    const handleClickThumbsUp = async (patient) => {
+        const updatedPatientsList = patientsList.map((p) => {
+            if (p.patientID === patient.patientID) {
+                return { ...p, thumbs: p.thumbs + 1 };
+            } else {
+                return p;
+            }
+        });
+        setPatientsList(updatedPatientsList);
+    
+        // Update the database in the background
+        try {
+            const res = await reqUpdateThumbs(patient.patientID);
+            if (res === patient.thumbs + 1) {
+                console.log("updating in database");
+            } else {
                 console.log("fail in updating in database");
             }
-       
-    }
+        } catch (error) {
+            console.error("Failed to update database:", error);
+            // If the database update fails, revert the frontend update
+            const revertedPatientsList = patientsList.map((p) => {
+                if (p.patientID === patient.patientID) {
+                    return { ...p, thumbs: p.thumbs - 1 };
+                } else {
+                    return p;
+                }
+            });
+            setPatientsList(revertedPatientsList);
+        }
+    };
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh', minWidth:"100%", paddingTop:"6vh"}}>
@@ -195,7 +216,7 @@ export default function TherapistOverview() {
                     sx={{ mr: 1 }}
                     onClick={() => handleButtonClick(addClientButtonPath)}
                     >
-                        Add client
+                        New Student
                     </Button>
                     {/* <Button 
                     variant="outlined" 
@@ -231,11 +252,10 @@ export default function TherapistOverview() {
 
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, maxWidth: '40%' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, padding: 3, maxWidth: '40%', marginRight: 3 }}>
                                     <Button
                                         variant="outlined"
                                         startIcon={<DetailIcon />}
-                                        // size="large"
                                         sx={{ textTransform: 'none' }}
                                         onClick={() => handleButtonClick(detailsButtonPath, patient)}
                                     >
@@ -244,18 +264,19 @@ export default function TherapistOverview() {
                                     <Button
                                         variant="outlined"
                                         startIcon={<ManageTasksIcon />}
-                                        // size="large"
                                         sx={{ textTransform: 'none' }}
                                         onClick={() => handleButtonClick(manageTaskButtonPath, patient)}
                                     >
                                         Manage tasks
                                     </Button>
-                                    <IconButton aria-label="thumbs up" size="large" onClick={()=>handleClickThumbsUp(patient)}>
-                                        <ThumbUp />{patient.thumbs}
-                                    </IconButton>
-                                    <IconButton aria-label="archive" size="large" sx={{ mr: 2 }}>
-                                        <ArchivedIcon />
-                                    </IconButton>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <IconButton aria-label="thumbs up" size="medium" onClick={() => handleClickThumbsUp(patient)}>
+                                            <ThumbUp />
+                                        </IconButton>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}> {/* Adjusted container */}
+                                            <Typography variant="h5">{patient.thumbs}</Typography>
+                                        </Box>
+                                    </Box>
                                 </Box>
                             </Card>
                         </Grid>

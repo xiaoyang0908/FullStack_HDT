@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import ThreeDAvatar from "@/app/components/three";
+import { ClickBack } from "@/app/components/clickBack"
 import {
     Box,
     Grid,
@@ -79,7 +80,7 @@ export default function TherapistPatientsDetails() {
 
     const personalInfoSection = (
         <Grid>
-            <Paper sx={{ p: 2, minHeight: '90vh', maxHeight: '90vh', overflow: 'auto'  }}>
+            <Paper sx={{ p: 2, minHeight: '85vh', maxHeight: '85vh', overflow: 'auto'  }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
@@ -146,7 +147,7 @@ export default function TherapistPatientsDetails() {
     // Tasks Section
     const tasksSection = (
         <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>  
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '55vh' }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '51vh' }}>
                 <Typography textAlign="center" variant="h6" sx={{ paddingBottom: 1 }}>Tasks</Typography>
                 <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
                     <Grid container spacing={2}>
@@ -174,6 +175,10 @@ export default function TherapistPatientsDetails() {
         <Container sx={{ paddingTop: '6vh', minWidth: '100vw', maxHeight: '100vh', overflow: 'hidden' }}>
             <Grid container spacing={2}>
 
+                <Grid item xs={12}>
+                    <ClickBack username={checkPatientData('name')} pagename={"Details"} path={"/therapistPage"} />
+                </Grid>
+                
                 {/* Personal Info Section, assuming it's now smaller let's say md={3} */}
                 <Grid item xs={12} md={2.5}>
                     {personalInfoSection}

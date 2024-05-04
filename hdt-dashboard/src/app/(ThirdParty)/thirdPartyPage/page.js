@@ -22,6 +22,7 @@ export default function TrdPage() {
     const [open, setOpen] = useState("false");
     const [showList, setShowList] = useState("hidden");
     const [buttonName, setButton] = useState("more");
+    const [watchLiveEnabled, setWatchLiveEnabled] = useState(false);
     
     useEffect(() => {   // Prevent scrolling 
         document.body.style.overflow = 'hidden';
@@ -37,12 +38,14 @@ export default function TrdPage() {
                 <div><Typography variant="h6" align="left">Welcome!</Typography></div>
                 <div><Typography variant="h7" align="left">Watch Jack exercise</Typography></div>
             </Box>
-            <Button variant="outlined" >
-                Watch Live
-            </Button>
-            <Tooltip title="This will show the live feed of what Jack is seeing and doing"
-                sx={{ ml: 1 }}
-            >
+            <Tooltip title={watchLiveEnabled ? "" : "Can only be used while in the same room"} placement="top">
+                <span>
+                    <Button variant="outlined" disabled={!watchLiveEnabled}>
+                        Watch Live
+                    </Button>
+                </span>
+            </Tooltip>
+            <Tooltip title="This will show the live feed of what Jack is seeing and doing" sx={{ ml: 1 }}>
                 <IconButton aria-label="help">
                     <HelpOutlineIcon fontSize="small" />
                 </IconButton>
