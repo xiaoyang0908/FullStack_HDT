@@ -37,15 +37,16 @@ export default function AddPatient() {
     const [cookies] = useCookies(["user_token"]);
     const therapistInfo = cookies.user_token;
     const [patientProfile, setPatientProfile] = useState({});
-    const [content, setContent] = useState(null);
-    const [avatarUrl1, setAvatarUrl1] = useState('');
-
+    
+    //const [content, setContent] = useState(null);
+    //const [avatarUrl1, setAvatarUrl1] = useState('');
+/*
     useEffect(() => {
-        setContent(<UserInfoContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl1} />);
-    }, [avatarUrl1]);
+        setContent(<UserInfoContent setPatientProfile={setPatientProfile} />);
+    }, []);*/
 
     // Information to be rendered within the basic info section
-    const UserInfoContent = ({ avatarUrl }) => {
+    const UserInfoContent = () => {
         const storedPatientData = localStorage.getItem("currentPatient");
         const editPatient = storedPatientData ? JSON.parse(storedPatientData) : {};
         //console.log(editPatient);
@@ -77,7 +78,7 @@ export default function AddPatient() {
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
         const [password, setPassword] = useState('' || editPatient.password);
-        //const [avatarUrl1, setAvatarUrl1] = useState('' || editPatient.avatar);
+        const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
             lastName: contactName[1] || '',
@@ -91,15 +92,6 @@ export default function AddPatient() {
                 [name]: value,
             }));
         }
-
-        useEffect(() => {
-            console.log('Avatar URL inside UserInfoContent:', avatarUrl1);
-            setPatientProfile(prevProfile => ({
-                ...prevProfile,
-                avatar: avatarUrl1
-            }));
-        }, [avatarUrl1]);
-
 
         useEffect(()=>{
             setPatientProfile({
@@ -119,14 +111,14 @@ export default function AddPatient() {
                 activityStatus: "Online",
                 tasks: [],
                 sexual: biologicalSex,
-                avatar: avatarUrl1,
+                avatar: avatarUrl,
                 contact: {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
                 }
             });
-        }, [id, patientID, password, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl1]);
+        }, [id, patientID, password, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
         
         const handleProfilePictureUpload = (event) => {
             const file = event.target.files[0];
@@ -140,15 +132,25 @@ export default function AddPatient() {
             }
         };       
 
-        const handleSubmit = async(event) => {
-            event.preventDefault();    
-            console.log("handle submit",patientProfile);
-            const res = await reqSavePatient(therapistInfo.email, patientProfile);
-            if (res === "success") {
-                console.log("saved patient");
-                router.back();
+        const handleSubmit = async (event) => {
+            event.preventDefault();
+            const updatedProfile = {
+                ...patientProfile,
+                avatar: avatarUrl // Make sure to include the updated URL
+            };
+        
+            try {
+                const res = await reqSavePatient(therapistInfo.email, updatedProfile);
+                if (res === "success") {
+                    console.log("Patient saved successfully");
+                    setTimeout(() => router.back(), 10); // Navigate back after a slight delay
+                } else {
+                    console.error("Failed to save patient:", res);
+                }
+            } catch (error) {
+                console.error("Error during submission:", error);
             }
-        };
+        };        
 
         const containerSpacing = 8;    // spacing between grid items (name, birthday, number, email, sex)
         const bottomSpacingToTitle = 4; // spacing between title and first text field
@@ -293,7 +295,7 @@ export default function AddPatient() {
                     </Box>
 
 
-                    <AvatarContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl} />
+                    <AvatarContent setAvatarUrl={setAvatarUrl} />
 
                     <Box sx={{ p: 6, display: 'flex', flexDirection: 'column', alignItems: 'left', width: '100%' }}>
                         <Typography variant="h5" >Contact Person</Typography>
@@ -358,26 +360,34 @@ export default function AddPatient() {
 
     //const userInfoContent = <UserInfoContent />;
     
-    function AvatarContent({ setPatientProfile, avatarUrl1 }) {
+    function AvatarContent({ setAvatarUrl}) {
         const iframeRef = useRef(null);
-    
-        const parseMessage = (event) => {
-            if (typeof event.data === 'string' && event.data.startsWith('https://')) {
-                setAvatarUrl1(event.data);
-                //console.log('Avatar URL set to:', event.data); // Check if this prints
-            }
-        };
-    
+
         useEffect(() => {
             const handleMessages = (event) => {
-                parseMessage(event);
+                // Ensure the message comes from the expected domain
+                if (event.origin === "https://rehab.readyplayer.me") {
+                    let data;
+                    try {
+                        // Attempt to parse the message data as JSON
+                        data = JSON.parse(event.data);
+                    } catch {
+                        data = event.data;
+                    }
+    
+                    // Check if the data includes a .glb URL
+                    if (typeof data === 'string' && data.endsWith('.glb')) {
+                        console.log("Received Avatar URL:", data);
+                        setAvatarUrl(data);
+                    }
+                }
             };
     
             window.addEventListener('message', handleMessages);
             return () => {
                 window.removeEventListener('message', handleMessages);
             };
-        }, [patientProfile, avatarUrl1]);
+        }, [setAvatarUrl]);
     
         return (
             // Render the avatar using the avatarUrl prop
@@ -386,18 +396,17 @@ export default function AddPatient() {
                     ref={iframeRef}
                     style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
                     src="https://rehab.readyplayer.me/avatar?frameApi"
-                    allow="clipboard-write"
+                    //allow="clipboard-write"
                 />
-                {avatarUrl1 && <VisageAvatar modelSrc={avatarUrl1} />}
             </Grid>
         );
     }
-    
+
     const displayCard = (
         <Grid item xs={12} md={10}>
             <Paper elevation={3} sx={{ minHeight: '90vh', overflowY: 'auto' }}>
                 <Box sx={{ height: '100%' }}>
-                    {content}
+                    <UserInfoContent setPatientProfile={setPatientProfile}></UserInfoContent>
                 </Box>
             </Paper>
         </Grid>
