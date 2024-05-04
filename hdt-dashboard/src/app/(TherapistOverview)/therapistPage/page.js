@@ -273,7 +273,7 @@ export default function TherapistOverview() {
                                         <IconButton aria-label="thumbs up" size="medium" onClick={() => handleClickThumbsUp(patient)}>
                                             <ThumbUp />
                                         </IconButton>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}> {/* Adjusted container */}
+                                        <Box sx={{ display: 'flex', alignItems: 'center', width: '50px', justifyContent: 'center' }}> {/* Adjusted container */}
                                             <Typography variant="h5">{patient.thumbs}</Typography>
                                         </Box>
                                     </Box>

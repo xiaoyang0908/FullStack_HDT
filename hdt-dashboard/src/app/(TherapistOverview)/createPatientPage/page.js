@@ -1,7 +1,5 @@
 'use client'
-import { useState, useEffect, useRef} from "react";
-import { AvatarCreator, AvatarExportedEvent } from '@readyplayerme/react-avatar-creator';
-import { Avatar as VisageAvatar } from "@readyplayerme/visage";
+import { useState, useEffect, useRef } from "react";
 import {
     Box,
     Grid,
@@ -20,32 +18,11 @@ import formatDate from "@/app/util/date";
 import { useRouter } from "next/navigation";
 import { ClickBack } from "@/app/components/clickBack"
 
-
-/**
- * @typedef {Object} AvatarCreatorConfig
- * @property {boolean} [clearCache]
- * @property {BodyType} [bodyType]
- * @property {boolean} [quickStart]
- * @property {Language} [language]
- * @property {string} [token]
- * @property {string} [avatarId]
- * 
- * @param {AvatarExportedEvent} avatarEvent
- */
-
 export default function AddPatient() {
     const router = useRouter();
     const [cookies] = useCookies(["user_token"]);
     const therapistInfo = cookies.user_token;
     const [patientProfile, setPatientProfile] = useState({});
-    
-    //const [content, setContent] = useState(null);
-    //const [avatarUrl1, setAvatarUrl1] = useState('');
-/*
-    useEffect(() => {
-        setContent(<UserInfoContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl1} />);
-    }, [avatarUrl1]);
-
     // Information to be rendered within the basic info section
     const UserInfoContent = () => {
         const storedPatientData = localStorage.getItem("currentPatient");
@@ -57,12 +34,8 @@ export default function AddPatient() {
         const contactName = editPatient.contact && editPatient.contact.fullName ? editPatient.contact.fullName.split(" ") : [];
         const storedBirth = editPatient.birth?new Date(editPatient.birth):new Date(); 
         const formattedBirthDate = storedBirth.toISOString().split('T')[0]; 
-        // const formattedBirthDate = storedBirth instanceof Date? storedBirth.toISOString().split('T')[0]:new Date();
-
-
         const storedSex = editPatient.sexual? editPatient.sexual: "female";
         const storedArm = editPatient.dominantArm? editPatient.dominantArm: "left";
-        // console.log(storedBirth);
 
         // set initial value
         const [patientProfile,setPatientProfile] = useState({} || editPatient);
@@ -79,7 +52,7 @@ export default function AddPatient() {
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
         const [password, setPassword] = useState('' || editPatient.password);
-        //const [avatarUrl1, setAvatarUrl1] = useState('' || editPatient.avatar);
+        const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
             lastName: contactName[1] || '',
@@ -117,9 +90,7 @@ export default function AddPatient() {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
-                },
-                thumbs: thumbs,
-                thumbs_caregivers: thumbs_caregivers
+                }
             });
         }, [id, patientID, password, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
         
@@ -288,7 +259,7 @@ export default function AddPatient() {
                     </Box>
 
 
-                    <AvatarContent setPatientProfile={setPatientProfile} avatarUrl={avatarUrl} />
+                    <AvatarContent setAvatarUrl={setAvatarUrl} />
 
                     <Box sx={{ p: 6, display: 'flex', flexDirection: 'column', alignItems: 'left', width: '100%' }}>
                         <Typography variant="h5" >Contact Person</Typography>
@@ -350,10 +321,8 @@ export default function AddPatient() {
             </>
         );
     };
-
-    //const userInfoContent = <UserInfoContent />;
     
-    function AvatarContent({ setPatientProfile, avatarUrl1 }) {
+    function AvatarContent({ setAvatarUrl }) {
         const iframeRef = useRef(null);
 
         useEffect(() => {
@@ -389,7 +358,6 @@ export default function AddPatient() {
                     ref={iframeRef}
                     style={{ minWidth: '100%', minHeight: '90vh', border: 'none' }}
                     src="https://rehab.readyplayer.me/avatar?frameApi"
-                    //allow="clipboard-write"
                 />
             </Grid>
         );
