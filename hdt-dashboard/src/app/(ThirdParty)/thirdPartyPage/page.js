@@ -33,32 +33,25 @@ export default function TrdPage() {
     //fetch caregiver and carepatient
     const [careTherapist,setCareTherapist] = useState({});
     const [carePatient,setCarePatient] = useState({});
-    const fetchCareTherapist = async() =>{
-        try {
-            const res = await reqCareTherapist(caregiverInfo.email);
-            if(res){
-                setCareTherapist(res);
-            }
-        } catch (error) {
-            console.log("fail to fetch caregiver's therapist")
-        }
-    }
-
-    const fecthCarePatient = async() =>{
-        try {
-            const res = await reqCarePatient(caregiverInfo.email);
-            if(res){
-                console.log(res);
-                setCarePatient(res);
-            }
-        } catch (error) {
-            console.log("fail to fetch caregiver's patient")
-        }
-    }
 
     useEffect(()=>{
-        fetchCareTherapist();
-        fecthCarePatient();
+        const fetchData = async() =>{
+            try {
+                const [therapistData, patientData] = await Promise.all([
+                    reqCareTherapist(caregiverInfo.email),
+                    reqCarePatient(caregiverInfo.email)
+                ]);
+                if (therapistData) {
+                    setCareTherapist(therapistData);
+                }
+                if (patientData) {
+                    setCarePatient(patientData);
+                }
+            } catch (error) {
+                console.log("Error fetching data:", error);
+            }
+        };
+        fetchData();
     },[])
     
     useEffect(() => {   // Prevent scrolling 

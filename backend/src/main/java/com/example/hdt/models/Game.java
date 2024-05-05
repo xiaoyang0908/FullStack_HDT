@@ -18,6 +18,8 @@ public class Game implements Serializable {
     private int slots;
     @Field("img")
     private String img;
+    @Field("icon")
+    private String icon;
 
     public String get_id() {
         return _id;
@@ -57,5 +59,13 @@ public class Game implements Serializable {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

@@ -20,6 +20,12 @@ public class Tasks implements Serializable {
         private String status;
         @Field
         private String date;
+        @Field
+        private int spentTime;
+        @Field
+        private int totalTime;
+        @Field
+        private Object performance;
 
 
     public Tasks() {
@@ -90,5 +96,29 @@ public class Tasks implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getSpentTime() {
+        return spentTime;
+    }
+
+    public void setSpentTime(int spentTime) {
+        this.spentTime = spentTime;
+    }
+
+    public int getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime() {
+        this.totalTime = game.getSlots()*sets;
+    }
+
+    public Object getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(Object performance) {
+        this.performance = performance;
     }
 }

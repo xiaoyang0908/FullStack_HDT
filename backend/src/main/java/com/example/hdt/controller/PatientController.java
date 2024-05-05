@@ -43,12 +43,14 @@ public class PatientController {
             oldTask.setSets(newTask.getSets());
             oldTask.setDifficulty(newTask.getDifficulty());
             oldTask.setDate(newTask.getDate());
+            oldTask.setTotalTime();
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());
             return ResponseEntity.ok(curPatient.getTasks());
         }else if (newTask!=null && curPatient.findTask(newTask.get_id())==null){
             //insert new task
             String uuid = patientImpl.uniqueId();
             newTask.set_id(curPatintId+ uuid);
+            newTask.setTotalTime();
             curPatient.addTasks(newTask);
             patientImpl.insertTasks(curPatintId,newTask);
             return ResponseEntity.ok(curPatient.getTasks());

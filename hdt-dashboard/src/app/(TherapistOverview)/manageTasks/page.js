@@ -77,18 +77,23 @@ export default function ManageTask(){
 
 
     // encapsulate the taskinfo
+
     const [taskInfo, setTaskInfo] = useState(
         {
             game:{
                 type:"",
                 equippment:"",
                 slots:"",
-                img:""
+                img:"",
+                icon:""
             },
             difficulty:"",
             sets:"", 
             status:"Awaiting start",
             date:"", 
+            spentTime:0,
+            totalTime:0,
+            performance:{left:0.0,right:0.0}
             
         }
     );
@@ -149,7 +154,8 @@ export default function ManageTask(){
                 type:task.type,
                 equippment:task.equippment,
                 slots:task.slots,
-                img:task.img
+                img:task.img,
+                icon:task.icon
             }
         }))
       };
