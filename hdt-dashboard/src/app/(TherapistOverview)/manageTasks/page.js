@@ -87,7 +87,7 @@ export default function ManageTask(){
             },
             difficulty:"",
             sets:"", 
-            status:"Not Done",
+            status:"Awaiting start",
             date:"", 
             
         }

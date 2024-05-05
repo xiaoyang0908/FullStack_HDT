@@ -27,7 +27,7 @@ export default function AddPatient() {
     const UserInfoContent = () => {
         const storedPatientData = localStorage.getItem("currentPatient");
         const editPatient = storedPatientData ? JSON.parse(storedPatientData) : {};
-        //console.log(editPatient);
+        console.log(editPatient);
 
         // Extract name and contact details from editPatient if available
         const nameArray = editPatient.name ? editPatient.name.split(" ") : [];
@@ -51,7 +51,6 @@ export default function AddPatient() {
         const [typeOfMovement, setTypeOfMovement] = useState('' || editPatient.impaired);
         const [dominantArm, setDominantArm] = useState(storedArm);
         const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
-        const [password, setPassword] = useState('' || editPatient.password);
         const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
@@ -71,14 +70,14 @@ export default function AddPatient() {
             setPatientProfile({
                 id:id,
                 patientID: patientID,
-                password: password,
+                password: "hdt123456",
                 birth: formatDate(birthDate),
                 name: `${firstName} ${lastName}`,
                 email: email,
                 phone: phoneNumber,
                 photo: photo,
-                caregivers: [],
-                therapists: [],
+                caregivers: "",
+                therapists: "",
                 impaired: typeOfMovement,
                 dominantArm: dominantArm,
                 goals: therapyGoals,
@@ -90,9 +89,12 @@ export default function AddPatient() {
                     fullName: `${contact.firstName} ${contact.lastName}`,
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
-                }
+                },
+                thumbs:0,
+                thumbs_caregivers:0,
+                performance:[]
             });
-        }, [id, patientID, password, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
+        }, [id, patientID, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
         
         const handleProfilePictureUpload = (event) => {
             const file = event.target.files[0];
@@ -112,7 +114,7 @@ export default function AddPatient() {
             const res = await reqSavePatient(therapistInfo.email, patientProfile);
             if (res === "success") {
                 console.log("saved patient");
-                router.back();
+               router.back();
             }
         };
 
@@ -183,7 +185,7 @@ export default function AddPatient() {
                                     </TextField>
                                 </Grid>
                             </Grid>
-                            <Grid container spacing={containerSpacing}>
+                            {/* <Grid container spacing={containerSpacing}>
                                 <Grid item xs={6}>
                                     <TextField
                                         label="Password"
@@ -194,7 +196,7 @@ export default function AddPatient() {
                                         autoComplete="new-password"
                                         />
                                 </Grid>
-                            </Grid>
+                            </Grid> */}
                         </Box>
                     </Box>
 
@@ -381,5 +383,4 @@ export default function AddPatient() {
             </Grid>
         </Container>
     );
-    */
 }
