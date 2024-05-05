@@ -1,47 +1,51 @@
 import React, { useState, useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Box, Button } from "@mui/material";
-import Chart, { layouts } from 'chart.js/auto';
+import Chart from 'chart.js/auto';
 
-const DATA_SETS = {
-    'total': [60, 20, 35],
-    'week': [10, 10, 15],
-    'month': [45, 15, 25]
-};
+// Example of data structure
+// const exerciseData = {  
+//    'total': [120, 150], // User has completed 120 minutes out of a 150-minute goal.
+//    'week': [30, 50],   // For the week, 30 minutes completed out of 50 minutes.
+// };
+
 
 const COLORS = {
     backgroundColor: [
-        'rgba(75, 192, 192, 0.5)', // Finished color
-        'rgba(255, 206, 86, 0.5)', // Unfinished color
-        'rgba(255, 99, 132, 0.5)'  // Skipped color
+        'rgba(0, 128, 0, 0.7)', // Completed color - green
+        'rgba(255, 0, 0, 0.7)'  // Missing color - red
     ],
     borderColor: [
-        'rgba(75, 192, 192, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(255, 99, 132, 1)'
+        'rgba(0, 128, 0, 1)',
+        'rgba(255, 0, 0, 1)'
     ]
 };
 
-// Button configurations mapped by filter types
 const BUTTON_LABELS = {
     'total': 'Total',
-    'week': 'Ugentlig',
-    'month': 'Månedlig'
+    'week': 'Weekly',
+    //'month': 'Månedlig'
 };
 
-export default function PieChart() {
+export default function PieChart({ exerciseData }) {
     const [filterType, setFilterType] = useState('total');
     const handleButtonClick = (type) => setFilterType(type);
 
-    const data = useMemo(() => ({
-        labels: ['Udført', 'Påbegyndt', 'Udeladt'],
-        datasets: [{
-            data: DATA_SETS[filterType],
-            backgroundColor: COLORS.backgroundColor,
-            borderColor: COLORS.borderColor,
-            borderWidth: 1,
-        }]
-    }), [filterType]);
+    const data = useMemo(() => {
+        const completedMinutes = exerciseData[filterType][0];  // Assuming index 0 is completed minutes
+        const totalTargetMinutes = exerciseData[filterType][1]; // Assuming index 1 is the total target minutes
+        const missingMinutes = totalTargetMinutes - completedMinutes; // Calculate missing minutes
+
+        return {
+            labels: ['Completed', 'Missing'],
+            datasets: [{
+                data: [completedMinutes, missingMinutes], // Updated data array
+                backgroundColor: COLORS.backgroundColor,
+                borderColor: COLORS.borderColor,
+                borderWidth: 1,
+            }]
+        };
+    }, [exerciseData, filterType]);
 
     const options = {
         cutout: '70%',
@@ -52,15 +56,13 @@ export default function PieChart() {
                 position: 'bottom',
                 labels: {
                     padding: 10
-                                }
+                }
             },
             tooltip: {
                 callbacks: {
                     label: function (tooltipItem) {
                         const labelData = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.dataIndex];
-                        const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                        const percentage = ((labelData / total) * 100).toFixed(1);
-                        return `${labelData} (${percentage}%)`;
+                        return `${labelData}%`;
                     }
                 }
             }
@@ -71,9 +73,10 @@ export default function PieChart() {
         variant: "outlined", 
         sx: { 
             textTransform: 'none',
-            margin: '2px', // Adjust the values as needed
+            margin: '2px',
         } 
     };
+
     Chart.register({
         id: 'centerText',
         afterDraw: (chart) => {
@@ -81,9 +84,7 @@ export default function PieChart() {
             const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
             const completed = chart.data.datasets[0].data[0];
             const percentage = ((completed / total) * 100).toFixed(0) + '%';
-    
-            // Calculate font size dynamically
-            const fontSize = Math.min(chart.width, chart.height) / 7; // Adjust font size
+            const fontSize = Math.min(chart.width, chart.height) / 7; 
     
             ctx.save();
             ctx.font = `${fontSize}px sans-serif`;

@@ -46,7 +46,7 @@ export default function AddPatient() {
         const [lastName, setLastName] = useState('' || nameArray[1]);
         const [birthDate, setBirthDate] = useState(formattedBirthDate);
         const [phoneNumber, setPhoneNumber] = useState('' || editPatient.phone);
-        const [email, setEmail] = useState('' || editPatient.email);
+        const [email, setEmail] = useState('' || editPatient.email);    // In this case used as Username
         const [biologicalSex, setBiologicalSex] = useState(storedSex);
         const [typeOfMovement, setTypeOfMovement] = useState('' || editPatient.impaired);
         const [dominantArm, setDominantArm] = useState(storedArm);
@@ -58,6 +58,17 @@ export default function AddPatient() {
             email: editPatient.contact ? editPatient.contact.email : '',
             phoneNumber: editPatient.contact ? editPatient.contact.phoneNumber : ''
         });
+
+        const generatePassword = (email) => {   // In this case used as Username
+            if (!email) {
+                return undefined; // Return undefined if no email is provided
+            }
+            // Generate password based on the email
+            const lowerCaseEmail = email.toLowerCase();
+            return lowerCaseEmail + "password";
+        };
+        
+        
         const handleContact = (event) =>{
             const{name,value} = event.target;
             setContact((prevUserData) => ({
@@ -70,10 +81,10 @@ export default function AddPatient() {
             setPatientProfile({
                 id:id,
                 patientID: patientID,
-                password: "hdt123456",
+                password: editPatient.password ? editPatient.password : generatePassword(email),
                 birth: formatDate(birthDate),
                 name: `${firstName} ${lastName}`,
-                email: email,
+                email: email,   // In this case used as Username
                 phone: phoneNumber,
                 photo: photo,
                 caregivers: "",
@@ -106,8 +117,7 @@ export default function AddPatient() {
                 };
                 reader.readAsDataURL(file);
             }
-        };       
-
+        };
         const handleSubmit = async(event) => {
             event.preventDefault();    
             console.log("handle submit",patientProfile);
@@ -162,7 +172,7 @@ export default function AddPatient() {
                             <Grid container spacing={containerSpacing}>
                                 <Grid item xs={6}>
                                     <TextField 
-                                    label="Email" 
+                                    label="Username" 
                                     variant="outlined" 
                                     value={email} 
                                     onChange={(e) => setEmail(e.target.value)}

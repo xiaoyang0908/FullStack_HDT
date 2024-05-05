@@ -58,7 +58,7 @@ export default function NavBar({ isDrawerEnabled = true }){
                     alignItems: 'center',
                     justifyContent: "center"
                 }}>
-                        <Avatar alt="Profile Picture" src={"/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100, border: "1px solid black" }} />
+                        <Avatar alt="Profile Picture" src={"/profilePictureTherapist.png"} sx={{ width: 100, height: 100, border: "1px solid black" }} />
                         <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                             <h4>Welcome!</h4>
                         {isClient ? (therapistInfo ? <h4 variant="h6">{therapistInfo.name}</h4> : null) : <h4 variant="h6">Loading...</h4>}

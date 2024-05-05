@@ -62,6 +62,25 @@ export default function TrdPage() {
         };
     }, []);
 
+    /*
+    const handleClickThumbsUp = async () => {
+        // Update the thumbs-up count and the database in the background
+        try {
+            // Update the thumbs-up count locally
+            setThumbsCount(thumbsCount + 1);
+    
+            // Update the database
+
+            
+
+        } catch (error) {
+            console.error("Failed to update database:", error);
+            // If the database update fails, revert the frontend update
+            setThumbsCount(thumbsCount - 1);
+        }
+    };
+    */
+
     const LiveStreamCard = () => (
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', backgroundImage:"/caregiverWelcome.svg"}}>
             <Box flexGrow={1} mb={5}>
@@ -75,17 +94,16 @@ export default function TrdPage() {
                     </Button>
                 </span>
             </Tooltip>
-            <Tooltip title="This will show the live feed of what Jack is seeing and doing" sx={{ ml: 1 }}>
-                <IconButton aria-label="help">
-                    <HelpOutlineIcon fontSize="small" />
-                </IconButton>
+            <Tooltip title={`This will show the live feed of what ${carePatient.name} is seeing and doing`} sx={{ ml: 1 }}>                <IconButton aria-label="help">
+                <HelpOutlineIcon fontSize="small" />
+            </IconButton>
             </Tooltip>
         </Grid>
     );
 
     const TherapistCard = () => (
         <Grid container alignItems="center" sx={{ p: 3, height: "100%", overflow: 'hidden' }}>
-            <Avatar alt={'currentPatient.name'} src={"/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100 }} />
+            <Avatar alt={'currentPatient.name'} src={"/profilePictureTherapist.png"} sx={{ width: 100, height: 100 }} />
             <Box sx={{ pl: 3 }}>
                 <div><Typography variant="h6" fontWeight="bold" color="#0D2560">{careTherapist.name}</Typography></div>
                 <div><Typography variant="h7" align="left">Physiotherapist for {carePatient.name}</Typography></div>
@@ -106,16 +124,16 @@ export default function TrdPage() {
     const ThumbsUpCard = () => (
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
             <ThumbUpIcon fontSize="large" flexGrow={1} sx={{ mb: 4, mt: 1 }} />
-            <Typography variant="h7">Thumbs-Up Count</Typography>
+            <Typography variant="h7">Thumbs up given</Typography>
             <Typography variant="h4">9</Typography>
         </Grid>
     );
 
     const UserCard = () => (
         <Grid container alignItems="center" sx={{ p: 3, height: "100%", overflow: 'hidden' }}>
-            <Avatar alt={'currentPatient.name'} src={"/path/to/default/avatar.jpg"} sx={{ width: 100, height: 100 }} />
+            <Avatar alt={'currentPatient.name'} src={carePatient.photo} sx={{ width: 100, height: 100 }} /* This is profile picture avatar */ /> 
             <Box sx={{ pl: 3 }}>
-                <div><Typography variant="h6">Jack Smith</Typography></div>
+                <div><Typography variant="h6">{carePatient.name}</Typography></div>
                 <div>
                     <Typography variant="h4" align="left" display="inline">79</Typography>
                     <Typography variant="h7" align="left" display="inline"> hours exercised</Typography>
@@ -123,10 +141,10 @@ export default function TrdPage() {
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
                 <Grid container my={1} direction="row">
-                    <Typography variant="h7" align="left">Click the button to cheer on Jack</Typography>
+                    <Typography variant="h7" align="left">Click the button to cheer on {carePatient.name}</Typography>
                 </Grid>
             </Box>
-            <Button variant="outlined" startIcon={<ThumbUpIcon />} size="large">
+            <Button variant="outlined" startIcon={<ThumbUpIcon />} /*onClick={handleClickThumbsUp(carePatient)}*/ size="large">
                 Give thumbs up
             </Button>
             <Tooltip title="Gives a thumps up to motivate"
@@ -151,7 +169,7 @@ export default function TrdPage() {
                     <Box sx={{display:"flex", alignItems:"center"}}>
                         <Typography variant="h5" align="left">Journey</Typography>
                         <Box sx={{marginLeft:2}}>
-                            <Typography variant="h7" align="right" display="inline"> tasks left </Typography>
+                            <Typography variant="h7" align="right" display="inline">{carePatient.name} has </Typography>
                             <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">5</Typography>
                             <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
                         </Box>
@@ -200,7 +218,7 @@ export default function TrdPage() {
 
                 <Grid item xs={12} md={4} >
                     <Box sx={{ width: '100%', height: '100%' }}>
-                        <ThreeDAvatar glbModelUrl={'currentPatient.avatar'} />
+                        <ThreeDAvatar glbModelUrl={carePatient.avatar ? carePatient.avatar : ""} />
                     </Box>
                 </Grid>
             </Grid>

@@ -246,8 +246,8 @@ export default function TherapistOverview() {
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
-                                    <Typography variant="body2">Total exercise hours: {'No data available'}</Typography>
-                                    <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available'}</Typography>
+                                    <Typography variant="body2">Total exercise hours: {'No data available yet'}</Typography>
+                                    <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available yet'}</Typography>
                                 </Box>
 
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>

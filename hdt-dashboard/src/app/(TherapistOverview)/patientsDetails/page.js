@@ -71,6 +71,33 @@ export default function TherapistPatientsDetails() {
         }
     }
 
+    useEffect(() => {
+        const patientData = localStorage.getItem('currentPatient');
+        if (patientData) {
+            const loadedPatient = JSON.parse(patientData);
+            // Ensure exerciseData is present and in the correct format, if not, use default
+            if (!loadedPatient.exerciseData || !loadedPatient.exerciseData.total || !loadedPatient.exerciseData.week) {
+                loadedPatient.exerciseData = DEFAULT_EXERCISE_DATA;
+            }
+            setCurrentPatient(loadedPatient);
+            setLoading(false);
+        } else {
+            setLoading(false);
+            // Optionally handle no data found case more explicitly here
+        }
+    
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
+    const DEFAULT_EXERCISE_DATA = {
+        'total': [0, 100], // Assuming a default target of 100 minutes total
+        'week': [0, 50]    // Assuming a default target of 50 minutes per week
+    };
+    
+
     const userAvatar = (
         <Grid container sx={{ display: 'flex', alignItems: 'flex-start', width: '100%', height: '100%' }}>
             <ThreeDAvatar glbModelUrl={checkPatientData('avatar')} />
@@ -140,7 +167,7 @@ export default function TherapistPatientsDetails() {
     const exerciseCompletionChartSection = (
         <Paper sx={{ p: 2, minHeight: '100%'}}>
             <Typography align="center" variant="h6">Exercise Completion Rate</Typography>
-            <PieChart />
+            <PieChart exerciseData={currentPatient.exerciseData ? currentPatient.exerciseData : DEFAULT_EXERCISE_DATA } />
         </Paper>
     );
 
