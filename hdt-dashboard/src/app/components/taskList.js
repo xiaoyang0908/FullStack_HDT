@@ -21,7 +21,7 @@ export default function TasksComponent({taskList, showDate}){
  
       <Grid container spacing={2} direction="row" sx={{ height: '100%' }}>
           {taskList.map((task) => (
-              <Grid item xs={3} key={task._id} sx={{ display: 'flex' }}>
+              <Grid item xs={3} key={task._id} sx={{ display: 'flex', position: 'relative' }}>
                   <Card sx={{ width: '100%', height: '100%'}}>
                       <CardMedia
                         sx={{height:"80%"}}
@@ -38,13 +38,13 @@ export default function TasksComponent({taskList, showDate}){
                   </Card>
 
 
-                  <Card sx={{width: '100%', height: '80%', /*position:"absolute"*/top:0, left:0, backgroundColor: 'rgba(255, 255, 255, 0)'}}>
+                  <Card sx={{width: '100%', height: '80%', position:"absolute",top:0, left:0, backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
                         <CardHeader
                             action={
                               <img src={task.game.icon} width="50px" height="50px" />
                             }
                         />
-                        <CardContent />
+                        <CardContent sx={{height:"60%"}}/>
                         
                           <CardContent sx={{marginTop:"auto", backgroundColor: 'rgba(255, 255, 255, 0.7)'}}>
                             <Box sx={{display:"flex", marginTop:1, alignItems:"center"}}>
