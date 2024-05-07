@@ -15,16 +15,16 @@ import {
     Typography,
     Divider,
     Card,
-    CardContent
+    CardContent,
+    Dialog,
+    DialogContent
 } from "@mui/material";
 import { useCookies } from "react-cookie";
 import { reqCare, reqCarePatient, reqCarePatientThumbs, reqCareTherapist } from "@/app/api/api";
 import TasksComponent from "@/app/components/taskList";
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function TrdPage() {
-    const [open, setOpen] = useState("false");
-    const [showList, setShowList] = useState("hidden");
-    const [buttonName, setButton] = useState("more");
     const [watchLiveEnabled, setWatchLiveEnabled] = useState(false);
 
     //get caregiver infomation
@@ -34,6 +34,8 @@ export default function TrdPage() {
     //fetch caregiver and carepatient
     const [careTherapist,setCareTherapist] = useState({});
     const [carePatient,setCarePatient] = useState({});
+    const[thumbsCount,setThumbsCount] = useState(0);
+    const [patientTasks, setPatientTasks] = useState([]);
 
     useEffect(()=>{
         const fetchData = async() =>{
@@ -58,10 +60,11 @@ export default function TrdPage() {
             document.body.style.overflow = '';
         };
     }, []);
-
-
-    const initialThumbsCount = (carePatient && carePatient.thumbs && carePatient.thumbs_caregivers) ? carePatient.thumbs + carePatient.thumbs_caregivers : 0;
-    const[thumbsCount,setThumbsCount] = useState(initialThumbsCount);
+    useEffect(()=>{
+        setThumbsCount((carePatient.thumbs? carePatient.thumbs : 0) + (carePatient.thumbs_caregivers? carePatient.thumbs_caregivers : 0));
+        setPatientTasks(carePatient.tasks);
+    },[carePatient])
+   
     const handleClickThumbsUp = async () => {
         // Update the thumbs-up count and the database in the background
         try {
@@ -78,6 +81,53 @@ export default function TrdPage() {
             setThumbsCount(thumbsCount - 1);
         }
     };
+
+    const [open, setOpen] = useState(false);
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+      const handleOpen=() =>{
+        setOpen(true);
+      }
+
+    const handleClickMore = ()=>{
+        return (<Dialog
+            fullWidth={true}
+            maxWidth="xl"
+            height="80vh"
+            open={open}
+            onClose={handleClose}>
+
+                <DialogContent>
+                    <Box sx={{}}>
+                        <Box sx={{display:"flex", alignItems:"center"}}>
+                            <Typography variant="h5" align="left">Journey</Typography>
+                            <Box sx={{marginLeft:2}}>
+                                <Typography variant="h7" align="right" display="inline">{carePatient.name} has </Typography>
+                                <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">{patientTasks? patientTasks.length:0}</Typography>
+                                <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
+                            </Box>
+                        </Box>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose}
+                            sx={{
+                                position: 'absolute',
+                                right: 8,
+                                top: 8,
+                                color:"grey"
+                            }}
+                            >
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+
+                    <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"block"} />
+                </DialogContent>
+                </Dialog>)
+    }
 
 
     const LiveStreamCard = () => (
@@ -104,7 +154,7 @@ export default function TrdPage() {
         <Grid container alignItems="center" sx={{ p: 3, height: "100%", overflow: 'hidden' }}>
             <Avatar alt={'currentPatient.name'} src={"/profilePictureTherapist.png"} sx={{ width: 100, height: 100 }} />
             <Box sx={{ pl: 3 }}>
-                <div><Typography variant="h6" fontWeight="bold" color="#0D2560"></Typography>{carePatient.contact.fullName}</div>
+                <div><Typography variant="h6" fontWeight="bold" color="#0D2560"></Typography>{carePatient.contact && carePatient.contact.fullName ? carePatient.contact.fullName : ""}</div>
                 <div><Typography variant="h7" align="left">Contact person for {carePatient.name}</Typography></div>
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
@@ -169,13 +219,13 @@ export default function TrdPage() {
                         <Typography variant="h5" align="left">Journey</Typography>
                         <Box sx={{marginLeft:2}}>
                             <Typography variant="h7" align="right" display="inline">{carePatient.name} has </Typography>
-                            <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">5</Typography>
+                            <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">{patientTasks? patientTasks.length:0}</Typography>
                             <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
                         </Box>
                     </Box>
-                        <Button variant="contained" sx={{height:"35px"}}> More </Button>
+                        <Button variant="contained" sx={{height:"35px"}} onClick={handleOpen}> More </Button>
                 </Grid>
-                {/* <TasksComponent taskList={carePatient.tasks} showDate={false} /> */}
+                <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} />
                 
             </Paper>
         </Box>
@@ -221,6 +271,7 @@ export default function TrdPage() {
                     </Box>
                 </Grid>
             </Grid>
+            {open && handleClickMore()}
         </Container>
     );
 }
