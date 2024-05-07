@@ -18,7 +18,8 @@ import {
     CardContent
 } from "@mui/material";
 import { useCookies } from "react-cookie";
-import { reqCare, reqCarePatient, reqCareTherapist } from "@/app/api/api";
+import { reqCare, reqCarePatient, reqCarePatientThumbs, reqCareTherapist } from "@/app/api/api";
+import TasksComponent from "@/app/components/taskList";
 
 export default function TrdPage() {
     const [open, setOpen] = useState("false");
@@ -37,15 +38,11 @@ export default function TrdPage() {
     useEffect(()=>{
         const fetchData = async() =>{
             try {
-                const [therapistData, patientData] = await Promise.all([
-                    reqCareTherapist(caregiverInfo.email),
-                    reqCarePatient(caregiverInfo.email)
-                ]);
-                if (therapistData) {
-                    setCareTherapist(therapistData);
-                }
-                if (patientData) {
-                    setCarePatient(patientData);
+                const res = await reqCare(caregiverInfo.email);
+                console.log(res);
+                if (res) {
+                    setCareTherapist(res.therapist);
+                    setCarePatient(res.carePatient);
                 }
             } catch (error) {
                 console.log("Error fetching data:", error);
@@ -62,24 +59,26 @@ export default function TrdPage() {
         };
     }, []);
 
-    /*
+
+    const initialThumbsCount = (carePatient && carePatient.thumbs && carePatient.thumbs_caregivers) ? carePatient.thumbs + carePatient.thumbs_caregivers : 0;
+    const[thumbsCount,setThumbsCount] = useState(initialThumbsCount);
     const handleClickThumbsUp = async () => {
         // Update the thumbs-up count and the database in the background
         try {
             // Update the thumbs-up count locally
             setThumbsCount(thumbsCount + 1);
-    
             // Update the database
-
-            
-
+            const res = await reqCarePatientThumbs();
+            if (res===thumbsCount) {
+                console.log("load in database");
+            }
         } catch (error) {
             console.error("Failed to update database:", error);
             // If the database update fails, revert the frontend update
             setThumbsCount(thumbsCount - 1);
         }
     };
-    */
+
 
     const LiveStreamCard = () => (
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', backgroundImage:"/caregiverWelcome.svg"}}>
@@ -105,17 +104,17 @@ export default function TrdPage() {
         <Grid container alignItems="center" sx={{ p: 3, height: "100%", overflow: 'hidden' }}>
             <Avatar alt={'currentPatient.name'} src={"/profilePictureTherapist.png"} sx={{ width: 100, height: 100 }} />
             <Box sx={{ pl: 3 }}>
-                <div><Typography variant="h6" fontWeight="bold" color="#0D2560">{careTherapist.name}</Typography></div>
-                <div><Typography variant="h7" align="left">Physiotherapist for {carePatient.name}</Typography></div>
+                <div><Typography variant="h6" fontWeight="bold" color="#0D2560"></Typography>{carePatient.contact.fullName}</div>
+                <div><Typography variant="h7" align="left">Contact person for {carePatient.name}</Typography></div>
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
                 <Grid container direction="row" justifyContent="space-between">
                     <Typography variant="h7" align="left">Therapist:</Typography>
-                    <Typography variant="h7" align="right"> {careTherapist.name}</Typography>
+                    <Typography variant="h7" align="right" fontWeight="bold" color="#0D2560"> {careTherapist.name}</Typography>
                 </Grid>
                 <Grid container direction="row" justifyContent="space-between">
                     <Typography variant="h7" align="left">Contact number:</Typography>
-                    <Typography variant="h7" align="right">{careTherapist.phone}</Typography>
+                    <Typography variant="h7" align="right" fontWeight="bold" color="#0D2560">{careTherapist.phone}</Typography>
                 </Grid>
             </Box>
         </Grid>
@@ -125,7 +124,7 @@ export default function TrdPage() {
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
             <ThumbUpIcon fontSize="large" flexGrow={1} sx={{ mb: 4, mt: 1 }} />
             <Typography variant="h7">Thumbs up given</Typography>
-            <Typography variant="h4">9</Typography>
+            <Typography variant="h4">{thumbsCount}</Typography>
         </Grid>
     );
 
@@ -144,7 +143,7 @@ export default function TrdPage() {
                     <Typography variant="h7" align="left">Click the button to cheer on {carePatient.name}</Typography>
                 </Grid>
             </Box>
-            <Button variant="outlined" startIcon={<ThumbUpIcon />} /*onClick={handleClickThumbsUp(carePatient)}*/ size="large">
+            <Button variant="outlined" startIcon={<ThumbUpIcon />} onClick={()=>handleClickThumbsUp()} size="large">
                 Give thumbs up
             </Button>
             <Tooltip title="Gives a thumps up to motivate"
@@ -176,7 +175,7 @@ export default function TrdPage() {
                     </Box>
                         <Button variant="contained" sx={{height:"35px"}}> More </Button>
                 </Grid>
-
+                {/* <TasksComponent taskList={carePatient.tasks} showDate={false} /> */}
                 
             </Paper>
         </Box>

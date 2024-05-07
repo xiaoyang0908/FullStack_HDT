@@ -3,7 +3,7 @@ import axios from "axios";
 //create axios instance
 const service = axios.create({
     baseURL: "", //default url
-    timeout: 70000, //request out of time
+    timeout: 500000, //request out of time
     withCredentials: false,
 })
 
