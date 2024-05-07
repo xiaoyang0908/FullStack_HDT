@@ -96,7 +96,6 @@ export default function TrdPage() {
         return (<Dialog
             fullWidth={true}
             maxWidth="xl"
-            height="80vh"
             open={open}
             onClose={handleClose}>
 
@@ -123,8 +122,9 @@ export default function TrdPage() {
                             <CloseIcon />
                         </IconButton>
                     </Box>
-
-                    <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"block"} />
+                    <Box sx={{height:"80%"}}>
+                        <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"block"} layout={3} />
+                    </Box>
                 </DialogContent>
                 </Dialog>)
     }
@@ -225,7 +225,7 @@ export default function TrdPage() {
                     </Box>
                         <Button variant="contained" sx={{height:"35px"}} onClick={handleOpen}> More </Button>
                 </Grid>
-                <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} />
+                <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} layout={4} />
                 
             </Paper>
         </Box>
@@ -251,7 +251,7 @@ export default function TrdPage() {
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
-                            <Paper sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            <Paper sx={{ display: 'flex', flexDirection: 'column',height: '100%'  }}>
                                 <ThumbsUpCard />
                                 <Divider />
                                 <UserCard />

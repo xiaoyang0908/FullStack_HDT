@@ -1,5 +1,6 @@
-import { Grid, Paper,Box,Typography,Button, CardMedia, Card, CardHeader, IconButton, CardContent,linearProgressClasses } from "@mui/material"
-export default function TasksComponent({taskList, showDate}){
+import { Grid, Paper,Box,Typography,Button, CardMedia, Card, CardHeader, IconButton, CardContent } from "@mui/material"
+import LinearProgress from '@mui/material/LinearProgress';;
+export default function TasksComponent({taskList, showDate, layout}){
 
 
  function changeColor(task){
@@ -21,32 +22,31 @@ export default function TasksComponent({taskList, showDate}){
  
       <Grid container spacing={2} direction="row" sx={{ height: '100%' }}>
           {taskList.map((task) => (
-              <Grid item xs={3} key={task._id} sx={{ display: 'flex', position: 'relative' }}>
+              <Grid item xs={layout} key={task._id} sx={{ display: 'flex', position: 'relative',height: '100%' }}>
                   <Card sx={{ width: '100%', height: '100%'}}>
                       <CardMedia
-                        sx={{height:"80%"}}
+                        sx={{height:"85%"}}
                         image = {task.game.img}
                       />
-                      <CardContent sx={{display:"flex",flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
+                      <CardContent sx={{display:"flex",flexDirection:"column", justifyContent:"center", alignItems:"center",marginTop:2}}>
                         <Typography variant="text" display={showDate}>{task.date}</Typography>
-                        {/* <linearProgressClasses sx={{ height:"8px",borderRadius:"4px",width:"100%",
-                          ...(task.status === "Done" && {[`&.${linearProgressClasses.bar}`]:"#1EBEAD"}) 
-                          || (task.status === "In Process" && {[`&.${linearProgressClasses.bar}`]:"#737BE5"}) 
-                          || (task.status === "Awaiting Start" && {[`&.${linearProgressClasses.bar}`]:"#F3901C"})
-                          || (task.status === "Not Done" && {[`&.${linearProgressClasses.bar}`]:"#F3901C"})}} variant="determinate" value={50} /> */}
+                        <Box sx={{width:"100%",height:"10px"}}>
+                          <LinearProgress variant="determinate" value={50} sx={{height:10,borderRadius: 5,}}/>
+                        </Box>
                       </CardContent>
                   </Card>
 
 
-                  <Card sx={{width: '100%', height: '80%', position:"absolute",top:0, left:0, backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
+                  <Card sx={{width: 'calc(100% - 16px)', height: '85%', position:"absolute",top:0, left:0,  backgroundColor: 'transparent' ,margin:2}}>
                         <CardHeader
+
                             action={
                               <img src={task.game.icon} width="50px" height="50px" />
                             }
                         />
-                        <CardContent sx={{height:"60%"}}/>
+                        <CardContent sx={{height:"40%",backgroundColor: 'rgba(255, 255, 255, 0)', display:"flex", flexDirection:"column", alignItems:"center"}}/>
                         
-                          <CardContent sx={{marginTop:"auto", backgroundColor: 'rgba(255, 255, 255, 0.7)'}}>
+                          <CardContent sx={{marginTop:"auto", backgroundColor: 'rgba(255, 255, 255, 0.5)'}}>
                             <Box sx={{display:"flex", marginTop:1, alignItems:"center"}}>
                               <Typography variant="h6" fontWeight="bold">{task.game.type} </Typography>
                               <Box sx={{height:"25px",backgroundColor:"black", borderRadius:20,marginLeft:1,paddingLeft:1,paddingRight:1,
