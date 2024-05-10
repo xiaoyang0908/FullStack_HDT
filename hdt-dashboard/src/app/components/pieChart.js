@@ -96,7 +96,7 @@ export default function PieChart({ exerciseData }) {
     });
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', width: '100%', height: '100%' }}>
             <Box sx={{ mb: 2, flex: '0 0 auto', paddingTop: 2 }}>
                 {Object.keys(BUTTON_LABELS).map(key => (
                     <Button key={key} {...buttonStyle} onClick={() => handleButtonClick(key)}>

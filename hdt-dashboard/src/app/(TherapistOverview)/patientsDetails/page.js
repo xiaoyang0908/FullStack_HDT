@@ -31,10 +31,13 @@ export default function TherapistPatientsDetails() {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    const handleEditClick = () => {
+    const editPatientButtonPath = '/createPatientPage';
+    const manageTaskButtonPath = '/manageTasksPage';
+
+    const handleButtonClick = (path) => {
         try {
             localStorage.setItem('currentPatient', JSON.stringify(currentPatient)); // Save patient data to local storage
-            router.push('/createPatientPage');
+            router.push(path);
         } catch (error) {
             console.error("Error navigating with patient data:", error);
         }
@@ -129,7 +132,7 @@ export default function TherapistPatientsDetails() {
                         <Grid item xs={12}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Typography variant="body1">Birth date</Typography>
-                                <IconButton aria-label="edit" onClick={handleEditClick}>
+                                <IconButton aria-label="edit" onClick={() => handleButtonClick(editPatientButtonPath)}>
                                     <EditIcon />
                                 </IconButton>
                             </Box>
@@ -168,16 +171,27 @@ export default function TherapistPatientsDetails() {
     // Exercise Completion section
     const exerciseCompletionChartSection = (
         <Paper sx={{ p: 2, minHeight: '100%'}}>
-            <Typography align="center" variant="h6">Exercise Completion Rate</Typography>
+            <Typography align="left" variant="h6">Exercise Completion Rate</Typography>
             <PieChart exerciseData={currentPatient.exerciseData ? currentPatient.exerciseData : DEFAULT_EXERCISE_DATA } />
         </Paper>
     );
 
     // Tasks Section
     const tasksSection = (
-        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>  
+        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '51vh' }}>
-                <Typography textAlign="center" variant="h6" sx={{ paddingBottom: 1 }}>Tasks</Typography>
+                <Box display="flex" alignItems="center" sx={{ paddingBottom: 1 }}>
+                    <Typography variant="h6">
+                        Tasks
+                    </Typography>
+                    {/* <Button
+                        variant="outlined"
+                        sx={{ textTransform: 'none', marginLeft: 'auto' }}
+                        onClick={() => handleButtonClick(manageTaskButtonPath)}
+                    >
+                        Manage
+                    </Button> */}
+                </Box>
                 <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
                     <TasksComponent taskList={currentPatient.tasks} showDate='none' layout={12} />
                 </Box>
