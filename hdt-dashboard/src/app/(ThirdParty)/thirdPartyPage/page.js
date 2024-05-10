@@ -207,7 +207,7 @@ export default function TrdPage() {
     );
 
     const ExerciseTasksCard = () => (
-        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden', height: '46vh' }}>
+        <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden', height: '48vh' }}>
             <Paper sx={{
                 p: 2,
                 display: 'flex',

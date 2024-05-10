@@ -236,7 +236,11 @@ export default function TherapistOverview() {
                         <Grid item key={patient.patientID} xs={12}>
                             <Card sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, padding: 2, maxWidth: '30%' }}>
-                                    <Avatar alt="Profile Picture" src={patient.photo || "/path/to/default/avatar.jpg"} sx={{ marginRight: 2 }} />
+                                    <Avatar alt="Profile Picture" src={patient.photo || "/path/to/default/avatar.jpg"} sx={{
+                                        marginRight: 2, width: 55, height: 55, '& > img': {
+                                            transform: 'scale(2)' // Adjust the scale factor for the profile picture
+                                        }
+                                    }} />
                                     <Box sx={{ flexDirection: 'column' }}>
                                         <Typography variant="h6">{patient.name || 'No data available'}</Typography>
                                         <Typography variant="body2">Current tasks: {patient.tasks? patient.tasks.length :'No data available'}</Typography>

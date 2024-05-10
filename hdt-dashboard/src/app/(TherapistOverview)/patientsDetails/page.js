@@ -21,6 +21,7 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import PieChart from "@/app/components/pieChart";
 import { useRouter } from 'next/navigation';
+import TasksComponent from "@/app/components/taskList";
 
 export default function TherapistPatientsDetails() {
 
@@ -67,10 +68,11 @@ export default function TherapistPatientsDetails() {
                 return currentPatient[property];
             }
         } else {
-            return 'Error Loading';
+            return 'No data available';
         }
     }
 
+    /*
     useEffect(() => {
         const patientData = localStorage.getItem('currentPatient');
         if (patientData) {
@@ -90,7 +92,8 @@ export default function TherapistPatientsDetails() {
         return () => {
             document.body.style.overflow = '';
         };
-    }, []);
+    }, []);*/
+
 
     const DEFAULT_EXERCISE_DATA = {
         'total': [0, 100], // Assuming a default target of 100 minutes total
@@ -111,7 +114,11 @@ export default function TherapistPatientsDetails() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', pt: 2 }}>
-                            { <MuiAvatar alt="PB" src={checkPatientData('photo')} sx={{ width: 100, height: 100}}/> }
+                            {<MuiAvatar alt="PB" src={checkPatientData('photo')} sx={{
+                                width: 100, height: 100, '& > img': {
+                                    transform: 'scale(2)' // Adjust the scale factor for the profile picture
+                                }
+                            }} />}
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
                             <Typography variant="h5">{ checkPatientData('name') }</Typography>
@@ -128,13 +135,8 @@ export default function TherapistPatientsDetails() {
                             </Box>
                             <Typography variant="body2" color="text.secondary">{checkPatientData('birth')}</Typography>
                         </Grid>
-
                         <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Client's Tel.</Typography>
-                            <Typography variant="body2" color="text.secondary">{ checkPatientData('phone') }</Typography>
-                        </Grid>
-                        <Grid item xs={12} sx={{ mt: 1 }}>
-                            <Typography variant="body1">Email</Typography>
+                            <Typography variant="body1">Username</Typography>
                             <Typography variant="body2" color="text.secondary">{ checkPatientData('email') }</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ mt: 1 }}>
@@ -156,7 +158,7 @@ export default function TherapistPatientsDetails() {
                         <Grid item xs={12} sx={{ mt: 1 }}>
                             <Typography variant="body1">Therapy goals</Typography>
                             <Typography variant="body2" color="text.secondary">{ checkPatientData('goals') }</Typography>
-                        </Grid>
+                        </Grid> 
                     </Grid>
                 </Grid>
             </Paper>
@@ -177,22 +179,7 @@ export default function TherapistPatientsDetails() {
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '51vh' }}>
                 <Typography textAlign="center" variant="h6" sx={{ paddingBottom: 1 }}>Tasks</Typography>
                 <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
-                    <Grid container spacing={2}>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item) => (
-                            <Grid item xs={12} key={item}>
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h7" component="div">
-                                            Placeholder Title {item}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Placeholder content here...
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <TasksComponent taskList={currentPatient.tasks} showDate='none' layout={12} />
                 </Box>
             </Paper>
         </Box>

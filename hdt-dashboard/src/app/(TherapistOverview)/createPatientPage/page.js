@@ -38,26 +38,30 @@ export default function AddPatient() {
         const storedArm = editPatient.dominantArm? editPatient.dominantArm: "left";
 
         // set initial value
-        const [patientProfile,setPatientProfile] = useState({} || editPatient);
-        const [patientID,setPatientID] = useState('' || editPatient.patientID);
-        const [photo,setPhoto] = useState(''|| editPatient.photo)
-        const [id,setId] = useState('' || editPatient.id);
-        const [firstName, setFirstName] = useState('' || nameArray[0]);
-        const [lastName, setLastName] = useState('' || nameArray[1]);
+        const [patientProfile, setPatientProfile] = useState(editPatient || {});
+        const [patientID, setPatientID] = useState(editPatient.patientID || '');
+        const [photo, setPhoto] = useState(editPatient.photo || '');
+        const [id, setId] = useState(editPatient.id || '');
+        const [firstName, setFirstName] = useState(nameArray[0] || '');
+        const [lastName, setLastName] = useState(nameArray[1] || '');
         const [birthDate, setBirthDate] = useState(formattedBirthDate);
-        const [phoneNumber, setPhoneNumber] = useState('' || editPatient.phone);
-        const [email, setEmail] = useState('' || editPatient.email);    // In this case used as Username
+        const [phoneNumber, setPhoneNumber] = useState(editPatient.phone || '');
+        const [email, setEmail] = useState(editPatient.email || ''); // In this case used as Username
         const [biologicalSex, setBiologicalSex] = useState(storedSex);
-        const [typeOfMovement, setTypeOfMovement] = useState('' || editPatient.impaired);
+        const [typeOfMovement, setTypeOfMovement] = useState(editPatient.impaired || '');
         const [dominantArm, setDominantArm] = useState(storedArm);
-        const [therapyGoals, setTherapyGoals] = useState('' || editPatient.goals);
-        const [avatarUrl, setAvatarUrl] = useState('' || editPatient.avatar);
+        const [therapyGoals, setTherapyGoals] = useState(editPatient.goals || '');
+        const [avatarUrl, setAvatarUrl] = useState(editPatient.avatar || '');
+        const [tasks, setTasks] = useState(editPatient.tasks || []);
+        const [thumbs, setThumbs] = useState(editPatient.thumbs || 0);
+        const [thumbs_caregivers, setThumbsCaregivers] = useState(editPatient.thumbs_caregivers || 0);
         const [contact, setContact] = useState({
             firstName: contactName[0] || '',
             lastName: contactName[1] || '',
             email: editPatient.contact ? editPatient.contact.email : '',
             phoneNumber: editPatient.contact ? editPatient.contact.phoneNumber : ''
         });
+        
 
         const generatePassword = (email) => {   // In this case used as Username
             if (!email) {
@@ -93,7 +97,7 @@ export default function AddPatient() {
                 dominantArm: dominantArm,
                 goals: therapyGoals,
                 activityStatus: "Online",
-                tasks: [],
+                tasks: tasks,
                 sexual: biologicalSex,
                 avatar: avatarUrl,
                 contact: {
@@ -101,11 +105,11 @@ export default function AddPatient() {
                     email: contact.email,
                     phoneNumber: contact.phoneNumber
                 },
-                thumbs:0,
-                thumbs_caregivers:0,
+                thumbs: thumbs,
+                thumbs_caregivers: thumbs_caregivers,
                 performance:[]
             });
-        }, [id, patientID, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
+        }, [id, patientID, tasks, thumbs, thumbs_caregivers, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
         
         const handleProfilePictureUpload = (event) => {
             const file = event.target.files[0];

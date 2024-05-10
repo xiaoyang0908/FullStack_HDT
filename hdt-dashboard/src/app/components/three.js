@@ -23,9 +23,9 @@ function ThreeDAvatar({ glbModelUrl }) {
         mountRef.current.appendChild(renderer.domElement);
 
         const controls = new OrbitControls(camera, renderer.domElement);
-        controls.minDistance = 1.4;
-        controls.maxDistance = 1.4;
-        controls.target.set(0, 1.2, 0);
+        controls.minDistance = 1.2;
+        controls.maxDistance = 1.6;
+        controls.target.set(0, 1, 0);
         controls.update();
 
         // Lighting Setup
@@ -82,12 +82,14 @@ function ThreeDAvatar({ glbModelUrl }) {
             const topWidth = 0.5;
             const bottomWidth = 0.53;
 
+            /*
             // Create a cover object
             const coverGeometry = new THREE.CylinderGeometry(topWidth / 2, bottomWidth / 2, coverHeight, 32); // Parameters: radiusTop, radiusBottom, height, radialSegments
             const coverMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Or use any appropriate material/color
             const coverMesh = new THREE.Mesh(coverGeometry, coverMaterial);
             coverMesh.position.set(0, coverYPosition, 0.04);
             scene.add(coverMesh);
+            */
         }, undefined, error => {
             console.error('An error happened with the GLB loader.', error);
         });
