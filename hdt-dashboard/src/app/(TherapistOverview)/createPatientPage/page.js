@@ -96,7 +96,6 @@ export default function AddPatient() {
                 impaired: typeOfMovement,
                 dominantArm: dominantArm,
                 goals: therapyGoals,
-                activityStatus: "Online",
                 tasks: tasks,
                 sexual: biologicalSex,
                 avatar: avatarUrl,
