@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @Document("tasks")
 public class Tasks implements Serializable {
@@ -17,38 +18,17 @@ public class Tasks implements Serializable {
         @Field
         private int sets;
         @Field
-        private String status;
+        private String status = "Awaiting Start";
         @Field
         private String date;
         @Field
-        private int spentTime;
+        private int spentTime = 0;
         @Field
-        private int totalTime;
+        private int finisheSets = 0;
         @Field
-        private Object performance;
+        private ArrayList<Performance> performance = new ArrayList<>();
 
 
-    public Tasks() {
-    }
-
-    public Tasks(String _id, Game game, String difficulty, int sets, String status, String date) {
-        this._id = _id;
-        this.game = game;
-        this.difficulty = difficulty;
-        this.sets = sets;
-        this.status = status;
-        this.date = date;
-
-    }
-
-//    public int getTotalTime() {
-//        return totalTime;
-//    }
-//
-//    public void setTotalTime() {
-//       int totalTime = this.game.getSlots() * this.getSets();
-//       this.totalTime = totalTime/60;
-//    }
 
     public String get_id() {
         return _id;
@@ -106,19 +86,19 @@ public class Tasks implements Serializable {
         this.spentTime = spentTime;
     }
 
-    public int getTotalTime() {
-        return totalTime;
+    public int getFinisheSets() {
+        return finisheSets;
     }
 
-    public void setTotalTime() {
-        this.totalTime = game.getSlots()*sets;
+    public void setFinisheSets(int finisheSets) {
+        this.finisheSets = finisheSets;
     }
 
-    public Object getPerformance() {
+    public ArrayList<Performance> getPerformance() {
         return performance;
     }
 
-    public void setPerformance(Object performance) {
+    public void setPerformance(ArrayList<Performance> performance) {
         this.performance = performance;
     }
 }

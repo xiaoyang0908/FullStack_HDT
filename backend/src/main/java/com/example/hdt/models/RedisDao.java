@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisDao<T> {
@@ -24,6 +25,11 @@ public class RedisDao<T> {
         for (int i = 0; i < tlist.size(); i++) {
             listOps.leftPush(keys.get(i),tlist.get(i));
         }
+    }
+
+    public void setRedis(String key,T t){
+        ValueOperations<String,T> operations = redisTemplate.opsForValue();
+        operations.set(key,t);
     }
 
     public Object get(String key){

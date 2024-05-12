@@ -1,9 +1,6 @@
 package com.example.hdt.ServiceImpl;
 
-import com.example.hdt.models.Patient;
-import com.example.hdt.models.RedisDao;
-import com.example.hdt.models.Therapist;
-import com.example.hdt.models.Thumbs;
+import com.example.hdt.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,26 +21,23 @@ public class TherapistImpl {
     @Autowired
     private PatientImpl patientimlpl;
 
-    public static RedisDao<Patient> cachePatients;
 
-    public static Therapist curTherapist = new Therapist();
+    public static RedisDao<Therapist> cacheTherapist;
+    private static final String REDIS_KEY = "CurrentTherapist:%s";
+
+//    public static Therapist curTherapist = new Therapist();
 
     @Autowired
-    public TherapistImpl(RedisDao<Patient> cachePatients) {
-        this.cachePatients = cachePatients;
+    public TherapistImpl(RedisDao<Therapist> cacheTherapist) {
+        this.cacheTherapist = cacheTherapist;
     }
 //    getActivityPatient
     @Cacheable(value = "activePatients",key = "#email")
     public List<Patient> findAllAcitvePatient(String email){
         Query query = new Query(Criteria.where("Email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
-        curTherapist.setEmail(t.getEmail());
-        curTherapist.setTherapistID(t.getTherapistID());
-        for (Thumbs thumb:
-             t.getThumbs()) {
-            curTherapist.getThumbs().add(thumb);
-        }
-//        curTherapist.getThumbs().forEach(System.out::print);
+        String redisKey = String.format(REDIS_KEY,email);
+        cacheTherapist.setRedis(redisKey,t);
         List<String> activePatientsId = t.getActivePatients();
         System.out.println("fetch from database");
         return getActivePaitents(activePatientsId);
@@ -53,29 +47,46 @@ public class TherapistImpl {
     public void addPatientsList(Patient patient, String email){
         Query query = new Query(Criteria.where("email").is(email));
         Therapist t = mongoTemplate.findOne(query,Therapist.class);
+        Query query1 = new Query(Criteria.where("Email").is(patient.getContact().getEmail()));
+        Caregiver c = mongoTemplate.findOne(query1,Caregiver.class);
+
         if (patient.getPatientID()==null && patient.getId()==null) {
             patient.setPatientID("PAT-" + patientimlpl.uniqueId());
+            //add corresponding id to patient therapist and caregiver
             patient.addTherapists(t.getTherapistID());
             t.addActivePatients(patient.getPatientID());
+            if (c!=null){
+                patient.setCaregivers(c.getCaregiverID());
+                c.setPatientID(patient.getPatientID());
+                Update update = new Update().set("PatientID",patient.getPatientID());
+                mongoTemplate.updateFirst(query1,update,Caregiver.class);
+            }
 
 //            new thumbs obeject fot therapist
             Thumbs thumbs = new Thumbs();
             thumbs.setId(patient.getPatientID());
             t.getThumbs().add(thumbs);
-            Update update = new Update().set("activePatients",t.getActivePatients()).push("thumbs",thumbs);
-            mongoTemplate.updateFirst(query,update,Therapist.class);
+            Update update1 = new Update().set("activePatients",t.getActivePatients()).push("thumbs",thumbs);
+            mongoTemplate.updateFirst(query,update1,Therapist.class);
 
             patient.setThumbs(0);
             patientimlpl.insertPatient(patient);
         }else {
+            if (c!=null){
+                patient.setCaregivers(c.getCaregiverID());
+                c.setPatientID(patient.getPatientID());
+                Update update = new Update().set("PatientID",patient.getPatientID());
+                mongoTemplate.updateFirst(query1,update,Caregiver.class);
+            }
+
             System.out.println(patient.toString());
             patientimlpl.savePatient(patient);
         }
     }
 
     @CacheEvict(value = "activePatients",allEntries = true)
-    public void updateThumbsUp( String id, int count){
-        Query query = new Query(Criteria.where("email").is(curTherapist.getEmail()).and("thumbs.id").is(id));
+    public void updateThumbsUp( String id, int count, String email){
+        Query query = new Query(Criteria.where("email").is(email).and("thumbs.id").is(id));
         Update update = new Update().set("thumbs.$.thumbsCount",count);
         mongoTemplate.updateFirst(query,update,Therapist.class);
         patientimlpl.updateThumbs(id,count);

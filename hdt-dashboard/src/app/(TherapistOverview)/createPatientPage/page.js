@@ -13,15 +13,15 @@ import {
     MenuItem
 } from "@mui/material";
 import { reqSavePatient } from "@/app/api/api";
-import { useCookies } from "react-cookie";
+import { CookieSetting } from "@/app/util/cookieSetting";
 import formatDate from "@/app/util/date";
 import { useRouter } from "next/navigation";
 import { ClickBack } from "@/app/components/clickBack"
 
 export default function AddPatient() {
     const router = useRouter();
-    const [cookies] = useCookies(["user_token"]);
-    const therapistInfo = cookies.user_token;
+    const {getToken} = CookieSetting();
+    const therapistInfo = getToken();
     const [patientProfile, setPatientProfile] = useState({});
     // Information to be rendered within the basic info section
     const UserInfoContent = () => {
@@ -39,9 +39,9 @@ export default function AddPatient() {
 
         // set initial value
         const [patientProfile, setPatientProfile] = useState(editPatient || {});
-        const [patientID, setPatientID] = useState(editPatient.patientID || '');
+        const [patientID, setPatientID] = useState(editPatient.patientID || null);
         const [photo, setPhoto] = useState(editPatient.photo || '');
-        const [id, setId] = useState(editPatient.id || '');
+        const [id, setId] = useState(editPatient.id || null);
         const [firstName, setFirstName] = useState(nameArray[0] || '');
         const [lastName, setLastName] = useState(nameArray[1] || '');
         const [birthDate, setBirthDate] = useState(formattedBirthDate);
@@ -107,7 +107,6 @@ export default function AddPatient() {
                 },
                 thumbs: thumbs,
                 thumbs_caregivers: thumbs_caregivers,
-                performance:[]
             });
         }, [id, patientID, tasks, thumbs, thumbs_caregivers, birthDate, firstName, lastName, email, phoneNumber, photo, typeOfMovement, dominantArm, therapyGoals, biologicalSex, contact, avatarUrl]);
         

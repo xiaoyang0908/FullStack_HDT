@@ -42,7 +42,7 @@ public class PatientImpl{
     }
 
 
-    @Cacheable(value = "patient", key = "list")
+    @Cacheable(value = "AllPatient")
     public List<Patient> getPatientList(){
         List<Patient> patients= mongoTemplate.findAll(Patient.class);
         List<String> patientIds = new ArrayList<>();
@@ -50,7 +50,7 @@ public class PatientImpl{
                 patients) {
             patientIds.add(p.getPatientID());
         }
-        TherapistImpl.cachePatients.setRedisList(patientIds,patients);
+//        TherapistImpl.cachePatients.setRedisList(patientIds,patients);
         return patients;
     }
 

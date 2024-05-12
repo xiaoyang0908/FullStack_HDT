@@ -8,9 +8,6 @@ import { reqLoginOUt } from "../api/api";
 export function Middleware({children}){
     const router = useRouter();
     const [open, setOpen] = useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-      };
     
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -20,52 +17,58 @@ export function Middleware({children}){
     };
         // setCurUser(currentUser.user);
     // signed in already
-     const {getToken} = CookieSetting();
+     const {getToken,setToken} = CookieSetting();
      const cookieUser = getToken();
 
        // if expired
      const handleUserExpire = async() =>{
        try {
-            const res = await reqLoginOUt();
+            const res = await reqLoginOUt(cookieUser.email);
             return res;
        } catch (error) {
             new Error("Haven't signed in");
        }
        
      }
-     const handleUserActivity = () => {
-        // refresh cookie
-        const expirationTime = new Date();
-        expirationTime.setTime(expirationTime.getTime() + 60 * 60 * 1000); // 1hour
-        document.cookie = `auth=${cookieUser}; expires=${expirationTime.toUTCString()}; path=/`;
-    };
+ 
 
     //check cookie per hour
     useEffect(() => {
         const expirationCheckInterval = setInterval(() => {
             if (!cookieUser) {
                 setOpen(true); 
-                handleUserExpire()
+                handleUserExpire();
                 clearInterval(expirationCheckInterval); 
             }
         }, 60*60*1000);
-
         return () => clearInterval(expirationCheckInterval); 
     }, [cookieUser]);
 
     // listener
+    const handleUserActivity = () => {
+        // refresh cookie
+        if(cookieUser){
+            setToken(cookieUser,{
+                path: "/",
+                maxAge: 3600, // cookeie  expired after one hour
+                sameSite: true,
+            })
+        }
+    };
     useEffect(() => {
-        const activityListener = () => {
+        const handleActivity = () => {
             handleUserActivity();
         };
 
-       
-        window.addEventListener('mousemove', activityListener);
-        window.addEventListener('keypress', activityListener);
+        let timer = setTimeout(() => {
+            window.addEventListener('mousemove', handleActivity);
+            window.addEventListener('keypress', handleActivity);
+        }, 59 * 59 * 1000); // 60 minutes = 60 * 60 seconds = 60 * 60 * 1000 milliseconds
 
         return () => {
-            window.removeEventListener('mousemove', activityListener);
-            window.removeEventListener('keypress', activityListener);
+            clearTimeout(timer);
+            window.removeEventListener('mousemove', handleActivity);
+            window.removeEventListener('keypress', handleActivity);
         };
     }, []);
 

@@ -3,6 +3,7 @@ package com.example.hdt.controller;
 import com.example.hdt.ServiceImpl.TherapistImpl;
 import com.example.hdt.models.Patient;
 import com.example.hdt.models.RedisDao;
+import com.example.hdt.models.Therapist;
 import com.example.hdt.models.Thumbs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class TherapistController {
     @Autowired
     private TherapistImpl therapistImpl;
+    private static final String REDIS_KEY = "CurrentTherapist:%s";
 
     @PostMapping("/activePatients")
     public ResponseEntity<List<Patient>> getAllActivePatients(@RequestBody Map<String, Object> requestBody) throws Exception{
@@ -49,14 +51,16 @@ public class TherapistController {
     @PostMapping("/Thumbs")
     public ResponseEntity<Integer> getThumbs(@RequestBody Map<String, Object> requestBody) throws Exception{
         String thumbsId = (String) requestBody.get("thumbsID");
+        String therapistEmail = (String) requestBody.get("therapistEmail");
+        String redisKey = String.format(REDIS_KEY,therapistEmail);
         int count=0;
-        TherapistImpl.curTherapist.getThumbs().forEach(System.out::print);
-        for (Thumbs t: TherapistImpl.curTherapist.getThumbs()) {
+        Therapist curTherapist = (Therapist) TherapistImpl.cacheTherapist.get(redisKey);
+        for (Thumbs t:  curTherapist.getThumbs()){
             if (t.getId().equals(thumbsId)){
                 count = t.getThumbsCount();
                 count++;
                 t.setThumbsCount(count);
-                therapistImpl.updateThumbsUp(thumbsId,count);
+                therapistImpl.updateThumbsUp(thumbsId,count,therapistEmail);
                 break;
             }
         }

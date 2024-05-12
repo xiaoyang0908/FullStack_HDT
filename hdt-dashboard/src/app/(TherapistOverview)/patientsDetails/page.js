@@ -7,15 +7,9 @@ import {
     Grid,
     Paper,
     Avatar as MuiAvatar, // Renamed to avoid confusion with Avatar component
-    Button,
     Typography,
     Divider,
-    List,
-    ListItem,
-    ListItemText,
     Container,
-    Card,
-    CardContent
 } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';

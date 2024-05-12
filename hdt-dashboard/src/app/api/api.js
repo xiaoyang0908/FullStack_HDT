@@ -8,9 +8,9 @@ export const reqLoginIn = (username, password)=>{
     }
 }
 
-export const reqLoginOUt = ()=>{
+export const reqLoginOUt = (username)=>{
     try{
-        return get("http://127.0.0.1:8090/api/logout");
+        return post("http://127.0.0.1:8090/api/logout",{username:username});
     }catch(err){
         throw err;
     }
@@ -57,9 +57,9 @@ export const reqSavePatient = (therapistEmail,patientProfile)=>{
     }
 }
 
-export const reqUpdateThumbs = (thumbsID)=>{
+export const reqUpdateThumbs = (therapistEmail,thumbsID)=>{
     try {
-        return post("http://localhost:8090/therapist/Thumbs",{thumbsID:thumbsID});
+        return post("http://localhost:8090/therapist/Thumbs",{therapistEmail:therapistEmail,thumbsID:thumbsID});
     } catch (error) {
         throw err;
     }

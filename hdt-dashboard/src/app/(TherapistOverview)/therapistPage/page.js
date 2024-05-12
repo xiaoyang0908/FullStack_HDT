@@ -10,9 +10,8 @@ import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 // import {updateCurrentPatient} from "../../contexts/PatientContext";
 import { reqActivePatientsList, reqUpdateThumbs } from '../../api/api';
-import { usePatient } from '../../contexts/PatientContext';
 import { useEffect, useState } from 'react';
-import { useCookies } from "react-cookie";
+import { CookieSetting } from "../../util/cookieSetting";
 import {
   TextField, 
   Box,
@@ -41,8 +40,8 @@ export default function TherapistOverview() {
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const router = useRouter();
     // const { updateCurrentPatient } = usePatient();
-    const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
-    const therapistInfo = cookies.user_token;
+    const {getToken} = CookieSetting();
+    const therapistInfo = getToken();
 
     const detailsButtonPath = '/patientsDetails';
     const manageTaskButtonPath = '/manageTasks';
@@ -55,7 +54,7 @@ export default function TherapistOverview() {
         try {
             const response = await reqActivePatientsList(therapistInfo.email);
             console.log(response)
-            setPatientsList(response);
+            setPatientsList(response || []);
             setLoading(false);
         } catch (error) {
             console.error("Failed to fetch patients:", error);
@@ -149,7 +148,7 @@ export default function TherapistOverview() {
     
         // Update the database in the background
         try {
-            const res = await reqUpdateThumbs(patient.patientID);
+            const res = await reqUpdateThumbs(therapistInfo.email,patient.patientID);
             if (res === patient.thumbs + 1) {
                 console.log("updating in database");
             } else {
@@ -214,7 +213,7 @@ export default function TherapistOverview() {
                     variant="contained" 
                     startIcon={<AddIcon />} 
                     sx={{ mr: 1 }}
-                    onClick={() => handleButtonClick(addClientButtonPath)}
+                    onClick={() => handleButtonClick(addClientButtonPath,null)}
                     >
                         New Student
                     </Button>

@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import MenuIcon from '@mui/icons-material/Menu';
 import Grid from '@mui/material/Grid';
 import { Button, ListItemIcon, ListItemText, MenuList, ListItemButton,Link, Avatar, Box , MenuItem, AppBar, IconButton} from '@mui/material';
-import { useCookies } from "react-cookie";
+import { CookieSetting } from "../util/cookieSetting";
 import { Center } from '@react-three/drei';
 import LogOut from './appBar';
 import { ThemeContext } from '@emotion/react';
@@ -19,8 +19,8 @@ export default function NavBar({ isDrawerEnabled = true }){
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [fontColor, setFont] = useState("black");
     const [bgcolor, setBgColor] = useState("white")
-    const [cookies, setCookie, removeCookie] = useCookies(["user_token"]);
-    const therapistInfo = cookies.user_token;
+    const {getToken} = CookieSetting();
+    const therapistInfo = getToken();
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {

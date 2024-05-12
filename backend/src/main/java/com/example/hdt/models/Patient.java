@@ -6,9 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.scheduling.config.Task;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Document("patientProfile")
 public class Patient implements Serializable {
@@ -52,7 +50,7 @@ public class Patient implements Serializable {
     private String goals;
 
     @Field("ActivityStatus")
-    private String activityStatus;
+    private String activityStatus = "Active";
 
     @Field("Tasks")
     private ArrayList<Tasks> tasks;
@@ -64,16 +62,25 @@ public class Patient implements Serializable {
     private String avatar;
 
     @Field("Contact")
-    private Object contact;
+    private Contact contact = new Contact();
 
     @Field("thumbs")
-    private int thumbs;
+    private int thumbs = 0;
 
     @Field("thumbs_caregivers")
-    private int thumbs_caregivers;
+    private int thumbs_caregivers =0;
 
     @Field("performance")
-    private ArrayList<Object> performance;
+    private HashMap<MiniGame,Performance> performance = new HashMap<>();
+
+    @Field("UnityAvatar")
+    private String UnityAvatar;
+
+    @Field("TotalExerciseHours")
+    private float TotalExerciseHours = 0;
+
+    @Field("WeekExerciseHours")
+    private float WeekExerciseHours = 0;
 
 
 
@@ -175,7 +182,7 @@ public class Patient implements Serializable {
         this.avatar = avatar;
     }
 
-    public void setContact(Object contact) {
+    public void setContact(Contact contact) {
         this.contact = contact;
     }
 
@@ -212,7 +219,7 @@ public class Patient implements Serializable {
         return avatar;
     }
 
-    public Object getContact() {
+    public Contact getContact() {
         return contact;
     }
 
@@ -260,14 +267,6 @@ public class Patient implements Serializable {
         this.thumbs_caregivers = thumbs_caregivers;
     }
 
-    public ArrayList<Object> getPerformance() {
-        return performance;
-    }
-
-    public void setPerformance(ArrayList<Object> performance) {
-        this.performance = performance;
-    }
-
     public String getCaregivers() {
         return caregivers;
     }
@@ -283,4 +282,29 @@ public class Patient implements Serializable {
     public void setTherapists(String therapists) {
         this.therapists = therapists;
     }
+
+    public String getUnityAvatar() {
+        return UnityAvatar;
+    }
+
+    public void setUnityAvatar(String unityAvatar) {
+        UnityAvatar = unityAvatar;
+    }
+
+    public float getTotalExerciseHours() {
+        return TotalExerciseHours;
+    }
+
+    public void setTotalExerciseHours(float totalExerciseHours) {
+        TotalExerciseHours = TotalExerciseHours+totalExerciseHours;
+    }
+
+    public float getWeekExerciseHours() {
+        return WeekExerciseHours;
+    }
+
+    public void setWeekExerciseHours(float weekExerciseHours) {
+        WeekExerciseHours = weekExerciseHours;
+    }
+
 }

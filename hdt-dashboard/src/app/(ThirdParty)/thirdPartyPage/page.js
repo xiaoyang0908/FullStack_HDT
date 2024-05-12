@@ -19,7 +19,7 @@ import {
     Dialog,
     DialogContent
 } from "@mui/material";
-import { useCookies } from "react-cookie";
+import { CookieSetting } from "@/app/util/cookieSetting";
 import { reqCare, reqCarePatient, reqCarePatientThumbs, reqCareTherapist } from "@/app/api/api";
 import TasksComponent from "@/app/components/taskList";
 import CloseIcon from '@mui/icons-material/Close';
@@ -28,8 +28,8 @@ export default function TrdPage() {
     const [watchLiveEnabled, setWatchLiveEnabled] = useState(false);
 
     //get caregiver infomation
-    const [cookies] = useCookies(["user_token"]);
-    const caregiverInfo = cookies.user_token;
+    const {getToken} = CookieSetting();
+    const caregiverInfo = getToken();
 
     //fetch caregiver and carepatient
     const [careTherapist,setCareTherapist] = useState({});

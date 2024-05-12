@@ -87,14 +87,9 @@ export default function ManageTask(){
                 img:"",
                 icon:""
             },
-            difficulty:"",
+            difficulty:"Adaptive control",
             sets:"", 
-            status:"Awaiting start",
             date:"", 
-            spentTime:0,
-            totalTime:0,
-            performance:{left:0.0,right:0.0}
-            
         }
     );
     const handleChange = (event) => {
@@ -222,8 +217,10 @@ export default function ManageTask(){
                             variant="outlined"
                             fullWidth
                             margin="normal"
-                            value={taskInfo.difficulty}
-                            onChange = {handleChange}
+                            // value={taskInfo.difficulty}
+                            // onChange = {handleChange}
+                            disabled
+                            defaultValue={"Adaptive control"}
                         >
                            {difficultyLevel.map((op) =>(
                                 <MenuItem key={op} value={op}>
@@ -338,7 +335,7 @@ export default function ManageTask(){
                  </TableContainer>):
                  (
                  <Box sx={{display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center", width:"100%", height:"100%"}}>
-                    <img src="/tasks/notask.svg" width="83px" height="83px"/>
+                    <img src="/tasks/notasks.svg" width="83px" height="83px"/>
                     <Typography fontSize="24px" color="#555555">There is no task, please add</Typography>
                  </Box>
                  )
