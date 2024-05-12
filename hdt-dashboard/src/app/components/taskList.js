@@ -37,6 +37,7 @@ export default function TasksComponent({ taskList, showDate, layout }) {
               width: '100%',
               height: 'auto',
               position: "absolute",
+              //should use vh instead? not good in large screen
               bottom: (showDate === "none") ? '30px' : '60px',
               backgroundColor: 'rgba(255, 255, 255, 0.5)',
               padding: 2

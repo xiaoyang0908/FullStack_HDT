@@ -71,10 +71,10 @@ public class Patient implements Serializable {
     private int thumbs_caregivers =0;
 
     @Field("performance")
-    private HashMap<MiniGame,Performance> performance = new HashMap<>();
+    private ArrayList<Performance> performance = new ArrayList<>();
 
     @Field("UnityAvatar")
-    private String UnityAvatar;
+    private String UnityAvatar = "";
 
     @Field("TotalExerciseHours")
     private float TotalExerciseHours = 0;
