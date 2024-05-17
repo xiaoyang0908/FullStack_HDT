@@ -1,6 +1,7 @@
 package com.example.hdt.ServiceImpl;
 
 import com.example.hdt.models.Patient;
+import com.example.hdt.models.Performance;
 import com.example.hdt.models.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,9 +27,14 @@ public class PatientImpl{
         return uuid.toString();
     }
 
+
     //    get user
     public Patient findPatientByPatientId(String patientId){
         Query query = new Query(Criteria.where("patientID").is(patientId));
+        return mongoTemplate.findOne(query,Patient.class);
+    }
+    public Patient findPatientByEmail(String email){
+        Query query = new Query(Criteria.where("email").is(email));
         return mongoTemplate.findOne(query,Patient.class);
     }
 
@@ -54,6 +60,7 @@ public class PatientImpl{
         return patients;
     }
 
+
     //    insert Tasks
     @CacheEvict(value = "activePatients",allEntries = true)
     public void insertTasks(String id, Tasks task){
@@ -72,13 +79,21 @@ public class PatientImpl{
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
+
     //update thumbs count
+    @CacheEvict(value = "activePatients",allEntries = true)
     public void updateThumbs(String id, int count){
         Query query = new Query(Criteria.where("PatientID").is(id));
         Update update = new Update().set("thumbs",count);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
+    @CacheEvict(value = "activePatients",allEntries = true)
+    public void updatePerformance(String id, List<Performance> performanceList){
+        Query query = new Query(Criteria.where("PatientID").is(id));
+        Update update = new Update().set("performance",performanceList);
+        mongoTemplate.updateFirst(query,update,Patient.class);
+    }
 
 
 

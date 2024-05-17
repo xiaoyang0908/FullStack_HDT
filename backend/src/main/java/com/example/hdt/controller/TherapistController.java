@@ -34,7 +34,7 @@ public class TherapistController {
     }
 
 
-    @PostMapping("savePatient")
+    @PostMapping("/savePatient")
     public ResponseEntity<String> savePatientProfile(@RequestBody Map<String, Object> requestBody)throws Exception{
         LinkedHashMap<String,Object> patientProfile = (LinkedHashMap<String, Object>) requestBody.get("patientProfile");
         String therapistEmail = (String) requestBody.get("therapistEmail");

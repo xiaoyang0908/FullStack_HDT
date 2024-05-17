@@ -11,6 +11,12 @@ public class Performance implements Serializable {
         private float left;
         @Field("right")
         private float right;
+        @Field("startTime")
+        private String startTime;
+        @Field("endTime")
+        private String endTime;
+        @Field("duration")
+        private float duration;
 
     public String getGameType() {
         return gameType;
@@ -24,15 +30,39 @@ public class Performance implements Serializable {
             return left;
         }
 
-        public void setLeft(float left) {
-            this.left = left;
-        }
+    public void setLeft(float left) {
+        this.left = left;
+    }
 
-        public float getRight() {
-            return right;
-        }
+    public float getRight() {
+        return right;
+    }
 
-        public void setRight(float right) {
-            this.right = right;
-        }
+    public void setRight(float right) {
+        this.right = right;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public float getDuration() {
+        return duration;
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
+    }
 }

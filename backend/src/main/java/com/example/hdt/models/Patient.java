@@ -307,4 +307,11 @@ public class Patient implements Serializable {
         WeekExerciseHours = weekExerciseHours;
     }
 
+    public ArrayList<Performance> getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(ArrayList<Performance> performance) {
+        this.performance = performance;
+    }
 }
