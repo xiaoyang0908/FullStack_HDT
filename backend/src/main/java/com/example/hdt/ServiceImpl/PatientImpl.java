@@ -48,7 +48,7 @@ public class PatientImpl{
     }
 
 
-    @Cacheable(value = "AllPatient")
+//    @Cacheable(value = "AllPatient")
     public List<Patient> getPatientList(){
         List<Patient> patients= mongoTemplate.findAll(Patient.class);
         List<String> patientIds = new ArrayList<>();
