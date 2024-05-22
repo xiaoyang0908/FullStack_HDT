@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/AddCommentOutlined';
 import DetailIcon from '@mui/icons-material/DocumentScannerOutlined';
 import ThumbUp from '@mui/icons-material/ThumbUpAltOutlined';
 import ArchivedIcon from '@mui/icons-material/ArchiveOutlined';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { useRouter } from 'next/navigation';
 import ManageTasksIcon from '@mui/icons-material/PlaylistAddCheckOutlined';
 // import {updateCurrentPatient} from "../../contexts/PatientContext";
@@ -24,7 +25,8 @@ import {
   IconButton,
   Container,
   Pagination,
-  Divider
+  Divider,
+  Tooltip
 } from "@mui/material";
 
 
@@ -249,8 +251,22 @@ export default function TherapistOverview() {
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
 
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
-                                    <Typography variant="body2">Total exercise hours: {'No data available yet'}</Typography>
-                                    <Typography variant="body2">This week: {patient.exerciseTimeCurrentWeek || 'No data available yet'}</Typography>
+                                    <Box sx={{display:"flex", alignItems:"center"}}>
+                                        <Typography variant="body2" marginRight={2}>
+                                            Total exercise hours:   
+                                        </Typography>
+                                        <img src="excerciseHour.svg" />
+                                        <Typography variant="body2" fontWeight={"bold"}>
+                                            {'No data available yet'}  
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{display:"flex", alignItems:"center"}}>
+                                        <Typography variant="body2"  marginRight={10}>This week:</Typography>
+                                        <img src="excerciseHour.svg" />
+                                        <Typography variant="body2" fontWeight={"bold"}>
+                                            {patient.exerciseTimeCurrentWeek || 'No data available yet'} 
+                                        </Typography>
+                                    </Box>
                                 </Box>
 
                                 <Divider orientation="vertical" flexItem sx={{ my: dividerPadding }}/>
@@ -272,14 +288,22 @@ export default function TherapistOverview() {
                                     >
                                         Manage tasks
                                     </Button>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                        <IconButton aria-label="thumbs up" size="medium" onClick={() => handleClickThumbsUp(patient)}>
+                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', borderRadius:"10px",backgroundColor:"#E19A62"}}>
+                                        <IconButton aria-label="thumbs up" size="large" sx={{color:"white"}} onClick={() => handleClickThumbsUp(patient)}>
                                             <ThumbUp />
                                         </IconButton>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', width: '50px', justifyContent: 'center' }}> {/* Adjusted container */}
-                                            <Typography variant="h5">{patient.thumbs}</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', width: '25px', justifyContent: 'center',height:"25px",borderRadius:"25px", backgroundColor:"white", marginRight:1,color:"#E19A62" }}> {/* Adjusted container */}
+                                            <Typography variant="text" fontWeight="bold">{patient.thumbs}</Typography>
                                         </Box>
                                     </Box>
+                                    <Tooltip title={`This will show the count of thumbs given by the therapist`} >                
+                                        <IconButton aria-label="help">
+                                            <HelpOutlineIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                    </Box>
+                                   
                                 </Box>
                             </Card>
                         </Grid>

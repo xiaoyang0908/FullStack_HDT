@@ -10,6 +10,7 @@ import {
     Typography,
     Divider,
     Container,
+    Button
 } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,7 +27,7 @@ export default function TherapistPatientsDetails() {
     const router = useRouter();
 
     const editPatientButtonPath = '/createPatientPage';
-    const manageTaskButtonPath = '/manageTasksPage';
+    const manageTaskButtonPath = '/manageTasks';
 
     const handleButtonClick = (path) => {
         try {
@@ -173,21 +174,22 @@ export default function TherapistPatientsDetails() {
     // Tasks Section
     const tasksSection = (
         <Box sx={{ width: '100%', flex: '1 1 auto', overflow: 'hidden' }}>
-            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '51vh' }}>
+            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '47vh' }}>
                 <Box display="flex" alignItems="center" sx={{ paddingBottom: 1 }}>
                     <Typography variant="h6">
                         Tasks
                     </Typography>
-                    {/* <Button
-                        variant="outlined"
+                    <Button
+                        variant="contained"
+                        size="small"
                         sx={{ textTransform: 'none', marginLeft: 'auto' }}
                         onClick={() => handleButtonClick(manageTaskButtonPath)}
                     >
                         Manage
-                    </Button> */}
+                    </Button>
                 </Box>
                 <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
-                    <TasksComponent taskList={currentPatient.tasks} showDate='none' layout={12} />
+                    <TasksComponent taskList={currentPatient.tasks} showDate='none' layout={6} gridHeight={"55%"} parent={"patientDetails"}/>
                 </Box>
             </Paper>
         </Box>
@@ -210,10 +212,10 @@ export default function TherapistPatientsDetails() {
                 <Grid item xs={12} md={2.5}>
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
-                            {exerciseCompletionChartSection}
+                        {tasksSection} 
                         </Grid>
                         <Grid item xs={12}>
-                            {tasksSection}
+                        {exerciseCompletionChartSection}
                         </Grid>
                     </Grid>
                 </Grid>

@@ -8,12 +8,16 @@ import com.example.hdt.models.Thumbs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @CrossOrigin
@@ -23,14 +27,20 @@ public class TherapistController {
     private TherapistImpl therapistImpl;
     private static final String REDIS_KEY = "CurrentTherapist:%s";
 
+    private static final Logger logger = LoggerFactory.getLogger(TherapistController.class);
     @PostMapping("/activePatients")
-    public ResponseEntity<List<Patient>> getAllActivePatients(@RequestBody Map<String, Object> requestBody) throws Exception{
+    public ResponseEntity<List<Patient>> getAllActivePatients(@RequestBody Map<String, Object> requestBody){
         String email = (String) requestBody.get("email");
-        List<Patient> activePatients = therapistImpl.findAllAcitvePatient(email);
-        if (activePatients.isEmpty()){
-            return ResponseEntity.ok(null);
+        try {
+            List<Patient> activePatients = therapistImpl.findAllAcitvePatient(email);
+            if (activePatients.isEmpty()) {
+                return ResponseEntity.ok(null);
+            }
+            return ResponseEntity.ok(activePatients);
+        }catch (Exception e){
+            logger.error("Error occurred while processing /therapist/activePatients", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        return ResponseEntity.ok(activePatients);
     }
 
 

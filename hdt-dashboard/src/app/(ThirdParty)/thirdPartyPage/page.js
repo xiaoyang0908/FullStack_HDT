@@ -143,7 +143,8 @@ export default function TrdPage() {
                     </Button>
                 </span>
             </Tooltip>
-            <Tooltip title={`This will show the live feed of what ${carePatient.name} is seeing and doing`} sx={{ ml: 1 }}>                <IconButton aria-label="help">
+            <Tooltip title={`This will show the live feed of what ${carePatient.name} is seeing and doing`} sx={{ ml: 1 }}>                
+            <IconButton aria-label="help">
                 <HelpOutlineIcon fontSize="small" />
             </IconButton>
             </Tooltip>
@@ -225,7 +226,7 @@ export default function TrdPage() {
                     </Box>
                         <Button variant="contained" sx={{height:"35px"}} onClick={handleOpen}> More </Button>
                 </Grid>
-                <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} layout={4} />
+                <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} layout={4} gridHeight={"95%"} parent={"3rd"}/>
                 
             </Paper>
         </Box>

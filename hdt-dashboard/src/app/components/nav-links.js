@@ -48,7 +48,7 @@ export default function NavBar({ isDrawerEnabled = true }){
                         boxSizing: 'border-box',
                         bgcolor: "#F5F7FC",
                         zIndex: "1200 !important",
-                        // marginTop: '2%'
+                        // marginTop: '3%'
                     }
                 }}>
                     <Toolbar sx={{

@@ -24,13 +24,16 @@ export default function ManageTask(){
 
 
     function sortPatientData(unsortedData, isAscending = true) {
+        const order = { 'Awaiting Start': 1, 'In Progress': 2, 'Done': 3, 'Overdue': 4 };
+
         return [...unsortedData].sort((a, b) => {
-            const nameA = a.status ? a.status.toUpperCase() : '';
-            const nameB = b.status ? b.status.toUpperCase() : '';
-            if (nameA < nameB) {
+            const statusA = a.status ? order[a.status] : 0;
+            const statusB = b.status ? order[b.status] : 0;
+    
+            if (statusA < statusB) {
                 return isAscending ? -1 : 1;
             }
-            if (nameA > nameB) {
+            if (statusA > statusB) {
                 return isAscending ? 1 : -1;
             }
             return 0;
@@ -313,18 +316,18 @@ export default function ManageTask(){
                         <TableBody>
                             {tasks.map((task,i)=>(
                                 <TableRow key={i} sx={{'& > *': {border:0, }}}>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} component="th" scope="row" align="left">{task.game.type}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.game.equippment}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.difficulty}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.sets}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.game.slots}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.status}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Not Done") && {color:"#A9A9A9"} )}} align="left">{task.date}</TableCell>  
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} component="th" scope="row" align="left">{task.game.type}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.game.equippment}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.difficulty}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.sets}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.game.slots}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.status}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.date}</TableCell>  
                                         <TableCell>
-                                            <IconButton aria-label="edit" onClick={()=>handleEditTask(task)} sx={{...((task.status === "Done" || task.status==="Not Done") && {display:"none"} )}}>
+                                            <IconButton aria-label="edit" onClick={()=>handleEditTask(task)} sx={{...((task.status === "Done" || task.status==="Overdue") && {display:"none"} )}}>
                                                 <EditICon color="#5A6ACF"/>
                                             </IconButton>
-                                            <IconButton aria-label="delete" onClick={()=>{handleDeleteTask(task._id)}} sx={{...((task.status === "Done" || task.status==="Not Done") && {display:"none"} )}}>
+                                            <IconButton aria-label="delete" onClick={()=>{handleDeleteTask(task._id)}} sx={{...((task.status === "Done" || task.status==="Overdue") && {display:"none"} )}}>
                                                 <DeleteIcon color="red"/>
                                             </IconButton>
                                         </TableCell>                           

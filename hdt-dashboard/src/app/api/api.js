@@ -35,7 +35,7 @@ export const reqGame = ()=>{
 
 export const reqTaskList = (patientID,taskinfo)=>{
     try {
-        return post("http://localhost:8090/patient/tasks",{patientID:patientID,taskinfo:taskinfo});
+        return post("http://127.0.0.1:8090/patient/tasks",{patientID:patientID,taskinfo:taskinfo});
     } catch (error) {
         throw err;
     }
@@ -43,7 +43,7 @@ export const reqTaskList = (patientID,taskinfo)=>{
 
 export const reqDeleteTask = (patientID,taskId)=>{
     try {
-        return post("http://localhost:8090/patient/deteteTask",{patientID:patientID,taskId:taskId});
+        return post("http://127.0.0.1:8090/patient/deteteTask",{patientID:patientID,taskId:taskId});
     } catch (error) {
         throw err;
     }
@@ -51,7 +51,7 @@ export const reqDeleteTask = (patientID,taskId)=>{
 
 export const reqSavePatient = (therapistEmail,patientProfile)=>{
     try {
-        return post("http://localhost:8090/therapist/savePatient",{therapistEmail:therapistEmail,patientProfile:patientProfile});
+        return post("http://127.0.0.1:8090/therapist/savePatient",{therapistEmail:therapistEmail,patientProfile:patientProfile});
     } catch (error) {
         throw err;
     }
@@ -59,7 +59,7 @@ export const reqSavePatient = (therapistEmail,patientProfile)=>{
 
 export const reqUpdateThumbs = (therapistEmail,thumbsID)=>{
     try {
-        return post("http://localhost:8090/therapist/Thumbs",{therapistEmail:therapistEmail,thumbsID:thumbsID});
+        return post("http://127.0.0.1:8090/therapist/Thumbs",{therapistEmail:therapistEmail,thumbsID:thumbsID});
     } catch (error) {
         throw err;
     }
@@ -67,7 +67,7 @@ export const reqUpdateThumbs = (therapistEmail,thumbsID)=>{
 
 export const reqCare = (caregiverEmail)=>{
     try {
-        return post("http://localhost:8090/caregiver/info",{caregiverEmail:caregiverEmail});
+        return post("http://127.0.0.1:8090/caregiver/info",{caregiverEmail:caregiverEmail});
     } catch (error) {
         throw err;
     }
@@ -76,7 +76,7 @@ export const reqCare = (caregiverEmail)=>{
 
 export const reqCarePatientThumbs = ()=>{
     try {
-        return get("http://localhost:8090/caregiver/thumbs");
+        return get("http://127.0.0.1:8090/caregiver/thumbs");
     } catch (error) {
         throw err;
     }
