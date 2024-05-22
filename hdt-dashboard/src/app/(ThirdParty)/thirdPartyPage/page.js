@@ -266,9 +266,19 @@ export default function TrdPage() {
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12} md={4} >
+                <Grid item xs={12} md={4} sx={{position:"relative"}}>
                     <Box sx={{ width: '100%', height: '100%' }}>
                         <ThreeDAvatar glbModelUrl={carePatient.avatar ? carePatient.avatar : ""} />
+                    </Box>
+                    <Box sx={{top:"2%", position:"absolute", left:"6%",width:"100%", height:"100%"}}>
+                        <Typography variant="h4" color={"white"}>Range of Motion(ROM)</Typography>
+                    </Box>
+                    <Box sx={{position:"absolute",width:"100%", height:"100%", top:0, left:0}}>
+                        <img alt="rangeMotion"  src="ROMArrows.png" width={"100%"} height={"100%"} />
+                    </Box>
+                    <Box sx={{top:"55%", position:"absolute", left:0,width:"100%", height:"100%", display:"flex", justifyContent:"space-between", p:"10%" }}>
+                        <Typography variant="h5" color={"white"}>Left: 179</Typography>
+                        <Typography variant="h5" color={"white"}>right: 179</Typography>
                     </Box>
                 </Grid>
             </Grid>

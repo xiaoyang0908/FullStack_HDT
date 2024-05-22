@@ -253,18 +253,18 @@ export default function TherapistOverview() {
                                 <Box sx={{ display: 'flex', flexDirection: "column", alignItems: 'flex-start', gap: 2, padding: 2, maxWidth: '30%' }}>
                                     <Box sx={{display:"flex", alignItems:"center"}}>
                                         <Typography variant="body2" marginRight={2}>
-                                            Total exercise hours:   
+                                            Total exercise:   
                                         </Typography>
                                         <img src="excerciseHour.svg" />
                                         <Typography variant="body2" fontWeight={"bold"}>
-                                            {'No data available yet'}  
+                                            {patient.totalExerciseHours} hours
                                         </Typography>
                                     </Box>
                                     <Box sx={{display:"flex", alignItems:"center"}}>
-                                        <Typography variant="body2"  marginRight={10}>This week:</Typography>
+                                        <Typography variant="body2"  marginRight={5}>This week:</Typography>
                                         <img src="excerciseHour.svg" />
                                         <Typography variant="body2" fontWeight={"bold"}>
-                                            {patient.exerciseTimeCurrentWeek || 'No data available yet'} 
+                                            {patient.weekExerciseHours} hours
                                         </Typography>
                                     </Box>
                                 </Box>

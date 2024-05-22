@@ -1,5 +1,6 @@
 package com.example.hdt.controller;
 
+import com.example.hdt.ServiceImpl.DateIdentity;
 import com.example.hdt.ServiceImpl.PatientImpl;
 import com.example.hdt.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ public class PatientController {
     @Autowired
     private PatientImpl patientImpl;
 
+    private static DateIdentity dateIdentity = new DateIdentity();
 
     @GetMapping("/allPatient")
     public ResponseEntity<List<Patient>> getAllPatients() throws Exception{
@@ -86,6 +88,7 @@ public class PatientController {
         System.out.println(newTask);
 
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
+        patientImpl.cacheTask.setRedis(curPatintId,"updateTask");
         //edit
         if (curPatient.findTask(newTask.get_id())!=null) {
             Tasks oldTask = curPatient.findTask(newTask.get_id());
@@ -125,15 +128,46 @@ public class PatientController {
         }
     }
 
-//        @PostMapping("/editTaskPerformance")
-//    public ResponseEntity<List<Tasks>> editTask(@RequestBody Map<String, Object> requestBody) throws Exception{
-//        LinkedHashMap<String,Object> taskInfo = (LinkedHashMap<String, Object>) requestBody.get("taskinfo");
-//        String curPatintId = (String) requestBody.get("patientID");
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String taskJson = objectMapper.writeValueAsString(taskInfo);
-//        Tasks newTask = objectMapper.readValue(taskJson,Tasks.class);
-////        TherapistImpl.changeSymbol = 1;
-//        Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
-//        return ResponseEntity.ok(curPatient.getTasks());
-//    }
+  @PostMapping("/categoryTasks")
+  public Dictionary<TaskStatus, Long> categoryTasks(@RequestBody Map<String, Object> requestBody) throws Exception {
+        String patientID = (String) requestBody.get("patientID");
+        Patient curPatient = patientImpl.findPatientByPatientId(patientID);
+        //total count
+        Dictionary<TaskStatus,Long> taskCategory = new Hashtable<>();
+        long awaitCount = curPatient.getTasks().stream().filter(tasks -> "Awaiting Start".equals(tasks.getStatus())).count();
+        long inProcessCount = curPatient.getTasks().stream().filter(tasks -> "In Process".equals(tasks.getStatus())).count();
+        long doneCount = curPatient.getTasks().stream().filter(tasks -> "Done".equals(tasks.getStatus())).count();
+        long overdueCount = curPatient.getTasks().stream().filter(tasks -> "Overdue".equals(tasks.getStatus())).count();
+        taskCategory.put(TaskStatus.AwaitingStart,awaitCount);
+        taskCategory.put(TaskStatus.InProcess,inProcessCount);
+        taskCategory.put(TaskStatus.Done,doneCount);
+        taskCategory.put(TaskStatus.Overdue,overdueCount);
+
+        //weekly count
+          long weekAwaitCount = 0;
+          long weekInProcessCount = 0;
+          long weekDoneCount = 0;
+          long weekOverdueCount = 0;
+
+          for (Tasks task:
+                  curPatient.getTasks()) {
+              if (dateIdentity.IdentifyDateInOneWeek(task.getDate())) {
+                  if (task.getStatus().equals("Awaiting Start")){
+                      weekAwaitCount++;
+                  }else if (task.getStatus().equals("In Process")){
+                      weekInProcessCount++;
+                  }else if (task.getStatus().equals("Done")){
+                      weekDoneCount++;
+                  }else if (task.getStatus().equals("Overdue")){
+                      weekOverdueCount++;
+                  }
+              }
+          }
+          taskCategory.put(TaskStatus.WeekAwaitingStart,weekAwaitCount);
+          taskCategory.put(TaskStatus.WeekInProcess,weekInProcessCount);
+          taskCategory.put(TaskStatus.WeekDone,weekDoneCount);
+          taskCategory.put(TaskStatus.WeekOverdue,weekOverdueCount);
+
+        return taskCategory;
+  }
 }

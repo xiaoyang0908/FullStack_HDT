@@ -77,10 +77,10 @@ public class Patient implements Serializable {
     private String UnityAvatar = "";
 
     @Field("TotalExerciseHours")
-    private float TotalExerciseHours = 0;
+    private Double TotalExerciseHours = 0.0;
 
     @Field("WeekExerciseHours")
-    private float WeekExerciseHours = 0;
+    private Double WeekExerciseHours = 0.0;
 
 
 
@@ -291,19 +291,19 @@ public class Patient implements Serializable {
         UnityAvatar = unityAvatar;
     }
 
-    public float getTotalExerciseHours() {
+    public Double getTotalExerciseHours() {
         return TotalExerciseHours;
     }
 
-    public void setTotalExerciseHours(float totalExerciseHours) {
-        TotalExerciseHours = TotalExerciseHours+totalExerciseHours;
+    public void setTotalExerciseHours(Double totalExerciseHours) {
+        TotalExerciseHours = totalExerciseHours;
     }
 
-    public float getWeekExerciseHours() {
+    public Double getWeekExerciseHours() {
         return WeekExerciseHours;
     }
 
-    public void setWeekExerciseHours(float weekExerciseHours) {
+    public void setWeekExerciseHours(Double weekExerciseHours) {
         WeekExerciseHours = weekExerciseHours;
     }
 

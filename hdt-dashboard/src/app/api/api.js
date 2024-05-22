@@ -19,7 +19,7 @@ export const reqLoginOUt = (username)=>{
 
 export const reqActivePatientsList = (email)=>{
     try {
-        return post("http://localhost:8090/therapist/activePatients",{email:email});
+        return post("http://127.0.0.1:8090/therapist/activePatients",{email:email});
     } catch (err) {
         throw err;
     }
@@ -81,3 +81,12 @@ export const reqCarePatientThumbs = ()=>{
         throw err;
     }
 }
+
+export const reqTaskCategory = (patientID)=>{
+    try {
+        return post("http://127.0.0.1:8090/patient/categoryTasks",{patientID:patientID});
+    } catch (error) {
+        throw err;
+    }
+}
+

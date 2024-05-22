@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +101,19 @@ public class TherapistImpl {
         for (String patientId: activePatientsId) {
             Patient p = patientimlpl.findPatientByPatientId(patientId);
             if (p!= null){
+                if (!patientimlpl.cacheTask.hasKey(patientId) || patientimlpl.cacheTask.get(patientId).equals("updateTask")) {
+                    patientimlpl.cacheTask.setRedis(patientId, "setTask");
+                    //calculate the total exercise hours
+                    //now is minutes
+                    //update in p and database
+                    double totalTime = (double) p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
+                    double totalHour = Math.floor(totalTime / 60.0 * 10) / 10.0;
+                    //                temporary fix for week hour
+                    double weekHour = Math.floor(totalHour * 2 / 5.0 * 10) / 10.0;;
+                    p.setTotalExerciseHours(totalHour);
+                    p.setWeekExerciseHours(weekHour);
+                    patientimlpl.updateTotalHour(patientId, totalHour, weekHour);
+                }
                 activePatient.add(p);
             }
         }

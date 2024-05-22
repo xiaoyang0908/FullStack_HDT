@@ -35,22 +35,22 @@ const BUTTON_LABELS = {
 export default function PieChart({ exerciseData }) {
     const [filterType, setFilterType] = useState('total');
     const [isClicked, setClick] = useState({
-        "total":false,
+        "total":true,
         "week": false
     });
     const handleButtonClick = (type) => {
         setFilterType(type);
         setClick(prevState => ({
-            ...prevState,
-            [type]: !prevState[type]
+            total: type === "total" ? !prevState.total : prevState.week,
+            week: type === "week" ? !prevState.week : prevState.total
         }));
     }
 
     const data = useMemo(() => {
-        const doneTasks = exerciseData[filterType][0];  // Assuming index 0 is completed minutes
-        const inProcessTasks = exerciseData[filterType][1]; // Assuming index 1 is the total target minutes
-        const awaitingStartTasks = exerciseData[filterType][2];
-        const OverdueTasks = exerciseData[filterType][3];
+        const doneTasks = filterType==="total"? exerciseData.Done : exerciseData.WeekDone;  // Assuming index 0 is completed minutes
+        const inProcessTasks = filterType==="total"? exerciseData.InProcess : exerciseData.WeekInProcess; // Assuming index 1 is the total target minutes
+        const awaitingStartTasks = filterType==="total"? exerciseData.AwaitingStart : exerciseData.WeekAwaitingStart;
+        const OverdueTasks = filterType==="total"? exerciseData.Overdue : exerciseData.WeekOverdue;
 
         return {
             labels: ['Done', 'In process', 'Awaiting start', 'Overdue'],

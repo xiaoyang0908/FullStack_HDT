@@ -24,7 +24,7 @@ export default function ManageTask(){
 
 
     function sortPatientData(unsortedData, isAscending = true) {
-        const order = { 'Awaiting Start': 1, 'In Progress': 2, 'Done': 3, 'Overdue': 4 };
+        const order = { 'Awaiting Start': 1, 'In Process': 2, 'Done': 3, 'Overdue': 4 };
 
         return [...unsortedData].sort((a, b) => {
             const statusA = a.status ? order[a.status] : 0;
@@ -196,7 +196,7 @@ export default function ManageTask(){
     function changeColor(status) {
         switch (status) {
           case "Awaiting Start": return "#FFC536";
-          case "In Progress": return "#2646A5";
+          case "In Process": return "#2646A5";
           case "Done": return "#1EBEAD";
           case "Overdue": return "E66D39";
           default: return "white";

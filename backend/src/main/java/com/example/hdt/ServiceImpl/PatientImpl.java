@@ -1,8 +1,6 @@
 package com.example.hdt.ServiceImpl;
 
-import com.example.hdt.models.Patient;
-import com.example.hdt.models.Performance;
-import com.example.hdt.models.Tasks;
+import com.example.hdt.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,6 +19,13 @@ import java.util.UUID;
 public class PatientImpl{
     @Autowired(required = false)
     private MongoTemplate mongoTemplate;
+
+    public  static RedisDao<String> cacheTask;
+
+    @Autowired
+    public PatientImpl(RedisDao<String> cacheTask) {
+        this.cacheTask = cacheTask;
+    }
 
     public String uniqueId(){
         UUID uuid = UUID.randomUUID();
@@ -92,6 +97,12 @@ public class PatientImpl{
     public void updatePerformance(String id, List<Performance> performanceList){
         Query query = new Query(Criteria.where("PatientID").is(id));
         Update update = new Update().set("performance",performanceList);
+        mongoTemplate.updateFirst(query,update,Patient.class);
+    }
+
+    public void updateTotalHour(String patientId, Double totalHour, Double weekHour){
+        Query query = new Query(Criteria.where("PatientID").is(patientId));
+        Update update = new Update().set("TotalExerciseHours",totalHour).set("WeekExerciseHours",weekHour);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
