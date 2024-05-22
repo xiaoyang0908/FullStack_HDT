@@ -123,7 +123,7 @@ export default function TrdPage() {
                         </IconButton>
                     </Box>
                     <Box sx={{height:"80%"}}>
-                        <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"block"} layout={3} />
+                        <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"block"} layout={3} gridHeight={"95%"} parent={"3rd"}/>
                     </Box>
                 </DialogContent>
                 </Dialog>)
