@@ -193,6 +193,16 @@ export default function ManageTask(){
         handleClose();
     }
 
+    function changeColor(status) {
+        switch (status) {
+          case "Awaiting Start": return "#FFC536";
+          case "In Progress": return "#2646A5";
+          case "Done": return "#1EBEAD";
+          case "Overdue": return "E66D39";
+          default: return "white";
+        }
+      }
+
     const handleAddTask = (openDia,taskInfo) =>{
         const difficultyLevel = ["Adaptive control","easy","medium","hard"];
         const totalSets =[1,2,3,4,5,6];
@@ -316,12 +326,17 @@ export default function ManageTask(){
                         <TableBody>
                             {tasks.map((task,i)=>(
                                 <TableRow key={i} sx={{'& > *': {border:0, }}}>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} component="th" scope="row" align="left">{task.game.type}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.game.equippment}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.difficulty}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.sets}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.game.slots}</TableCell>
-                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.status}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#555555"} )}} component="th" scope="row" align="left">{task.game.type}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#555555"} )}} align="left">{task.game.equippment}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#555555"} )}} align="left">{task.difficulty}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#555555"} )}} align="left">{task.sets}</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#555555"} )}} align="left">{task.game.slots} mins</TableCell>
+                                        <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">
+                                            <Box sx={{display:"flex", alignItems:"center"}}>
+                                                <Box sx={{width:12,height:12,borderRadius:12,bgcolor:changeColor(task.status), marginRight:1}}></Box>
+                                                {task.status}
+                                            </Box>
+                                        </TableCell>
                                         <TableCell sx={{...((task.status === "Done" || task.status==="Overdue") && {color:"#A9A9A9"} )}} align="left">{task.date}</TableCell>  
                                         <TableCell>
                                             <IconButton aria-label="edit" onClick={()=>handleEditTask(task)} sx={{...((task.status === "Done" || task.status==="Overdue") && {display:"none"} )}}>
@@ -356,7 +371,7 @@ export default function ManageTask(){
           > 
             <Box sx={{ display:"flex", alignItems:"center", justifyContent:"space-between",marginBottom:1, height:"50px"}}>
                 <Typography variant="h6" color={"black"}>Add Tasks</Typography>
-                <Button variant="contained" sx={{height:"35px"}} onClick={handleClickMore}> {buttonName} </Button>
+                <Button variant="contained" sx={{height:"35px"}} onClick={()=>handleClickMore()}> {buttonName} </Button>
             </Box>
            
             <Grid container spacing={2} sx={{ flexGrow: 1}}>
