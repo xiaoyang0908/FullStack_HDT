@@ -100,7 +100,7 @@ public class PatientImpl{
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
-    public void updateTotalHour(String patientId, int totalHour, int weekHour){
+    public void updateTotalHour(String patientId, double totalHour, double weekHour){
         Query query = new Query(Criteria.where("PatientID").is(patientId));
         Update update = new Update().set("TotalExerciseHours",totalHour).set("WeekExerciseHours",weekHour);
         mongoTemplate.updateFirst(query,update,Patient.class);

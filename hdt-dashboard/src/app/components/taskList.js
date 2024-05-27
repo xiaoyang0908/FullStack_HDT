@@ -150,7 +150,7 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                   height: 'auto',
                   position: "absolute",
                   //should use vh instead? not good in large screen
-                  bottom: (showDate === "none") ? '8%' : '16%',
+                  bottom: (showDate === "none") ? '15%' : '20%',
                   backgroundColor: 'rgba(255, 255, 255, 0.5)',
                   padding: 1,
                   display:"flex",
