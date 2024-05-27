@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy JAR app to Azure Web App - HDTDashboard
 
 on:
@@ -14,9 +17,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Java version
-        uses: actions/setup-java@v3  # Updated to v3 for compatibility with Node.js 20
+        uses: actions/setup-java@v1
         with:
-          distribution: 'temurin'  # Optional: Specify the distribution (e.g., 'temurin', 'zulu')
           java-version: '17'
 
       - name: Build with Maven
@@ -34,8 +36,6 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write  # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -43,15 +43,11 @@ jobs:
         with:
           name: java-app
 
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}  # Using a single secret for all Azure credentials
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'HDTDashboard'
-          slot-name: 'production'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EC8C4B6079514166ABAD648C90A273ED }}
           package: '*.jar'
