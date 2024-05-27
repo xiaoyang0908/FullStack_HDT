@@ -29,7 +29,7 @@ public class DateIdentity {
         int currentDateWeek = currentDate.get(weekFields.weekOfWeekBasedYear());
 //  get year
         int endDateYear = end.get(weekFields.weekBasedYear());
-        int startDateYear = start.get(weekFields.weekOfYear());
+        int startDateYear = start.get(weekFields.weekBasedYear());
         int currentDateYear = currentDate.get(weekFields.weekBasedYear());
 
         //compare

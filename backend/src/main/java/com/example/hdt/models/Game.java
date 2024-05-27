@@ -20,6 +20,8 @@ public class Game implements Serializable {
     private String img;
     @Field("icon")
     private String icon;
+    @Field("video")
+    private String video;
 
     public String get_id() {
         return _id;
@@ -67,5 +69,13 @@ public class Game implements Serializable {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
     }
 }

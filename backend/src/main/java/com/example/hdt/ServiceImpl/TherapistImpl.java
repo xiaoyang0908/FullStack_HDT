@@ -106,10 +106,14 @@ public class TherapistImpl {
                     //calculate the total exercise hours
                     //now is minutes
                     //update in p and database
-                    double totalTime = (double) p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
-                    double totalHour = Math.floor(totalTime / 60.0 * 10) / 10.0;
-                    //                temporary fix for week hour
-                    double weekHour = Math.floor(totalHour * 2 / 5.0 * 10) / 10.0;;
+//                    double totalTime = (double) p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
+//                    double totalHour = Math.floor(totalTime / 60.0 * 10) / 10.0;
+//                    //                temporary fix for week hour
+//                    double weekHour = Math.floor(totalHour * 2 / 5.0 * 10) / 10.0;;
+
+                    int totalTime = p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
+                    int totalHour = totalTime / 60;
+                    int weekHour = totalHour * 2 / 5;
                     p.setTotalExerciseHours(totalHour);
                     p.setWeekExerciseHours(weekHour);
                     patientimlpl.updateTotalHour(patientId, totalHour, weekHour);

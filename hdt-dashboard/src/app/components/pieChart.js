@@ -53,7 +53,7 @@ export default function PieChart({ exerciseData }) {
         const OverdueTasks = filterType==="total"? exerciseData.Overdue : exerciseData.WeekOverdue;
 
         return {
-            labels: ['Done', 'In process', 'Awaiting start', 'Overdue'],
+            labels: [`Done ${doneTasks}`, `In process ${inProcessTasks}`, `Awaiting start ${awaitingStartTasks}`, `Overdue ${OverdueTasks}`],
             datasets: [{
                 data: [doneTasks, inProcessTasks,awaitingStartTasks,OverdueTasks], // Updated data array
                 backgroundColor: COLORS.backgroundColor,
@@ -71,6 +71,24 @@ export default function PieChart({ exerciseData }) {
             legend: { 
                 position: 'bottom',
                 labels: {
+                    generateLabels: function(chart) {
+                        const data = chart.data;
+                        return data.labels.map((label, index) => {
+                            const meta = chart.getDatasetMeta(0);
+                            const style = meta.controller.getStyle(index);
+                            return {
+                                text: label,
+                                fillStyle: style.backgroundColor,
+                                strokeStyle: style.borderColor,
+                                lineWidth: style.borderWidth,
+                                hidden: !chart.getDataVisibility(index),
+                                index: index,
+                                pointStyle: 'circle',
+                                pointRadius: 0.1 // not working
+                            };
+                        });
+                    },
+                    usePointStyle: true, // This option forces the use of points instead of rectangles in legends
                     padding: 10
                 }
             },

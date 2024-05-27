@@ -129,8 +129,8 @@ export default function TherapistPatientsDetails() {
                 <img alt="rangeMotion"  src="ROMArrows.png" width={"100%"} height={"100%"} />
             </Box>
             <Box sx={{top:"55%", position:"absolute", left:0,width:"100%", height:"100%", display:"flex", justifyContent:"space-between", p:"10%" }}>
-                <Typography variant="h5" color={"white"}>Left: 179</Typography>
-                <Typography variant="h5" color={"white"}>right: 179</Typography>
+                <Typography variant="h5" color={"white"}>Left: 179°</Typography>
+                <Typography variant="h5" color={"white"}>right: 179°</Typography>
             </Box>
         </Grid>
 

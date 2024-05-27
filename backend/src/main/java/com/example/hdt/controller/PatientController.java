@@ -88,7 +88,6 @@ public class PatientController {
         System.out.println(newTask);
 
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
-        patientImpl.cacheTask.setRedis(curPatintId,"updateTask");
         //edit
         if (curPatient.findTask(newTask.get_id())!=null) {
             Tasks oldTask = curPatient.findTask(newTask.get_id());
@@ -97,6 +96,7 @@ public class PatientController {
                 oldTask.setDifficulty(newTask.getDifficulty());
                 oldTask.setDate(newTask.getDate());
             }else {
+                patientImpl.cacheTask.setRedis(curPatintId,"updateTask");
                 oldTask.setPerformance(newTask.getPerformance());
             }
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());

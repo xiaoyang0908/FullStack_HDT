@@ -1,4 +1,5 @@
-import { Grid, Card, CardMedia, CardContent, Typography, Box, LinearProgress } from '@mui/material';
+import { Grid, Card, CardMedia, CardContent, Typography, Box, LinearProgress, Popover } from '@mui/material';
+import { useState } from 'react';
 
 export default function TasksComponent({ taskList, showDate, layout,gridHeight,parent }) {
 
@@ -12,6 +13,22 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
     }
   }
 
+  const [anchorElMap, setAnchorElMap] = useState({});
+
+  const handleMouseEnter = (event, task) => {
+      const newAnchorElMap = { ...anchorElMap, [task._id]: event.currentTarget };
+      setAnchorElMap(newAnchorElMap);
+  };
+
+
+  const handleMouseLeave = () => {
+      setAnchorElMap({});
+  };
+
+  const openPopover = (taskId) => {
+      return Boolean(anchorElMap[taskId]);
+  };
+
   return (
     <Grid container spacing={3} direction="row" sx={{ height: gridHeight }}>
       {
@@ -19,7 +36,12 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
         (
           taskList.map((task) => (
             <Grid item xs={layout} key={task._id} sx={{ display: 'flex', position: 'relative', height: '100%',boxShadow: 'none'}}>
-              <Card sx={{ width: '100%', height: '100%', backgroundColor: 'transparent', boxShadow: 'none', position: 'relative', overflow: 'visible' }}>
+              <Card sx={{ width: '100%', height: '100%', backgroundColor: 'transparent', boxShadow: 'none', position: 'relative', overflow: 'visible', cursor: 'pointer' }} 
+                onMouseEnter={(event) => handleMouseEnter(event, task)}
+                onMouseLeave={handleMouseLeave}
+                aria-owns={open ? task._id : undefined}
+                aria-haspopup="true"
+                >
                 <CardMedia
                   component="img"
                   sx={{ height: "90%", width: "100%"}}
@@ -27,12 +49,12 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                   alt="Game visual"
                 />
                 <Box sx={{ position: 'absolute', top: 10, right: 10 }}>
-                  <img src={task.game.icon} width="50px" height="50px" alt="Game icon" />
+                  <img src={task.game.icon} width="100%" height="100%" alt="Game icon" />
                 </Box>
                 <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: 'transparent' }}>
                   <Typography variant="body2" paddingBottom={1} display={showDate}>{task.date}</Typography>
                   <Box sx={{ width: "100%", height: "10px" }}>
-                    <LinearProgress variant="determinate" value={50} sx={{ height: 10, borderRadius: 5, backgroundColor: 'rgba(255,255,255,0.2)' }} />
+                    <LinearProgress variant="determinate" value={(task.finisheSets/task.sets)* 100} sx={{ height: 10, borderRadius: 5, backgroundColor: '#DFDFDF' }} />
                   </Box>
                 </CardContent>
     
@@ -41,7 +63,7 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                   height: 'auto',
                   position: "absolute",
                   //should use vh instead? not good in large screen
-                  bottom: (showDate === "none") ? '30px' : '60px',
+                  bottom: (showDate === "none") ? '10%' : '15%',
                   backgroundColor: 'rgba(255, 255, 255, 0.5)',
                   padding: 2
                 }}>
@@ -64,6 +86,42 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                   </Box>
                 </CardContent>
               </Card>
+
+
+              <Popover 
+                  id={task._id}
+                  open={openPopover(task._id)}
+                  anchorEl={anchorElMap[task._id]}
+                  // anchorReference="anchorPosition"
+                  // anchorPosition={{ top: "50vh", left: "20vw"}}
+                  onClose={handleMouseLeave}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                  }}
+                  transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                  }}
+                  sx={{pointerEvents: 'none'}}
+                  disableRestoreFocus
+                >
+                   {task.game.video===""? 
+                     (
+                      <Typography variant='h5' sx={{p:1}}>No video available</Typography>
+                      ):(
+                    <video
+                            width="100%"
+                            height="100%"
+                            autoPlay
+                            muted
+                            loop
+                        >
+                         
+                            <source src={task.game.video} type="video/mp4" />
+                      </video>
+                   )}
+              </Popover>
             </Grid>
           ))
         ):
@@ -83,7 +141,7 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                 <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: 'transparent' }}>
                   <Typography variant="body2" paddingBottom={1} display={showDate}>{task.date}</Typography>
                   <Box sx={{ width: "100%", height: "8%" }}>
-                    <LinearProgress variant="determinate" value={50} sx={{ height: 8, borderRadius: 5, backgroundColor: '#DFDFDF' }} />
+                    <LinearProgress variant="determinate" value={(task.finisheSets/task.sets)* 100} sx={{ height: 8, borderRadius: 5, backgroundColor: '#DFDFDF' }} />
                   </Box>
                 </CardContent>
     

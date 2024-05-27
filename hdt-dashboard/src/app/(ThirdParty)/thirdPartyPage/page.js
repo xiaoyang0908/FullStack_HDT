@@ -132,7 +132,7 @@ export default function TrdPage() {
 
     const LiveStreamCard = () => (
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', backgroundImage:"/caregiverWelcome.svg"}}>
-            <Box flexGrow={1} mb={5}>
+            <Box sx={{flexGrow:1}} mb={5}>
                 <div><Typography variant="h6" align="left">Welcome!</Typography></div>
                 <div><Typography variant="h7" align="left">Cheer on {carePatient.name} right here</Typography></div>
             </Box>
@@ -173,7 +173,7 @@ export default function TrdPage() {
 
     const ThumbsUpCard = () => (
         <Grid sx={{ p: 3, height: "70%", overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'left' }}>
-            <ThumbUpIcon fontSize="large" flexGrow={1} sx={{ mb: 4, mt: 1 }} />
+            <ThumbUpIcon fontSize="large"  sx={{ mb: 4, mt: 1, flexGrow:1 }} />
             <Typography variant="h7">Thumbs up given</Typography>
             <Typography variant="h4">{thumbsCount}</Typography>
         </Grid>
@@ -270,15 +270,15 @@ export default function TrdPage() {
                     <Box sx={{ width: '100%', height: '100%' }}>
                         <ThreeDAvatar glbModelUrl={carePatient.avatar ? carePatient.avatar : ""} />
                     </Box>
-                    <Box sx={{top:"2%", position:"absolute", left:"6%",width:"100%", height:"100%"}}>
+                    <Box sx={{top:"4%", position:"absolute", left:"8%",width:"100%", height:"100%"}}>
                         <Typography variant="h4" color={"white"}>Range of Motion(ROM)</Typography>
                     </Box>
-                    <Box sx={{position:"absolute",width:"100%", height:"100%", top:0, left:0}}>
+                    <Box sx={{position:"absolute",width:"100%", height:"100%", top:0, left:"2%"}}>
                         <img alt="rangeMotion"  src="ROMArrows.png" width={"100%"} height={"100%"} />
                     </Box>
-                    <Box sx={{top:"55%", position:"absolute", left:0,width:"100%", height:"100%", display:"flex", justifyContent:"space-between", p:"10%" }}>
-                        <Typography variant="h5" color={"white"}>Left: 179</Typography>
-                        <Typography variant="h5" color={"white"}>right: 179</Typography>
+                    <Box sx={{top:"55%", position:"absolute", left:"2%",width:"100%", height:"100%", display:"flex", justifyContent:"space-between", p:"10%" }}>
+                        <Typography variant="h5" color={"white"}>Left: 179°</Typography>
+                        <Typography variant="h5" color={"white"}>right: 179°</Typography>
                     </Box>
                 </Grid>
             </Grid>
