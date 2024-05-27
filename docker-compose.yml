@@ -30,6 +30,6 @@ services:
     networks:
       - fullstack_hdt_backend-network
 
-networks:
-  fullstack_hdt_backend-network:
-    external: true
+# networks:
+#   fullstack_hdt_backend-network:
+#     # external: true
