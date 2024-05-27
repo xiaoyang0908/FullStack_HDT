@@ -5,6 +5,7 @@ com/example/hdt/config/RedisConfig.class
 com/example/hdt/controller/CareController.class
 com/example/hdt/ServiceImpl/UserImpl.class
 com/example/hdt/models/RedisDao.class
+com/example/hdt/ServiceImpl/DateIdentity.class
 com/example/hdt/models/User.class
 com/example/hdt/controller/GameController.class
 com/example/hdt/controller/UserController.class
@@ -20,5 +21,6 @@ com/example/hdt/ServiceImpl/CareImpl.class
 com/example/hdt/ServiceImpl/TherapistImpl.class
 com/example/hdt/ServiceImpl/PatientImpl.class
 com/example/hdt/models/Tasks.class
+com/example/hdt/models/TaskStatus.class
 com/example/hdt/models/Game.class
 com/example/hdt/models/Combo.class
