@@ -277,8 +277,8 @@ export default function TrdPage() {
                         <img alt="rangeMotion"  src="ROMArrows.png" width={"100%"} height={"100%"} />
                     </Box>
                     <Box sx={{top:"55%", position:"absolute", left:"2%",width:"100%", height:"100%", display:"flex", justifyContent:"space-between", p:"10%" }}>
-                        <Typography variant="h5" color={"white"}>Left: 179°</Typography>
-                        <Typography variant="h5" color={"white"}>right: 179°</Typography>
+                        <Typography variant="h5" color={"white"}>Left: {carePatient.performace[0].left}°</Typography>
+                        <Typography variant="h5" color={"white"}>right: {carePatient.performace[0].right}°</Typography>
                     </Box>
                 </Grid>
             </Grid>
