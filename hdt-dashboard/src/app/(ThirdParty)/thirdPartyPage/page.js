@@ -102,11 +102,11 @@ export default function TrdPage() {
                 <DialogContent>
                     <Box sx={{}}>
                         <Box sx={{display:"flex", alignItems:"center"}}>
-                            <Typography variant="h5" align="left">Journey</Typography>
+                            <Typography variant="h5" align="left">Forløb</Typography>
                             <Box sx={{marginLeft:2}}>
-                                <Typography variant="h7" align="right" display="inline">{carePatient.name} has </Typography>
+                                <Typography variant="h7" align="right" display="inline">{carePatient.name} har </Typography>
                                 <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">{patientTasks? patientTasks.length:0}</Typography>
-                                <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
+                                <Typography variant="h7" align="right" display="inline"> Opgaver tilbage</Typography>
                             </Box>
                         </Box>
                         <IconButton
@@ -140,14 +140,14 @@ export default function TrdPage() {
         }}>
             <Box sx={{display:"flex", flexDirection:"column"}}>
                 <Box sx={{flexGrow:1, justifyContent:"center", flexDirection:"column", display:"flex"}} mb={5}>
-                    <div><Typography variant="h5" align="left" fontWeight={"bold"} color="white">Welcome!</Typography></div>
-                    <div><Typography variant="h6" align="left" fontWeight={"bold"} color="white">Cheer on {carePatient.name} right here</Typography></div>
+                    <div><Typography variant="h5" align="left" fontWeight={"bold"} color="white">Velkommen!</Typography></div>
+                    <div><Typography variant="h6" align="left" fontWeight={"bold"} color="white">Hep på {carePatient.name} lige her</Typography></div>
                 </Box>
                 <Box>
                     <Tooltip title={watchLiveEnabled ? "" : "Can only be used while in the same room"} placement="top">
                         <span>
                             <Button disabled={!watchLiveEnabled} sx={{borderRadius:"12px", fontWeight:"bold", bgcolor:"#EEF0F9", color:"#969696", width:"150px", height:"40px"}}>
-                                Exercise Live
+                                Se med live 
                             </Button>
                         </span>
                     </Tooltip>
@@ -170,17 +170,17 @@ export default function TrdPage() {
             <Box sx={{ pl: 3 }}>
                 <div><Typography variant="h6" fontWeight="bold" color="#0D2560">{carePatient.contact && carePatient.contact.fullName ? carePatient.contact.fullName : ""}</Typography></div>
                 <div>
-                    <Typography variant="h7" align="left" color="#0D2560">Contact person for </Typography>
+                    <Typography variant="h7" align="left" color="#0D2560">Kontakt person til </Typography>
                     <Typography variant="h7" align="left" color="#0D2560" fontWeight={"bold"}>{carePatient.name}</Typography>
                 </div>
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
                 <Grid container direction="row" justifyContent="space-between">
-                    <Typography variant="h7" align="left" color="#0D2560">Therapist:</Typography>
-                    <Typography variant="h7" align="right" fontWeight="bold" color="#0D2560"> Dr. {careTherapist.name}</Typography>
+                    <Typography variant="h7" align="left" color="#0D2560">Terapeut:</Typography>
+                    <Typography variant="h7" align="right" fontWeight="bold" color="#0D2560"> {careTherapist.name}</Typography>
                 </Grid>
                 <Grid container direction="row" justifyContent="space-between">
-                    <Typography variant="h7" align="left" color="#0D2560">Contact number:</Typography>
+                    <Typography variant="h7" align="left" color="#0D2560">Kontakt nummer:</Typography>
                     <Typography variant="h7" align="right" fontWeight="bold" color="#0D2560">{careTherapist.phone}</Typography>
                 </Grid>
             </Box>
@@ -197,7 +197,7 @@ export default function TrdPage() {
        }}>
             <Box sx={{height:"100%",display:"flex",flexDirection:"column",alignItems:"left",justifyContent:"space-between"}}>
                 <img src="3rdParty/thumbIcon.svg" width="60%" />
-                <Typography variant="h6">Thumbs-up Count </Typography>
+                <Typography variant="h6">Tommel op tæller </Typography>
                 <Typography variant="h4" fontWeight={"bold"}>{thumbsCount}</Typography>
             </Box>
             <Box height={"100%"}>
@@ -212,17 +212,17 @@ export default function TrdPage() {
             <Box sx={{ pl: 3 }}>
                 <div><Typography variant="h5" fontWeight="bold">{carePatient.name}</Typography></div>
                 <div>
-                    <Typography variant="h3" align="left" display="inline">{carePatient.totalExerciseHours} </Typography>
-                    <Typography variant="h6" align="left" display="inline"> hours exercised</Typography>
+                    <Typography variant="h3" align="left" display="inline">Trænet i {carePatient.totalExerciseHours} </Typography>
+                    <Typography variant="h6" align="left" display="inline"> timer</Typography>
                 </div>
             </Box>
             <Box mt={1} sx={{ width: '100%' }}>
                 <Grid container my={1} direction="row">
-                    <Typography variant="h6" align="left">Click the button to cheer on {carePatient.name}</Typography>
+                    <Typography variant="h6" align="left">Klik på knappen for at heppe på {carePatient.name}</Typography>
                 </Grid>
             </Box>
             <Button startIcon={<ThumbUpIcon />} onClick={()=>handleClickThumbsUp()} size="large" sx={{ color:"white", bgcolor:"#D68E56" , fontWeight:"bold", width:"220px", height:"50px" , borderRadius:"15px"}}>
-                Give thumbs up
+                Giv en tommel op
             </Button>
             <Tooltip title="Gives a thumps up to motivate"
                 sx={{ ml: 1 }}
@@ -244,14 +244,14 @@ export default function TrdPage() {
             }}>
                 <Grid sx={{ pb: 1, pl: 1, pr: 1 }} container direction="row" justifyContent="space-between">
                     <Box sx={{display:"flex", alignItems:"center"}}>
-                        <Typography variant="h5" align="left">Journey</Typography>
+                        <Typography variant="h5" align="left">Forløb</Typography>
                         <Box sx={{marginLeft:2}}>
-                            <Typography variant="h7" align="right" display="inline">{carePatient.name} has </Typography>
+                            <Typography variant="h7" align="right" display="inline">{carePatient.name} har </Typography>
                             <Typography variant="h7" align="right" display="inline" color="#5A6ACF" fontWeight="bold">{patientTasks? patientTasks.length:0}</Typography>
-                            <Typography variant="h7" align="right" display="inline"> tasks left</Typography>
+                            <Typography variant="h7" align="right" display="inline"> Opgaver tilbage</Typography>
                         </Box>
                     </Box>
-                        <Button variant="contained" sx={{height:"35px"}} onClick={handleOpen}> More </Button>
+                        <Button variant="contained" sx={{height:"35px"}} onClick={handleOpen}> Mere </Button>
                 </Grid>
                 <TasksComponent taskList={patientTasks? patientTasks : []} showDate={"none"} layout={4} gridHeight={"95%"} parent={"3rd"}/>
                 
@@ -299,7 +299,7 @@ export default function TrdPage() {
                             <ThreeDAvatar glbModelUrl={carePatient.avatar ? carePatient.avatar : ""} />
                         </Box>
                         <Box sx={{top:"4%", position:"absolute", left:"8%",width:"100%", height:"100%"}}>
-                            <Typography variant="h4" color={"white"}>Range of Motion(ROM)</Typography>
+                            <Typography variant="h4" color={"white"}>Bevægelses område</Typography>
                         </Box>
                         <Box sx={{position:"absolute",width:"100%", height:"100%", top:0, left:"2%"}}>
                             <img alt="rangeMotion"  src="ROMArrows.png" width={"100%"} height={"100%"} />
