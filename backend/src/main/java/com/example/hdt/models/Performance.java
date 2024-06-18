@@ -16,7 +16,7 @@ public class Performance implements Serializable {
         @Field("endTime")
         private String endTime;
         @Field("duration")
-        private float duration;
+        private double duration;
 
     public String getGameType() {
         return gameType;
@@ -58,11 +58,11 @@ public class Performance implements Serializable {
         this.endTime = endTime;
     }
 
-    public float getDuration() {
+    public double getDuration() {
         return duration;
     }
 
-    public void setDuration(float duration) {
+    public void setDuration(double duration) {
         this.duration = duration;
     }
 }

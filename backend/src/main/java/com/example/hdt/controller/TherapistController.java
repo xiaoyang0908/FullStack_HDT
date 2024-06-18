@@ -1,10 +1,7 @@
 package com.example.hdt.controller;
 
 import com.example.hdt.ServiceImpl.TherapistImpl;
-import com.example.hdt.models.Patient;
-import com.example.hdt.models.RedisDao;
-import com.example.hdt.models.Therapist;
-import com.example.hdt.models.Thumbs;
+import com.example.hdt.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;

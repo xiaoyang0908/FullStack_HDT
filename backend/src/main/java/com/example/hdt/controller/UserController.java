@@ -4,7 +4,6 @@ import com.example.hdt.ServiceImpl.CareImpl;
 import com.example.hdt.ServiceImpl.TherapistImpl;
 import com.example.hdt.ServiceImpl.UserImpl;
 import com.example.hdt.models.RedisDao;
-import com.example.hdt.models.Therapist;
 import com.example.hdt.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

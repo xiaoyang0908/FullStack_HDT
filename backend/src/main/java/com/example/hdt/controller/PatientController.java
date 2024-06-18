@@ -1,5 +1,6 @@
 package com.example.hdt.controller;
 
+import com.example.hdt.ServiceImpl.DataComparasion;
 import com.example.hdt.ServiceImpl.DateIdentity;
 import com.example.hdt.ServiceImpl.PatientImpl;
 import com.example.hdt.models.*;
@@ -40,6 +41,7 @@ public class PatientController {
         return ResponseEntity.status(400).body(null);
     }
 
+    //update patient average performance data are sent by unity game
     @PostMapping("/UpdatePatientPerformance")
     public ResponseEntity<String> UpdatePatientPerformance(@RequestBody Map<String, Object> requestBody) throws Exception{
         LinkedHashMap<String,Object> performanceInfo = (LinkedHashMap<String, Object>) requestBody.get("performance");
@@ -89,19 +91,27 @@ public class PatientController {
 
         Patient curPatient = patientImpl.findPatientByPatientId(curPatintId);
         //edit
-        if (curPatient.findTask(newTask.get_id())!=null) {
+        if (newTask!=null && newTask.get_id()!=null) {
             Tasks oldTask = curPatient.findTask(newTask.get_id());
-            if (newTask.getPerformance().isEmpty()) {
-                oldTask.setSets(newTask.getSets());
-                oldTask.setDifficulty(newTask.getDifficulty());
-                oldTask.setDate(newTask.getDate());
-            }else {
-                patientImpl.cacheTask.setRedis(curPatintId,"updateTask");
-                oldTask.setPerformance(newTask.getPerformance());
+            //update task setting
+            oldTask.setSets(newTask.getSets());
+            oldTask.setDifficulty(newTask.getDifficulty());
+            oldTask.setDate(newTask.getDate());
+
+            //update task performance, data are sent by unity game
+            if (!newTask.getPerformance().isEmpty() && newTask.getPerformance().size() > oldTask.getPerformance().size()){
+                //update exercise hour symbol send by the unity game
+                patientImpl.cacheTask.setRedis(curPatintId, "updateTask");
+                oldTask.getPerformance().add(newTask.getPerformance().get(newTask.getPerformance().size()-1));
+                double duration = newTask.getPerformance().get(newTask.getPerformance().size()-1).getDuration();
+                oldTask.setSpentTime((int) (oldTask.getSpentTime()+duration));
+                oldTask.setFinisheSets(oldTask.getFinisheSets()+1);
+                curPatient.setTotalExerciseHours(curPatient.getTotalExerciseHours()+duration);
+                curPatient.setWeekExerciseHours(curPatient.getWeekExerciseHours()+duration);
             }
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());
             return ResponseEntity.ok(curPatient.getTasks());
-        } else if (newTask!=null && curPatient.findTask(newTask.get_id())==null){
+        } else if (newTask!=null && newTask.get_id()==null){
             //insert new task
             String uuid = patientImpl.uniqueId();
             newTask.set_id("Task"+ uuid);
@@ -134,10 +144,31 @@ public class PatientController {
         Patient curPatient = patientImpl.findPatientByPatientId(patientID);
         //total count
         Dictionary<TaskStatus,Long> taskCategory = new Hashtable<>();
-        long awaitCount = curPatient.getTasks().stream().filter(tasks -> "Awaiting Start".equals(tasks.getStatus())).count();
-        long inProcessCount = curPatient.getTasks().stream().filter(tasks -> "In Process".equals(tasks.getStatus())).count();
-        long doneCount = curPatient.getTasks().stream().filter(tasks -> "Done".equals(tasks.getStatus())).count();
-        long overdueCount = curPatient.getTasks().stream().filter(tasks -> "Overdue".equals(tasks.getStatus())).count();
+        long awaitCount = 0;
+        long inProcessCount = 0;
+        long doneCount = 0;
+        long overdueCount = 0;
+          for (Tasks task:
+                  curPatient.getTasks()) {
+              if (new DataComparasion().identifyDateCompare(task.getDate()) && !task.getStatus().equals("Done")){
+                  task.setStatus("Overdue");
+              }
+              if (task.getStatus().equals("Awaiting Start") && task.getSpentTime()>0){
+                  task.setStatus("In Process");
+              }
+              if (task.getStatus().equals("In Process") && task.getSets()== task.getFinisheSets()){
+                  task.setStatus("Done");
+              }
+              if (task.getStatus().equals("Awaiting Start")) {
+                  awaitCount++;
+              } else if (task.getStatus().equals("In Process")) {
+                  inProcessCount++;
+              } else if (task.getStatus().equals("Done")) {
+                  doneCount++;
+              } else if (task.getStatus().equals("Overdue")) {
+                  overdueCount++;
+              }
+          }
         taskCategory.put(TaskStatus.AwaitingStart,awaitCount);
         taskCategory.put(TaskStatus.InProcess,inProcessCount);
         taskCategory.put(TaskStatus.Done,doneCount);

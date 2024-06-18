@@ -230,7 +230,6 @@ public class Patient implements Serializable {
             if (task.get_id().equals(taskId)){
                 return task;
             }
-            break;
         }
         return null;
     }

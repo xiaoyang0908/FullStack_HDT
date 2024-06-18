@@ -41,16 +41,16 @@ export default function ManageTask(){
     }
     
 
-        // Fetch patient data from localStorage
-        useEffect(() => {
-            const patientData = localStorage.getItem('currentPatient');
-            if (patientData) {
-                const parsedData = JSON.parse(patientData);
-                setCurrentPatient(parsedData);
-                const sortedData = sortPatientData(parsedData.tasks);
-                setTasks(sortedData || []);
-            }
-        }, []);
+    // Fetch patient data from localStorage
+    useEffect(() => {
+        const patientData = localStorage.getItem('currentPatient');
+        if (patientData) {
+            const parsedData = JSON.parse(patientData);
+            setCurrentPatient(parsedData);
+            const sortedData = sortPatientData(parsedData.tasks);
+            setTasks(sortedData || []);
+        }
+    }, []);
 
     // Fetch game list
     const [gameList, setGameList] = useState([]);

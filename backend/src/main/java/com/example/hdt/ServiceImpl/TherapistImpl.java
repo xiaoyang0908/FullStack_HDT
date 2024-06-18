@@ -43,7 +43,7 @@ public class TherapistImpl {
         cacheTherapist.setRedis(redisKey,t);
         List<String> activePatientsId = t.getActivePatients();
         System.out.println("fetch from database");
-        return getActivePaitents(activePatientsId);
+        return patientimlpl.findPatientsByIds(activePatientsId);
     }
 
     @CacheEvict(value = "activePatients",allEntries = true)
@@ -96,33 +96,6 @@ public class TherapistImpl {
 
     }
 
-    public List<Patient> getActivePaitents(List<String> activePatientsId){
-        List<Patient> activePatient = new ArrayList<>();
-        for (String patientId: activePatientsId) {
-            Patient p = patientimlpl.findPatientByPatientId(patientId);
-            if (p!= null){
-                if (!patientimlpl.cacheTask.hasKey(patientId) || patientimlpl.cacheTask.get(patientId).equals("updateTask")) {
-                    patientimlpl.cacheTask.setRedis(patientId, "setTask");
-                    //calculate the total exercise hours
-                    //now is minutes
-                    //update in p and database
-                    double totalTime = (double) p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
-                    double totalHour = Math.floor(totalTime / 60.0 * 10) / 10.0;
-                    //                temporary fix for week hour
-                    double weekHour = Math.floor(totalHour * 2 / 5.0 * 10) / 10.0;;
-
-//                    int totalTime = p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
-//                    int totalHour = totalTime / 60;
-//                    int weekHour = totalHour * 2 / 5;
-                    p.setTotalExerciseHours(totalHour);
-                    p.setWeekExerciseHours(weekHour);
-                    patientimlpl.updateTotalHour(patientId, totalHour, weekHour);
-                }
-                activePatient.add(p);
-            }
-        }
-        return activePatient;
-    }
 
     public Therapist findTherapistByTherapistID(String therapistID){
         Query query = new Query(Criteria.where("TherapistID").is(therapistID));

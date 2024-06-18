@@ -71,7 +71,7 @@ export default function TherapistPatientsDetails() {
                         console.log(error);
                     });
             }
-        }, [currentPatient.patientID]);
+        }, [currentPatient]);
     
     if (loading) {
         return <div>Loading...</div>; // Or some other loading indicator

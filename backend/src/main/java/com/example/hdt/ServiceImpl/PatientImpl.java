@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Repository
@@ -20,7 +21,8 @@ public class PatientImpl{
     @Autowired(required = false)
     private MongoTemplate mongoTemplate;
 
-    public  static RedisDao<String> cacheTask;
+    public static RedisDao<String> cacheTask;
+//    private static final int BATCH_SIZE = 20;
 
     @Autowired
     public PatientImpl(RedisDao<String> cacheTask) {
@@ -35,12 +37,43 @@ public class PatientImpl{
 
     //    get user
     public Patient findPatientByPatientId(String patientId){
-        Query query = new Query(Criteria.where("patientID").is(patientId));
+        Query query = new Query(Criteria.where("PatientID").is(patientId));
         return mongoTemplate.findOne(query,Patient.class);
     }
     public Patient findPatientByEmail(String email){
         Query query = new Query(Criteria.where("email").is(email));
         return mongoTemplate.findOne(query,Patient.class);
+    }
+
+    //multi query
+    public List<Patient> findPatientsByIds(List<String> patientIds) {
+        Query query = new Query(Criteria.where("PatientID").in(patientIds));
+        List<Patient> patients = mongoTemplate.find(query, Patient.class);
+        for (Patient p : patients) {
+//            updates in task performance
+            if (cacheTask.hasKey(p.getPatientID()) && cacheTask.get(p.getPatientID()).equals("updateTask")) {
+                cacheTask.setRedis(p.getPatientID(), "setTask");
+                updateTotalHour(p.getPatientID(), p.getTotalExerciseHours(), p.getWeekExerciseHours());
+                break;
+            }
+            //calculate the total exercise hours
+            //now is minutes
+            //update in p and database
+//            load in first time
+            int totalTime = p.getTasks().stream().mapToInt(Tasks::getSpentTime).sum();
+            double totalHour = Math.floor(totalTime / 60.0 * 10) / 10.0;
+            AtomicReference<Double> weekHour = new AtomicReference<>(0.0);
+            p.getTasks().parallelStream().forEach(task -> {
+                double taskDuration = task.getPerformance().stream()
+                        .filter(performance -> new DateIdentity().IdentifyDateInOneWeek(String.format(performance.getStartTime() + "-" + performance.getEndTime())))
+                        .mapToDouble(Performance::getDuration)
+                        .sum();
+                weekHour.updateAndGet(v -> v + taskDuration);
+            });
+            double weekHourDouble = Math.floor(weekHour.get() / 60.0 * 10) / 10.0;
+            updateTotalHour(p.getPatientID(),totalHour,weekHourDouble);
+        }
+        return patients;
     }
 
 //    save patient
@@ -105,6 +138,8 @@ public class PatientImpl{
         Update update = new Update().set("TotalExerciseHours",totalHour).set("WeekExerciseHours",weekHour);
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
+
+
 
 
 
