@@ -108,6 +108,7 @@ public class PatientController {
                 oldTask.setFinisheSets(oldTask.getFinisheSets()+1);
                 curPatient.setTotalExerciseHours(curPatient.getTotalExerciseHours()+duration);
                 curPatient.setWeekExerciseHours(curPatient.getWeekExerciseHours()+duration);
+                updateTaskStatus(oldTask);
             }
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());
             return ResponseEntity.ok(curPatient.getTasks());
@@ -122,7 +123,6 @@ public class PatientController {
         return ResponseEntity.status(400).body(null);
 
     }
-
 
     @PostMapping("/deteteTask")
     public ResponseEntity<List<Tasks>> afterDeleteTasks(@RequestBody Map<String, Object> requestBody) throws Exception{
@@ -148,17 +148,8 @@ public class PatientController {
         long inProcessCount = 0;
         long doneCount = 0;
         long overdueCount = 0;
-          for (Tasks task:
-                  curPatient.getTasks()) {
-              if (new DataComparasion().identifyDateCompare(task.getDate()) && !task.getStatus().equals("Done")){
-                  task.setStatus("Overdue");
-              }
-              if (task.getStatus().equals("Awaiting Start") && task.getSpentTime()>0){
-                  task.setStatus("In Process");
-              }
-              if (task.getStatus().equals("In Process") && task.getSets()== task.getFinisheSets()){
-                  task.setStatus("Done");
-              }
+          for (Tasks task: curPatient.getTasks()) {
+              updateTaskStatus(task);
               if (task.getStatus().equals("Awaiting Start")) {
                   awaitCount++;
               } else if (task.getStatus().equals("In Process")) {
@@ -201,4 +192,16 @@ public class PatientController {
 
         return taskCategory;
   }
+
+    public void updateTaskStatus(Tasks oldTask) {
+        if (new DataComparasion().identifyDateCompare(oldTask.getDate()) && !oldTask.getStatus().equals("Done")){
+            oldTask.setStatus("Overdue");
+        }
+        if (oldTask.getStatus().equals("Awaiting Start") && oldTask.getSpentTime()>0){
+            oldTask.setStatus("In Process");
+        }
+        if (oldTask.getStatus().equals("In Process") && oldTask.getSets()== oldTask.getFinisheSets()){
+            oldTask.setStatus("Done");
+        }
+    }
 }
