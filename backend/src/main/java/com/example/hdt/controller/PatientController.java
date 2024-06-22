@@ -108,7 +108,6 @@ public class PatientController {
                 oldTask.setFinisheSets(oldTask.getFinisheSets()+1);
                 curPatient.setTotalExerciseHours(curPatient.getTotalExerciseHours()+duration);
                 curPatient.setWeekExerciseHours(curPatient.getWeekExerciseHours()+duration);
-                updateTaskStatus(oldTask);
             }
             patientImpl.updateTasks(curPatintId, curPatient.getTasks());
             return ResponseEntity.ok(curPatient.getTasks());
@@ -149,7 +148,6 @@ public class PatientController {
         long doneCount = 0;
         long overdueCount = 0;
           for (Tasks task: curPatient.getTasks()) {
-              updateTaskStatus(task);
               if (task.getStatus().equals("Awaiting Start")) {
                   awaitCount++;
               } else if (task.getStatus().equals("In Process")) {
@@ -192,16 +190,4 @@ public class PatientController {
 
         return taskCategory;
   }
-
-    public void updateTaskStatus(Tasks oldTask) {
-        if (new DataComparasion().identifyDateCompare(oldTask.getDate()) && !oldTask.getStatus().equals("Done")){
-            oldTask.setStatus("Overdue");
-        }
-        if (oldTask.getStatus().equals("Awaiting Start") && oldTask.getSpentTime()>0){
-            oldTask.setStatus("In Process");
-        }
-        if (oldTask.getStatus().equals("In Process") && oldTask.getSets()== oldTask.getFinisheSets()){
-            oldTask.setStatus("Done");
-        }
-    }
 }

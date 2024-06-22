@@ -69,10 +69,13 @@ public class PatientImpl{
                         .mapToDouble(Performance::getDuration)
                         .sum();
                 weekHour.updateAndGet(v -> v + taskDuration);
+                updateTaskStatus(task);
             });
             double weekHourDouble = Math.floor(weekHour.get() / 60.0 * 10) / 10.0;
             updateTotalHour(p.getPatientID(),totalHour,weekHourDouble);
+            updateTasks(p.getPatientID(), p.getTasks());
         }
+
         return patients;
     }
 
@@ -139,6 +142,17 @@ public class PatientImpl{
         mongoTemplate.updateFirst(query,update,Patient.class);
     }
 
+    public void updateTaskStatus(Tasks oldTask) {
+        if (new DataComparasion().identifyDateCompare(oldTask.getDate()) && !oldTask.getStatus().equals("Done")){
+            oldTask.setStatus("Overdue");
+        }
+        if (oldTask.getStatus().equals("Awaiting Start") && oldTask.getSpentTime()>0){
+            oldTask.setStatus("In Process");
+        }
+        if (oldTask.getStatus().equals("In Process") && oldTask.getSets()== oldTask.getFinisheSets()){
+            oldTask.setStatus("Done");
+        }
+    }
 
 
 
