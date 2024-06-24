@@ -111,13 +111,13 @@ export default function TasksComponent({ taskList, showDate, layout,gridHeight,p
                       <Typography variant='h5' sx={{p:1}}>No video available</Typography>
                       ):(
                     <video
-                            width="100%"
-                            height="100%"
+                            width="500px"
+                            height="300px"
                             autoPlay
                             muted
                             loop
                         >
-                         
+
                             <source src={task.game.video} type="video/mp4" />
                       </video>
                    )}
